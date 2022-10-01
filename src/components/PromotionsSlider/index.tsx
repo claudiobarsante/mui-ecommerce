@@ -19,7 +19,7 @@ export default function PromotionsSlider() {
     // to show the message
     setTimeout(() => {
       setShow(false);
-    }, 3000);
+    }, 4000);
 
     const intervalId = setInterval(() => {
       // get next message
@@ -33,8 +33,8 @@ export default function PromotionsSlider() {
 
       setTimeout(() => {
         setShow(false);
-      }, 3000);
-    }, 4000);
+      }, 4000);
+    }, 6000);
 
     return () => {
       clearInterval(intervalId);

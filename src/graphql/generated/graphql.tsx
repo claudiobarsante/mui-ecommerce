@@ -81,6 +81,7 @@ export type Book = {
   bookId: Scalars['String'];
   coverImageUrl?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
+  isFeatured: Scalars['Boolean'];
   isOnSale?: Maybe<Scalars['Boolean']>;
   negativeReview?: Maybe<Scalars['Int']>;
   pageCount?: Maybe<Scalars['Int']>;
@@ -127,6 +128,7 @@ export type BookFiltersInput = {
   coverImageUrl?: InputMaybe<StringFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
+  isFeatured?: InputMaybe<BooleanFilterInput>;
   isOnSale?: InputMaybe<BooleanFilterInput>;
   negativeReview?: InputMaybe<IntFilterInput>;
   not?: InputMaybe<BookFiltersInput>;
@@ -147,6 +149,7 @@ export type BookInput = {
   authors?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   bookId?: InputMaybe<Scalars['String']>;
   coverImageUrl?: InputMaybe<Scalars['String']>;
+  isFeatured?: InputMaybe<Scalars['Boolean']>;
   isOnSale?: InputMaybe<Scalars['Boolean']>;
   negativeReview?: InputMaybe<Scalars['Int']>;
   pageCount?: InputMaybe<Scalars['Int']>;
@@ -187,6 +190,47 @@ export type BooleanFilterInput = {
   null?: InputMaybe<Scalars['Boolean']>;
   or?: InputMaybe<Array<InputMaybe<Scalars['Boolean']>>>;
   startsWith?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type Category = {
+  __typename?: 'Category';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  name: Scalars['String'];
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type CategoryEntity = {
+  __typename?: 'CategoryEntity';
+  attributes?: Maybe<Category>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type CategoryEntityResponse = {
+  __typename?: 'CategoryEntityResponse';
+  data?: Maybe<CategoryEntity>;
+};
+
+export type CategoryEntityResponseCollection = {
+  __typename?: 'CategoryEntityResponseCollection';
+  data: Array<CategoryEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type CategoryFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<CategoryFiltersInput>>>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  name?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<CategoryFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<CategoryFiltersInput>>>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type CategoryInput = {
+  name?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type DateTimeFilterInput = {
@@ -243,7 +287,7 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']>;
 };
 
-export type GenericMorph = Author | Book | I18NLocale | Publisher | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
+export type GenericMorph = Author | Book | Category | I18NLocale | Publisher | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -359,6 +403,7 @@ export type Mutation = {
   changePassword?: Maybe<UsersPermissionsLoginPayload>;
   createAuthor?: Maybe<AuthorEntityResponse>;
   createBook?: Maybe<BookEntityResponse>;
+  createCategory?: Maybe<CategoryEntityResponse>;
   createPublisher?: Maybe<PublisherEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -368,6 +413,7 @@ export type Mutation = {
   createUsersPermissionsUser: UsersPermissionsUserEntityResponse;
   deleteAuthor?: Maybe<AuthorEntityResponse>;
   deleteBook?: Maybe<BookEntityResponse>;
+  deleteCategory?: Maybe<CategoryEntityResponse>;
   deletePublisher?: Maybe<PublisherEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -388,6 +434,7 @@ export type Mutation = {
   resetPassword?: Maybe<UsersPermissionsLoginPayload>;
   updateAuthor?: Maybe<AuthorEntityResponse>;
   updateBook?: Maybe<BookEntityResponse>;
+  updateCategory?: Maybe<CategoryEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
   updatePublisher?: Maybe<PublisherEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
@@ -414,6 +461,11 @@ export type MutationCreateAuthorArgs = {
 
 export type MutationCreateBookArgs = {
   data: BookInput;
+};
+
+
+export type MutationCreateCategoryArgs = {
+  data: CategoryInput;
 };
 
 
@@ -448,6 +500,11 @@ export type MutationDeleteAuthorArgs = {
 
 
 export type MutationDeleteBookArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteCategoryArgs = {
   id: Scalars['ID'];
 };
 
@@ -525,6 +582,12 @@ export type MutationUpdateAuthorArgs = {
 
 export type MutationUpdateBookArgs = {
   data: BookInput;
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  data: CategoryInput;
   id: Scalars['ID'];
 };
 
@@ -640,6 +703,8 @@ export type Query = {
   authors?: Maybe<AuthorEntityResponseCollection>;
   book?: Maybe<BookEntityResponse>;
   books?: Maybe<BookEntityResponseCollection>;
+  categories?: Maybe<CategoryEntityResponseCollection>;
+  category?: Maybe<CategoryEntityResponse>;
   i18NLocale?: Maybe<I18NLocaleEntityResponse>;
   i18NLocales?: Maybe<I18NLocaleEntityResponseCollection>;
   me?: Maybe<UsersPermissionsMe>;
@@ -679,6 +744,19 @@ export type QueryBooksArgs = {
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryCategoriesArgs = {
+  filters?: InputMaybe<CategoryFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryCategoryArgs = {
+  id?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -1161,6 +1239,11 @@ export type BooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type BooksQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', attributes?: { __typename?: 'Book', title?: string | null, synopsis?: string | null } | null }> } | null };
 
+export type FeaturedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FeaturedQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title?: string | null, price?: number | null, coverImageUrl?: string | null, rating?: number | null } | null }> } | null };
+
 
 export const BooksDocument = gql`
     query Books {
@@ -1201,3 +1284,45 @@ export function useBooksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Book
 export type BooksQueryHookResult = ReturnType<typeof useBooksQuery>;
 export type BooksLazyQueryHookResult = ReturnType<typeof useBooksLazyQuery>;
 export type BooksQueryResult = Apollo.QueryResult<BooksQuery, BooksQueryVariables>;
+export const FeaturedDocument = gql`
+    query Featured {
+  books(filters: {isFeatured: {eq: true}}) {
+    data {
+      id
+      attributes {
+        title
+        price
+        coverImageUrl
+        rating
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFeaturedQuery__
+ *
+ * To run a query within a React component, call `useFeaturedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFeaturedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFeaturedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFeaturedQuery(baseOptions?: Apollo.QueryHookOptions<FeaturedQuery, FeaturedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FeaturedQuery, FeaturedQueryVariables>(FeaturedDocument, options);
+      }
+export function useFeaturedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeaturedQuery, FeaturedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FeaturedQuery, FeaturedQueryVariables>(FeaturedDocument, options);
+        }
+export type FeaturedQueryHookResult = ReturnType<typeof useFeaturedQuery>;
+export type FeaturedLazyQueryHookResult = ReturnType<typeof useFeaturedLazyQuery>;
+export type FeaturedQueryResult = Apollo.QueryResult<FeaturedQuery, FeaturedQueryVariables>;

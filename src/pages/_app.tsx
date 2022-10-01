@@ -33,7 +33,7 @@ export default function MyApp(props: AppProps) {
           <link rel="apple-touch-icon" href="/img/icon-512.png" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
 
-          <meta name="theme-color" content="#06092B" />
+          <meta name="theme-color" content="#73bd73" />
           <meta
             name="description"
             content="The best collection of books cured by the world's readers'"
@@ -43,7 +43,7 @@ export default function MyApp(props: AppProps) {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <NextNprogress
-            color="#f02d34"
+            color="#73bd73"
             startPosition={0.3}
             stopDelayMs={200}
             showOnShallow={true}

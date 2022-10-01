@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import Image from 'next/image';
 import * as S from '../styles';
 
 import { Stack, Tooltip, Typography } from '@mui/material';
@@ -10,12 +10,13 @@ import FitScreenIcon from '@mui/icons-material/FitScreen';
 //import ProductDetail from '../productdetail';
 import ProductInfo from '../Info';
 import { ProductType } from 'data';
+import { FeaturedBook } from 'components/Featured';
 
 type Props = {
-  product: ProductType;
+  book: FeaturedBook;
   isMobile: boolean;
 };
-export default function SingleProductDesktop({ product, isMobile }: Props) {
+export default function SingleProductDesktop({ book, isMobile }: Props) {
   //   const [ProductDetailDialog, showProductDetailDialog, closeProductDialog] =
   //     useDialogModal(ProductDetail);
 
@@ -36,7 +37,17 @@ export default function SingleProductDesktop({ product, isMobile }: Props) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <S.ProductImage src={product.image} />
+        {/* <S.ProductImage src={book.attributes.coverImageUrl} /> */}
+        <S.ProductImage>
+          <Image
+            src={book.attributes.coverImageUrl}
+            alt={book.attributes.title}
+            // layout="responsive"
+            width={500}
+            height={650}
+            aria-label={book.attributes.title}
+          />
+        </S.ProductImage>
         <S.FavButton isfav={0}>
           <Tooltip placement="left" title="add to my wishlist">
             <FavoriteIcon />
@@ -61,8 +72,8 @@ export default function SingleProductDesktop({ product, isMobile }: Props) {
             </S.ActionButton>
           </Stack>
         </S.ActionsButtonsContainer>
-        <ProductInfo product={product} />
       </S.Product>
+      <ProductInfo book={book} />
       {/* <ProductDetailDialog product={product} /> */}
     </>
   );

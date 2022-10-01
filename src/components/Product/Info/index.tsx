@@ -1,14 +1,21 @@
-import { Typography } from '@mui/material';
+import { Typography, Rating } from '@mui/material';
+import formatPrice from 'utils/format-price';
 import * as S from '../styles';
 
-export default function ProductInfo({ product, isMobile }: any) {
+export default function ProductInfo({ book, isMobile }: any) {
   return (
     <S.ProductInfoContainer>
-      <Typography variant={isMobile ? 'h6' : 'h5'} lineHeight={2}>
-        {product.name}
-      </Typography>
+      {/* <Typography variant={isMobile ? 'h6' : 'h5'} lineHeight={2}>
+        {book.attributes.title}
+      </Typography> */}
+      <Rating
+        name="read-only"
+        value={book.attributes.rating}
+        readOnly
+        sx={{ color: '#F4B244' }}
+      />
       <Typography variant={isMobile ? 'caption' : 'body1'}>
-        ${product.price}
+        ${formatPrice(book.attributes.price)}
       </Typography>
     </S.ProductInfoContainer>
   );

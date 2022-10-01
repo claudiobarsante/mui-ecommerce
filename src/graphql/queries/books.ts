@@ -12,3 +12,19 @@ export const BOOKS_QUERY = gql`
     }
   }
 `;
+
+export const FEATURED_QUERY = gql`
+  query Featured {
+    books(filters: { isFeatured: { eq: true } }) {
+      data {
+        id
+        attributes {
+          title
+          price
+          coverImageUrl
+          rating
+        }
+      }
+    }
+  }
+`;

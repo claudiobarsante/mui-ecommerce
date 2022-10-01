@@ -10,16 +10,15 @@ export const Product = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   alignItems: 'center',
   overflow: 'hidden',
+
+  height: '100%',
   [theme.breakpoints.up('md')]: {
     position: 'relative'
   }
 }));
 
-export const ProductImage = styled('img')(({ src, theme }) => ({
-  src: `url(${src})`,
-  width: '100%',
-
-  background: Colors.light_gray,
+export const ProductImage = styled(Box)(({ theme }) => ({
+  width: '70%',
   padding: '10px',
   [theme.breakpoints.down('md')]: {
     width: '80%',
@@ -66,7 +65,7 @@ export const AddToCartButton = styled(Button)(
           ? `${slideInBottom} 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both`
           : ''
     },
-    background: Colors.secondary,
+    background: Colors.primary,
     opacity: 0.9
   })
 );

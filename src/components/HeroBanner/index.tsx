@@ -7,7 +7,7 @@ export default function HeroBanner() {
     <S.BannerContainer>
       <S.BannerImage
         src="/images/banner/banner.png"
-        alt="Picture of a dog inside a purse"
+        alt="Clipart one boy and 2 girls reading books"
       />
       <S.BannerContent>
         <Typography variant="h6">Huge Collection</Typography>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import Image from 'next/image';
 import * as S from '../styles';
 import { Stack, Tooltip, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -10,13 +10,14 @@ import FitScreenIcon from '@mui/icons-material/FitScreen';
 //import ProductMeta from "./ProductMeta";
 import ProductInfo from '../Info';
 import { ProductType } from 'data';
+import { FeaturedBook } from 'components/Featured';
 
 type Props = {
-  product: ProductType;
+  book: FeaturedBook;
   isMobile: boolean;
 };
 
-export default function SingleProductMobile({ product, isMobile }: Props) {
+export default function SingleProductMobile({ book, isMobile }: Props) {
   //   const [ProductDetailDialog, showProductDetailDialog, closeProductDialog] =
   //     useDialogModal(ProductDetail);
 
@@ -34,8 +35,16 @@ export default function SingleProductMobile({ product, isMobile }: Props) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <S.ProductImage src={product.image} />
-        <ProductInfo product={product} isMobile={isMobile} />
+        <S.ProductImage>
+          <Image
+            src={book.attributes.coverImageUrl}
+            width={500}
+            height={650}
+            alt={book.attributes.title}
+            aria-label={book.attributes.title}
+          />
+        </S.ProductImage>
+        <ProductInfo book={book} />
         <S.ActionsButtonsContainer istoshow={isMobile.toString()}>
           <Stack direction={isMobile ? 'row' : 'column'}>
             <S.FavButton isfav={0}>
