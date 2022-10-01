@@ -34,6 +34,16 @@ const theme = createTheme({
         }
       }
     },
+    // MuiListItemText: {
+    //   styleOverrides: {
+    //     root: {
+    //       padding: 0,
+    //       margin: 0,
+    //       borderColor: lighten(0.2, Colors.primary),
+    //       color: 'red'
+    //     }
+    //   }
+    // },
     MuiDrawer: {
       styleOverrides: {
         paper: {

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+//import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import * as S from './styles';
 
 import { useRouter } from 'next/router';
@@ -13,12 +14,13 @@ type Props = {
 const TopMenuLink = ({ text, href }: Props) => {
   const router = useRouter();
   const isActive = router.asPath === href;
-  console.log('isActive', router.asPath);
+
   return (
-    <Link href={`${href}`} passHref>
+    <Link href={`${href}`}>
       <S.LinkContainer>
-        {isActive && <BookmarkBorderIcon />}
-        <ListItemText primary={text} />
+        <a>{text}</a>
+        {/* <ListItemText primary={text} sx={{ border: '1px solid black' }} /> */}
+        {isActive && <BookmarkIcon />}
       </S.LinkContainer>
     </Link>
   );
