@@ -1,6 +1,8 @@
 export default function formatPrice(price: number | bigint): string {
-  return new Intl.NumberFormat('en', {
+  const formatedPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD'
+    currency: 'USD',
+    currencyDisplay: 'symbol'
   }).format(price);
+  return formatedPrice.slice(1);
 }

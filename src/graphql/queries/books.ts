@@ -28,3 +28,37 @@ export const FEATURED_QUERY = gql`
     }
   }
 `;
+
+export const BOOK_QUERY = gql`
+  query Book($id: ID!) {
+    book(id: $id) {
+      data {
+        id
+        attributes {
+          title
+          coverImageUrl
+          isOnSale
+          pageCount
+          price
+          rating
+          salePrice
+          synopsis
+          authors {
+            data {
+              attributes {
+                name
+              }
+            }
+          }
+          publisher {
+            data {
+              attributes {
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import * as S from '../styles';
 
 import { Stack, Tooltip, Typography } from '@mui/material';
@@ -8,6 +9,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import FitScreenIcon from '@mui/icons-material/FitScreen';
 //import useDialogModal from '../../hooks/useDialogModal';
 //import ProductDetail from '../productdetail';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import ProductInfo from '../Info';
 import { ProductType } from 'data';
 import { FeaturedBook } from 'components/Featured';
@@ -19,6 +21,7 @@ type Props = {
 export default function SingleProductDesktop({ book, isMobile }: Props) {
   //   const [ProductDetailDialog, showProductDetailDialog, closeProductDialog] =
   //     useDialogModal(ProductDetail);
+  const router = useRouter();
 
   const [showOptions, setShowOptions] = useState(false);
 
@@ -65,9 +68,16 @@ export default function SingleProductDesktop({ book, isMobile }: Props) {
                 <ShareIcon color="primary" />
               </Tooltip>
             </S.ActionButton>
-            <S.ActionButton onClick={() => {}}>
-              <Tooltip placement="left" title="full view">
-                <FitScreenIcon color="primary" />
+            <S.ActionButton
+              onClick={() => {
+                router.push({
+                  pathname: '/product/[id]',
+                  query: { id: book.id }
+                });
+              }}
+            >
+              <Tooltip placement="left" title="see details">
+                <VisibilityIcon color="primary" />
               </Tooltip>
             </S.ActionButton>
           </Stack>
