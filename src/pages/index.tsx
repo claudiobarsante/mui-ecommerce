@@ -31,7 +31,8 @@ export default Home;
 export const getStaticProps: GetStaticProps = async () => {
   const apolloClient = initializeApollo();
   const { data, error } = await apolloClient.query<FeaturedQuery>({
-    query: FEATURED_QUERY
+    query: FEATURED_QUERY,
+    fetchPolicy: 'no-cache'
   });
 
   if (error) {

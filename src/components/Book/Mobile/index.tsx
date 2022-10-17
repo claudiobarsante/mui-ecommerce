@@ -31,11 +31,8 @@ export default function SingleProductMobile({ book, isMobile }: Props) {
   };
   return (
     <>
-      <S.Product
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <S.ProductImage>
+      <S.Book onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <S.BookImage>
           <Image
             src={book.attributes.coverImageUrl}
             width={500}
@@ -43,7 +40,7 @@ export default function SingleProductMobile({ book, isMobile }: Props) {
             alt={book.attributes.title}
             aria-label={book.attributes.title}
           />
-        </S.ProductImage>
+        </S.BookImage>
         <ProductInfo book={book} />
         <S.ActionsButtonsContainer istoshow={isMobile.toString()}>
           <Stack direction={isMobile ? 'row' : 'column'}>
@@ -62,7 +59,7 @@ export default function SingleProductMobile({ book, isMobile }: Props) {
             </S.ActionButton>
           </Stack>
         </S.ActionsButtonsContainer>
-      </S.Product>
+      </S.Book>
       <S.AddToCartButton istoshow={isMobile.toString()} variant="contained">
         Add to cart
       </S.AddToCartButton>

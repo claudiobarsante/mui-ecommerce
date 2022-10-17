@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as S from '../styles';
@@ -25,32 +25,27 @@ export default function SingleProductDesktop({ book, isMobile }: Props) {
 
   const [showOptions, setShowOptions] = useState(false);
 
-  const handleMouseEnter = () => {
-    console.log('passei');
+  const handleMouseEnter = useCallback(() => {
     setShowOptions(true);
-  };
-  const handleMouseLeave = () => {
+  }, []);
+  const handleMouseLeave = useCallback(() => {
     setShowOptions(false);
-  };
+  }, []);
 
   console.log('isMobile: ', isMobile, showOptions);
   return (
     <>
-      <S.Product
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
+      <S.Book onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {/* <S.ProductImage src={book.attributes.coverImageUrl} /> */}
-        <S.ProductImage>
+        <S.BookImage>
           <Image
             src={book.attributes.coverImageUrl}
             alt={book.attributes.title}
-            // layout="responsive"
             width={500}
             height={650}
             aria-label={book.attributes.title}
           />
-        </S.ProductImage>
+        </S.BookImage>
         <S.FavButton isfav={0}>
           <Tooltip placement="left" title="add to my wishlist">
             <FavoriteIcon />
@@ -68,21 +63,14 @@ export default function SingleProductDesktop({ book, isMobile }: Props) {
                 <ShareIcon color="primary" />
               </Tooltip>
             </S.ActionButton>
-            <S.ActionButton
-              onClick={() => {
-                router.push({
-                  pathname: '/product/[id]',
-                  query: { id: book.id }
-                });
-              }}
-            >
+            <S.ActionButton onClick={() => router.push(`/product/${book.id}`)}>
               <Tooltip placement="left" title="see details">
                 <VisibilityIcon color="primary" />
               </Tooltip>
             </S.ActionButton>
           </Stack>
         </S.ActionsButtonsContainer>
-      </S.Product>
+      </S.Book>
       <ProductInfo book={book} />
       {/* <ProductDetailDialog product={product} /> */}
     </>

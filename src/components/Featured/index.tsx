@@ -24,7 +24,7 @@ export type FeaturedProps = {
 export default function Featured({ featured }: FeaturedProps) {
   const isMobile = useIsMobile();
 
-  const renderProducts = featured.map((book) => (
+  const renderBooks = featured.map((book) => (
     <Grid
       item
       key={book.id}
@@ -52,7 +52,7 @@ export default function Featured({ featured }: FeaturedProps) {
         sx={{ margin: `20px 4px 10px 4px` }}
         columns={{ xs: 2, sm: 8, md: 12 }}
       >
-        {renderProducts}
+        {renderBooks}
       </Grid>
     </Container>
   );

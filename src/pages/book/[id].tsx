@@ -1,12 +1,19 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetStaticProps } from 'next';
 // --  Apollo
 import { initializeApollo } from 'graphql/apolloClient';
 import { BookQuery, FeaturedQuery } from 'graphql/generated/graphql';
 import { BOOK_QUERY, FEATURED_QUERY } from 'graphql/queries/books';
+// -- Templates
+import BookPage from 'templates/BookPageTemplate/index';
+
 const apolloClient = initializeApollo();
 
+export type ProductType = {
+  product: BookQuery;
+};
+
 export default function Index() {
-  return <p>Id</p>;
+  return <BookPage />;
 }
 
 export async function getStaticPaths() {
@@ -20,16 +27,18 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  console.log('params', params);
   const { data, error } = await apolloClient.query<BookQuery>({
     query: BOOK_QUERY,
     variables: {
       id: params?.id
     }
   });
+
   console.log('result', data);
 
   return {
-    props: {}
+    props: {
+      product
+    }
   };
 };

@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import { slideInBottom, slideInRight } from '../../animation';
 import { Colors } from 'styles/theme/colors';
 
-export const Product = styled(Box)(({ theme }) => ({
+export const Book = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -17,7 +17,7 @@ export const Product = styled(Box)(({ theme }) => ({
   }
 }));
 
-export const ProductImage = styled(Box)(({ theme }) => ({
+export const BookImage = styled(Box)(({ theme }) => ({
   width: '70%',
   padding: '10px',
   [theme.breakpoints.down('md')]: {
@@ -31,13 +31,13 @@ export const ActionButton = styled(IconButton)(() => ({
   margin: 4
 }));
 
-type ProductFavButtonProps = {
+type BookFavButtonProps = {
   isfav: number; //has to be all in lower case to avoid Warning: React does not recognize the `isFav` prop on a DOM element
   theme?: Theme;
 };
 
 export const FavButton = styled(ActionButton)(
-  ({ isfav, theme }: ProductFavButtonProps) => ({
+  ({ isfav, theme }: BookFavButtonProps) => ({
     color: isfav ? Colors.primary : Colors.light,
     [theme!.breakpoints?.up('md')]: {
       position: 'absolute',
@@ -70,7 +70,7 @@ export const AddToCartButton = styled(Button)(
   })
 );
 
-export const ProductInfoContainer = styled(Box)(() => ({
+export const BookInfoContainer = styled(Box)(() => ({
   padding: 4,
   display: 'flex',
   flexDirection: 'column',
