@@ -36,6 +36,7 @@ export const BOOK_QUERY = gql`
         id
         attributes {
           title
+          bookId
           coverImageUrl
           isOnSale
           pageCount

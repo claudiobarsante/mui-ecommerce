@@ -24,28 +24,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import useIsMobile from 'hooks/use-IsMobile';
 import { BookProps } from 'utils/mappers';
 
-const BookDetailWrapper = styled(Box)(({ theme }) => ({
-  display: 'flex'
-  // padding: theme.spacing(4)
-}));
-
-const BookDetailInfoWrapper = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  maxWidth: 500,
-  lineHeight: 1.5
-}));
-
-const BookImage = styled('img')(({ src, theme }) => ({
-  src: `url(${src})`,
-  width: '100%',
-  //background: Colors.light_gray,
-  padding: '10px'
-  // [theme.breakpoints.down("md")]: {
-  //   width: "80%",
-  //   padding: '24px',
-  // },
-}));
+import * as S from './styles';
 
 type Props = {
   book: BookProps;
@@ -57,24 +36,20 @@ const BookPageTemplate = ({ book }: Props) => {
 
   return (
     <BaseLayout>
-      <BookDetailWrapper
+      <S.BookDetailContainer
         display={'flex'}
         flexDirection={isMobile ? 'column' : 'row'}
       >
         <Book sx={{ mr: 4 }}>
-          <BookImage src={book.coverImageUrl!} />
+          <S.BookImage src={book.coverImageUrl!} />
         </Book>
-        <BookDetailInfoWrapper>
-          <Typography variant="subtitle1">SKU: 123</Typography>
+        <S.BookDetailInfoContainer>
+          <Typography variant="subtitle1">SKU: {book.bookId}</Typography>
           <Typography variant="subtitle1">Availability: 5 in stock</Typography>
           <Typography sx={{ lineHeight: 2 }} variant="h4">
             {book.title}
           </Typography>
-          <Typography variant="body1">
-            {'asdasdasdasdasdsad'}
-            {'asdasdasdasdasdsad'}
-            {'asdasdasdasdasdsad'}
-          </Typography>
+          <Typography variant="body1">{book.synopsis}</Typography>
           <Box
             sx={{ mt: 4 }}
             display="flex"
@@ -101,8 +76,8 @@ const BookPageTemplate = ({ book }: Props) => {
             <TwitterIcon sx={{ pl: 2 }} />
             <InstagramIcon sx={{ pl: 2 }} />
           </Box>
-        </BookDetailInfoWrapper>
-      </BookDetailWrapper>
+        </S.BookDetailInfoContainer>
+      </S.BookDetailContainer>
     </BaseLayout>
   );
 };

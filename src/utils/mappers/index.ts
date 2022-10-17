@@ -2,6 +2,7 @@ import { BookQuery } from 'graphql/generated/graphql';
 
 export type BookProps = {
   id: string;
+  bookId: string | undefined | null;
   title: string | undefined | null;
   coverImageUrl: string | undefined | null;
   isOnSale: boolean | undefined | null;
@@ -18,6 +19,7 @@ export const bookMapper = (bookData: BookQuery) => {
   const id = bookData.book?.data?.id!;
   const {
     title,
+    bookId,
     coverImageUrl,
     isOnSale,
     pageCount,
@@ -34,6 +36,7 @@ export const bookMapper = (bookData: BookQuery) => {
 
     const book: BookProps = {
       id,
+      bookId,
       title,
       coverImageUrl,
       isOnSale,

@@ -287,7 +287,7 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']>;
 };
 
-export type GenericMorph = Author | Book | Category | I18NLocale | Publisher | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
+export type GenericMorph = Author | Book | Category | I18NLocale | Publisher | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser | Wishlist;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -411,6 +411,7 @@ export type Mutation = {
   createUsersPermissionsRole?: Maybe<UsersPermissionsCreateRolePayload>;
   /** Create a new user */
   createUsersPermissionsUser: UsersPermissionsUserEntityResponse;
+  createWishlist?: Maybe<WishlistEntityResponse>;
   deleteAuthor?: Maybe<AuthorEntityResponse>;
   deleteBook?: Maybe<BookEntityResponse>;
   deleteCategory?: Maybe<CategoryEntityResponse>;
@@ -421,6 +422,7 @@ export type Mutation = {
   deleteUsersPermissionsRole?: Maybe<UsersPermissionsDeleteRolePayload>;
   /** Delete an existing user */
   deleteUsersPermissionsUser: UsersPermissionsUserEntityResponse;
+  deleteWishlist?: Maybe<WishlistEntityResponse>;
   /** Confirm an email users email address */
   emailConfirmation?: Maybe<UsersPermissionsLoginPayload>;
   /** Request a reset password token */
@@ -443,6 +445,7 @@ export type Mutation = {
   updateUsersPermissionsRole?: Maybe<UsersPermissionsUpdateRolePayload>;
   /** Update an existing user */
   updateUsersPermissionsUser: UsersPermissionsUserEntityResponse;
+  updateWishlist?: Maybe<WishlistEntityResponse>;
   upload: UploadFileEntityResponse;
 };
 
@@ -494,6 +497,11 @@ export type MutationCreateUsersPermissionsUserArgs = {
 };
 
 
+export type MutationCreateWishlistArgs = {
+  data: WishlistInput;
+};
+
+
 export type MutationDeleteAuthorArgs = {
   id: Scalars['ID'];
 };
@@ -530,6 +538,11 @@ export type MutationDeleteUsersPermissionsRoleArgs = {
 
 
 export type MutationDeleteUsersPermissionsUserArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteWishlistArgs = {
   id: Scalars['ID'];
 };
 
@@ -628,6 +641,12 @@ export type MutationUpdateUsersPermissionsUserArgs = {
 };
 
 
+export type MutationUpdateWishlistArgs = {
+  data: WishlistInput;
+  id: Scalars['ID'];
+};
+
+
 export type MutationUploadArgs = {
   field?: InputMaybe<Scalars['String']>;
   file: Scalars['Upload'];
@@ -718,6 +737,8 @@ export type Query = {
   usersPermissionsRoles?: Maybe<UsersPermissionsRoleEntityResponseCollection>;
   usersPermissionsUser?: Maybe<UsersPermissionsUserEntityResponse>;
   usersPermissionsUsers?: Maybe<UsersPermissionsUserEntityResponseCollection>;
+  wishlist?: Maybe<WishlistEntityResponse>;
+  wishlists?: Maybe<WishlistEntityResponseCollection>;
 };
 
 
@@ -829,6 +850,19 @@ export type QueryUsersPermissionsUserArgs = {
 export type QueryUsersPermissionsUsersArgs = {
   filters?: InputMaybe<UsersPermissionsUserFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryWishlistArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type QueryWishlistsArgs = {
+  filters?: InputMaybe<WishlistFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -1234,6 +1268,58 @@ export type UsersPermissionsUserRelationResponseCollection = {
   data: Array<UsersPermissionsUserEntity>;
 };
 
+export type Wishlist = {
+  __typename?: 'Wishlist';
+  books?: Maybe<BookRelationResponseCollection>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user?: Maybe<UsersPermissionsUserEntityResponse>;
+};
+
+
+export type WishlistBooksArgs = {
+  filters?: InputMaybe<BookFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  publicationState?: InputMaybe<PublicationState>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type WishlistEntity = {
+  __typename?: 'WishlistEntity';
+  attributes?: Maybe<Wishlist>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type WishlistEntityResponse = {
+  __typename?: 'WishlistEntityResponse';
+  data?: Maybe<WishlistEntity>;
+};
+
+export type WishlistEntityResponseCollection = {
+  __typename?: 'WishlistEntityResponseCollection';
+  data: Array<WishlistEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type WishlistFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<WishlistFiltersInput>>>;
+  books?: InputMaybe<BookFiltersInput>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<WishlistFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<WishlistFiltersInput>>>;
+  publishedAt?: InputMaybe<DateTimeFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+  user?: InputMaybe<UsersPermissionsUserFiltersInput>;
+};
+
+export type WishlistInput = {
+  books?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+  user?: InputMaybe<Scalars['ID']>;
+};
+
 export type BooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1249,7 +1335,7 @@ export type BookQueryVariables = Exact<{
 }>;
 
 
-export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title?: string | null, coverImageUrl?: string | null, isOnSale?: boolean | null, pageCount?: number | null, price?: number | null, rating?: number | null, salePrice?: number | null, synopsis?: string | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
+export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title?: string | null, bookId: string, coverImageUrl?: string | null, isOnSale?: boolean | null, pageCount?: number | null, price?: number | null, rating?: number | null, salePrice?: number | null, synopsis?: string | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
 
 
 export const BooksDocument = gql`
@@ -1340,6 +1426,7 @@ export const BookDocument = gql`
       id
       attributes {
         title
+        bookId
         coverImageUrl
         isOnSale
         pageCount
