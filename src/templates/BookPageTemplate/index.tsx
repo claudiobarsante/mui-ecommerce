@@ -22,8 +22,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import useIsMobile from 'hooks/use-IsMobile';
-import { BookDataProps } from 'pages/book/[id]';
-import { bookMapper } from 'utils/mappers';
+import { BookProps } from 'utils/mappers';
 
 const BookDetailWrapper = styled(Box)(({ theme }) => ({
   display: 'flex'
@@ -48,7 +47,12 @@ const BookImage = styled('img')(({ src, theme }) => ({
   // },
 }));
 
-const BookPageTemplate = ({ bookData }: BookDataProps) => {
+type Props = {
+  book: BookProps;
+};
+
+const BookPageTemplate = ({ book }: Props) => {
+  console.log('bookTemplate', book);
   const isMobile = useIsMobile();
 
   return (
@@ -58,17 +62,13 @@ const BookPageTemplate = ({ bookData }: BookDataProps) => {
         flexDirection={isMobile ? 'column' : 'row'}
       >
         <Book sx={{ mr: 4 }}>
-          <BookImage
-            src={
-              'https://images-na.ssl-images-amazon.com/images/I/517Fo8m%2BgnL._SX331_BO1,204,203,200_.jpg'
-            }
-          />
+          <BookImage src={book.coverImageUrl!} />
         </Book>
         <BookDetailInfoWrapper>
           <Typography variant="subtitle1">SKU: 123</Typography>
           <Typography variant="subtitle1">Availability: 5 in stock</Typography>
           <Typography sx={{ lineHeight: 2 }} variant="h4">
-            {'asdasdasdasdasdsad'}
+            {book.title}
           </Typography>
           <Typography variant="body1">
             {'asdasdasdasdasdsad'}

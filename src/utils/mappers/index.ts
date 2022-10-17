@@ -15,7 +15,6 @@ export type BookProps = {
 };
 
 export const bookMapper = (bookData: BookQuery) => {
-  console.log('dentro do mapper', bookData);
   const id = bookData.book?.data?.id!;
   const {
     title,
@@ -48,7 +47,6 @@ export const bookMapper = (bookData: BookQuery) => {
         bookData.book?.data?.attributes?.publisher?.data?.attributes?.name
     };
 
-    console.log('fim do mapper book->', book);
     return book;
   }
 

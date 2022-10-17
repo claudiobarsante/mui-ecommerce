@@ -5,17 +5,16 @@ import { BookQuery, FeaturedQuery } from 'graphql/generated/graphql';
 import { BOOK_QUERY, FEATURED_QUERY } from 'graphql/queries/books';
 // -- Templates
 import BookPageTemplate from 'templates/BookPageTemplate/index';
-import { bookMapper } from 'utils/mappers';
+import { bookMapper, BookProps } from 'utils/mappers';
 
 const apolloClient = initializeApollo();
 
-// export type BookDataProps = {
-//   bookData: BookQuery;
-// };
+export type Props = {
+  book: BookProps;
+};
 
-export default function Index({ book }: any) {
-  console.log('client depois do mapper', book);
-  return <BookPageTemplate bookData={{}} />;
+export default function Index({ book }: Props) {
+  return <BookPageTemplate book={book} />;
 }
 
 export async function getStaticPaths() {
@@ -37,7 +36,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   });
 
   //Todo: if there's an error, send it to error page
-  console.log('data [id]', data);
+
   return {
     props: {
       book: bookMapper(data)
