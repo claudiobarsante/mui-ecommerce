@@ -17,7 +17,7 @@ type Props = {
   isMobile: boolean;
 };
 
-export default function SingleProductMobile({ book, isMobile }: Props) {
+export default function SingleBookMobile({ book, isMobile }: Props) {
   //   const [ProductDetailDialog, showProductDetailDialog, closeProductDialog] =
   //     useDialogModal(ProductDetail);
 

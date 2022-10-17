@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as S from '../styles';
@@ -11,14 +11,14 @@ import FitScreenIcon from '@mui/icons-material/FitScreen';
 //import ProductDetail from '../productdetail';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ProductInfo from '../Info';
-import { ProductType } from 'data';
+
 import { FeaturedBook } from 'components/Featured';
 
 type Props = {
   book: FeaturedBook;
   isMobile: boolean;
 };
-export default function SingleProductDesktop({ book, isMobile }: Props) {
+export default function SingleBookDesktop({ book, isMobile }: Props) {
   //   const [ProductDetailDialog, showProductDetailDialog, closeProductDialog] =
   //     useDialogModal(ProductDetail);
   const router = useRouter();
@@ -63,7 +63,7 @@ export default function SingleProductDesktop({ book, isMobile }: Props) {
                 <ShareIcon color="primary" />
               </Tooltip>
             </S.ActionButton>
-            <S.ActionButton onClick={() => router.push(`/product/${book.id}`)}>
+            <S.ActionButton onClick={() => router.push(`/book/${book.id}`)}>
               <Tooltip placement="left" title="see details">
                 <VisibilityIcon color="primary" />
               </Tooltip>

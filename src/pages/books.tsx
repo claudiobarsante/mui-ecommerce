@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseLayout from 'templates/BaseLayout';
 
-const Products = () => {
+const Books = () => {
   return (
     <BaseLayout>
       <p>Estou na products</p>
@@ -9,4 +9,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Books;

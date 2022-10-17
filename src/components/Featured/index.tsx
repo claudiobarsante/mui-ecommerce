@@ -1,9 +1,9 @@
 import { Container, Grid } from '@mui/material';
 import useIsMobile from 'hooks/use-IsMobile';
 import { products } from '../../data';
-import SingleProductMobile from 'components/Product/Mobile';
+import SingleBookMobile from 'components/Book/Mobile';
 
-import SingleProductDesktop from 'components/Product/Desktop';
+import SingleBookDesktop from 'components/Book/Desktop';
 
 export type FeaturedBook = {
   __typename: string;
@@ -37,9 +37,9 @@ export default function Featured({ featured }: FeaturedProps) {
       padding={'10px'}
     >
       {isMobile ? (
-        <SingleProductMobile book={book} isMobile={isMobile} />
+        <SingleBookMobile book={book} isMobile={isMobile} />
       ) : (
-        <SingleProductDesktop book={book} isMobile={isMobile} />
+        <SingleBookDesktop book={book} isMobile={isMobile} />
       )}
     </Grid>
   ));
