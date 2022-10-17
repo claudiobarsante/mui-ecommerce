@@ -4,6 +4,7 @@ import {
   DialogTitle,
   Slide,
   Box,
+  Chip,
   IconButton,
   DialogContent,
   Typography,
@@ -20,11 +21,13 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-
+import FaceIcon from '@mui/icons-material/Face';
 import useIsMobile from 'hooks/use-IsMobile';
 import { BookProps } from 'utils/mappers';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import * as S from './styles';
+import Availability from 'components/Availability';
 
 type Props = {
   book: BookProps;
@@ -44,11 +47,11 @@ const BookPageTemplate = ({ book }: Props) => {
           <S.BookImage src={book.coverImageUrl!} />
         </Book>
         <S.BookDetailInfoContainer>
-          <Typography variant="subtitle1">SKU: {book.bookId}</Typography>
-          <Typography variant="subtitle1">Availability: 5 in stock</Typography>
           <Typography sx={{ lineHeight: 2 }} variant="h4">
             {book.title}
           </Typography>
+          <Typography variant="subtitle1">SKU: {book.bookId}</Typography>
+          <Availability qty={book.stock} />
           <Typography variant="body1">{book.synopsis}</Typography>
           <Box
             sx={{ mt: 4 }}

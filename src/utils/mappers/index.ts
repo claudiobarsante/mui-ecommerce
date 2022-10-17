@@ -2,15 +2,16 @@ import { BookQuery } from 'graphql/generated/graphql';
 
 export type BookProps = {
   id: string;
-  bookId: string | undefined | null;
-  title: string | undefined | null;
-  coverImageUrl: string | undefined | null;
-  isOnSale: boolean | undefined | null;
-  pageCount: number | undefined | null;
-  price: number | undefined | null;
-  rating: number | undefined | null;
-  salePrice: number | undefined | null;
-  synopsis: string | undefined | null;
+  bookId: string;
+  title: string;
+  coverImageUrl: string;
+  isOnSale: boolean;
+  pageCount: number;
+  price: number;
+  rating: number;
+  salePrice: number;
+  synopsis: string;
+  stock: number;
   authors: (string | null | undefined)[] | undefined;
   publisher: string | undefined | null;
 };
@@ -26,7 +27,8 @@ export const bookMapper = (bookData: BookQuery) => {
     price,
     rating,
     salePrice,
-    synopsis
+    synopsis,
+    stock
   } = bookData.book?.data?.attributes!;
 
   if (bookData.book?.data) {
@@ -45,6 +47,7 @@ export const bookMapper = (bookData: BookQuery) => {
       rating,
       salePrice,
       synopsis,
+      stock,
       authors: extractedAuthors,
       publisher:
         bookData.book?.data?.attributes?.publisher?.data?.attributes?.name

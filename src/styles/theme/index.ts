@@ -11,6 +11,9 @@ const theme = createTheme({
     },
     secondary: {
       main: Colors.secondary
+    },
+    error: {
+      main: Colors.danger
     }
   },
 
