@@ -8,7 +8,7 @@ export type BookProps = {
   isOnSale: boolean;
   pageCount: number;
   price: number;
-  rating: number;
+  rating: number | undefined | null;
   salePrice: number;
   synopsis: string;
   stock: number;

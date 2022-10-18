@@ -36,6 +36,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   });
 
   //Todo: if there's an error, send it to error page
+  console.log('data', data.book);
 
   return {
     props: {
