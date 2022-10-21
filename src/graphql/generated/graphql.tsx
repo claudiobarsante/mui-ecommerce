@@ -83,18 +83,17 @@ export type Book = {
   createdAt?: Maybe<Scalars['DateTime']>;
   isFeatured: Scalars['Boolean'];
   isOnSale: Scalars['Boolean'];
-  negativeReview?: Maybe<Scalars['Int']>;
   pageCount: Scalars['Int'];
-  positiveReview?: Maybe<Scalars['Int']>;
   price: Scalars['Float'];
   publishedAt?: Maybe<Scalars['DateTime']>;
   publisher?: Maybe<PublisherEntityResponse>;
-  rating?: Maybe<Scalars['Int']>;
+  rating?: Maybe<Scalars['Float']>;
   salePrice: Scalars['Float'];
   stock: Scalars['Int'];
   synopsis: Scalars['String'];
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
+  userRatings?: Maybe<Scalars['JSON']>;
 };
 
 
@@ -131,20 +130,19 @@ export type BookFiltersInput = {
   id?: InputMaybe<IdFilterInput>;
   isFeatured?: InputMaybe<BooleanFilterInput>;
   isOnSale?: InputMaybe<BooleanFilterInput>;
-  negativeReview?: InputMaybe<IntFilterInput>;
   not?: InputMaybe<BookFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<BookFiltersInput>>>;
   pageCount?: InputMaybe<IntFilterInput>;
-  positiveReview?: InputMaybe<IntFilterInput>;
   price?: InputMaybe<FloatFilterInput>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
   publisher?: InputMaybe<PublisherFiltersInput>;
-  rating?: InputMaybe<IntFilterInput>;
+  rating?: InputMaybe<FloatFilterInput>;
   salePrice?: InputMaybe<FloatFilterInput>;
   stock?: InputMaybe<IntFilterInput>;
   synopsis?: InputMaybe<StringFilterInput>;
   title?: InputMaybe<StringFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
+  userRatings?: InputMaybe<JsonFilterInput>;
 };
 
 export type BookInput = {
@@ -153,17 +151,16 @@ export type BookInput = {
   coverImageUrl?: InputMaybe<Scalars['String']>;
   isFeatured?: InputMaybe<Scalars['Boolean']>;
   isOnSale?: InputMaybe<Scalars['Boolean']>;
-  negativeReview?: InputMaybe<Scalars['Int']>;
   pageCount?: InputMaybe<Scalars['Int']>;
-  positiveReview?: InputMaybe<Scalars['Int']>;
   price?: InputMaybe<Scalars['Float']>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   publisher?: InputMaybe<Scalars['ID']>;
-  rating?: InputMaybe<Scalars['Int']>;
+  rating?: InputMaybe<Scalars['Float']>;
   salePrice?: InputMaybe<Scalars['Float']>;
   stock?: InputMaybe<Scalars['Int']>;
   synopsis?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
+  userRatings?: InputMaybe<Scalars['JSON']>;
 };
 
 export type BookRelationResponseCollection = {
@@ -290,7 +287,7 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']>;
 };
 
-export type GenericMorph = Author | Book | Category | I18NLocale | Publisher | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser | Wishlist;
+export type GenericMorph = Author | Book | Category | I18NLocale | Publisher | Rating | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser | Wishlist;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -408,6 +405,7 @@ export type Mutation = {
   createBook?: Maybe<BookEntityResponse>;
   createCategory?: Maybe<CategoryEntityResponse>;
   createPublisher?: Maybe<PublisherEntityResponse>;
+  createRating?: Maybe<RatingEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Create a new role */
@@ -419,6 +417,7 @@ export type Mutation = {
   deleteBook?: Maybe<BookEntityResponse>;
   deleteCategory?: Maybe<CategoryEntityResponse>;
   deletePublisher?: Maybe<PublisherEntityResponse>;
+  deleteRating?: Maybe<RatingEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Delete an existing role */
@@ -442,6 +441,7 @@ export type Mutation = {
   updateCategory?: Maybe<CategoryEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
   updatePublisher?: Maybe<PublisherEntityResponse>;
+  updateRating?: Maybe<RatingEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
   updateUploadFolder?: Maybe<UploadFolderEntityResponse>;
   /** Update an existing role */
@@ -477,6 +477,11 @@ export type MutationCreateCategoryArgs = {
 
 export type MutationCreatePublisherArgs = {
   data: PublisherInput;
+};
+
+
+export type MutationCreateRatingArgs = {
+  data: RatingInput;
 };
 
 
@@ -521,6 +526,11 @@ export type MutationDeleteCategoryArgs = {
 
 
 export type MutationDeletePublisherArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteRatingArgs = {
   id: Scalars['ID'];
 };
 
@@ -616,6 +626,12 @@ export type MutationUpdateFileInfoArgs = {
 
 export type MutationUpdatePublisherArgs = {
   data: PublisherInput;
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpdateRatingArgs = {
+  data: RatingInput;
   id: Scalars['ID'];
 };
 
@@ -732,6 +748,8 @@ export type Query = {
   me?: Maybe<UsersPermissionsMe>;
   publisher?: Maybe<PublisherEntityResponse>;
   publishers?: Maybe<PublisherEntityResponseCollection>;
+  rating?: Maybe<RatingEntityResponse>;
+  ratings?: Maybe<RatingEntityResponseCollection>;
   uploadFile?: Maybe<UploadFileEntityResponse>;
   uploadFiles?: Maybe<UploadFileEntityResponseCollection>;
   uploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -809,6 +827,18 @@ export type QueryPublishersArgs = {
 };
 
 
+export type QueryRatingArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type QueryRatingsArgs = {
+  filters?: InputMaybe<RatingFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
 export type QueryUploadFileArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
@@ -867,6 +897,57 @@ export type QueryWishlistsArgs = {
   pagination?: InputMaybe<PaginationArg>;
   publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type Rating = {
+  __typename?: 'Rating';
+  book?: Maybe<BookEntityResponse>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  rating: Scalars['Float'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user_ids?: Maybe<UsersPermissionsUserRelationResponseCollection>;
+};
+
+
+export type RatingUser_IdsArgs = {
+  filters?: InputMaybe<UsersPermissionsUserFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type RatingEntity = {
+  __typename?: 'RatingEntity';
+  attributes?: Maybe<Rating>;
+  id?: Maybe<Scalars['ID']>;
+};
+
+export type RatingEntityResponse = {
+  __typename?: 'RatingEntityResponse';
+  data?: Maybe<RatingEntity>;
+};
+
+export type RatingEntityResponseCollection = {
+  __typename?: 'RatingEntityResponseCollection';
+  data: Array<RatingEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type RatingFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<RatingFiltersInput>>>;
+  book?: InputMaybe<BookFiltersInput>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<RatingFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<RatingFiltersInput>>>;
+  rating?: InputMaybe<FloatFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+  user_ids?: InputMaybe<UsersPermissionsUserFiltersInput>;
+};
+
+export type RatingInput = {
+  book?: InputMaybe<Scalars['ID']>;
+  rating?: InputMaybe<Scalars['Float']>;
+  user_ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 export type ResponseCollectionMeta = {
@@ -1323,6 +1404,34 @@ export type WishlistInput = {
   user?: InputMaybe<Scalars['ID']>;
 };
 
+export type UpdateBookMutationVariables = Exact<{
+  bookId: Scalars['ID'];
+  userRatings: Scalars['JSON'];
+  rating: Scalars['Float'];
+}>;
+
+
+export type UpdateBookMutation = { __typename?: 'Mutation', updateBook?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null };
+
+export type RatingFragmentFragment = { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null };
+
+export type CreateRatingMutationVariables = Exact<{
+  userId?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>;
+  bookId: Scalars['ID'];
+  rating: Scalars['Float'];
+}>;
+
+
+export type CreateRatingMutation = { __typename?: 'Mutation', createRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null } | null } | null } | null };
+
+export type UpdateRatingMutationVariables = Exact<{
+  ratingId: Scalars['ID'];
+  rating: Scalars['Float'];
+}>;
+
+
+export type UpdateRatingMutation = { __typename?: 'Mutation', updateRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null } | null } | null } | null };
+
 export type BooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1338,9 +1447,149 @@ export type BookQueryVariables = Exact<{
 }>;
 
 
-export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, bookId: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
+export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, bookId: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
+
+export type RatingsQueryVariables = Exact<{
+  bookId: Scalars['ID'];
+  userId: Scalars['ID'];
+}>;
 
 
+export type RatingsQuery = { __typename?: 'Query', ratings?: { __typename?: 'RatingEntityResponseCollection', data: Array<{ __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, user_ids?: { __typename?: 'UsersPermissionsUserRelationResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', id?: string | null }> } | null, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null } | null } | null } | null }> } | null };
+
+export const RatingFragmentFragmentDoc = gql`
+    fragment RatingFragment on Rating {
+  rating
+  book {
+    data {
+      attributes {
+        userRatings
+        rating
+      }
+    }
+  }
+}
+    `;
+export const UpdateBookDocument = gql`
+    mutation UpdateBook($bookId: ID!, $userRatings: JSON!, $rating: Float!) {
+  updateBook(id: $bookId, data: {userRatings: $userRatings, rating: $rating}) {
+    data {
+      id
+      attributes {
+        userRatings
+        rating
+      }
+    }
+  }
+}
+    `;
+export type UpdateBookMutationFn = Apollo.MutationFunction<UpdateBookMutation, UpdateBookMutationVariables>;
+
+/**
+ * __useUpdateBookMutation__
+ *
+ * To run a mutation, you first call `useUpdateBookMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBookMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBookMutation, { data, loading, error }] = useUpdateBookMutation({
+ *   variables: {
+ *      bookId: // value for 'bookId'
+ *      userRatings: // value for 'userRatings'
+ *      rating: // value for 'rating'
+ *   },
+ * });
+ */
+export function useUpdateBookMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBookMutation, UpdateBookMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBookMutation, UpdateBookMutationVariables>(UpdateBookDocument, options);
+      }
+export type UpdateBookMutationHookResult = ReturnType<typeof useUpdateBookMutation>;
+export type UpdateBookMutationResult = Apollo.MutationResult<UpdateBookMutation>;
+export type UpdateBookMutationOptions = Apollo.BaseMutationOptions<UpdateBookMutation, UpdateBookMutationVariables>;
+export const CreateRatingDocument = gql`
+    mutation CreateRating($userId: [ID], $bookId: ID!, $rating: Float!) {
+  createRating(data: {user_ids: $userId, book: $bookId, rating: $rating}) {
+    data {
+      id
+      attributes {
+        ...RatingFragment
+      }
+    }
+  }
+}
+    ${RatingFragmentFragmentDoc}`;
+export type CreateRatingMutationFn = Apollo.MutationFunction<CreateRatingMutation, CreateRatingMutationVariables>;
+
+/**
+ * __useCreateRatingMutation__
+ *
+ * To run a mutation, you first call `useCreateRatingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRatingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRatingMutation, { data, loading, error }] = useCreateRatingMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      bookId: // value for 'bookId'
+ *      rating: // value for 'rating'
+ *   },
+ * });
+ */
+export function useCreateRatingMutation(baseOptions?: Apollo.MutationHookOptions<CreateRatingMutation, CreateRatingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRatingMutation, CreateRatingMutationVariables>(CreateRatingDocument, options);
+      }
+export type CreateRatingMutationHookResult = ReturnType<typeof useCreateRatingMutation>;
+export type CreateRatingMutationResult = Apollo.MutationResult<CreateRatingMutation>;
+export type CreateRatingMutationOptions = Apollo.BaseMutationOptions<CreateRatingMutation, CreateRatingMutationVariables>;
+export const UpdateRatingDocument = gql`
+    mutation UpdateRating($ratingId: ID!, $rating: Float!) {
+  updateRating(id: $ratingId, data: {rating: $rating}) {
+    data {
+      id
+      attributes {
+        ...RatingFragment
+      }
+    }
+  }
+}
+    ${RatingFragmentFragmentDoc}`;
+export type UpdateRatingMutationFn = Apollo.MutationFunction<UpdateRatingMutation, UpdateRatingMutationVariables>;
+
+/**
+ * __useUpdateRatingMutation__
+ *
+ * To run a mutation, you first call `useUpdateRatingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateRatingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateRatingMutation, { data, loading, error }] = useUpdateRatingMutation({
+ *   variables: {
+ *      ratingId: // value for 'ratingId'
+ *      rating: // value for 'rating'
+ *   },
+ * });
+ */
+export function useUpdateRatingMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRatingMutation, UpdateRatingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRatingMutation, UpdateRatingMutationVariables>(UpdateRatingDocument, options);
+      }
+export type UpdateRatingMutationHookResult = ReturnType<typeof useUpdateRatingMutation>;
+export type UpdateRatingMutationResult = Apollo.MutationResult<UpdateRatingMutation>;
+export type UpdateRatingMutationOptions = Apollo.BaseMutationOptions<UpdateRatingMutation, UpdateRatingMutationVariables>;
 export const BooksDocument = gql`
     query Books {
   books {
@@ -1433,6 +1682,7 @@ export const BookDocument = gql`
         coverImageUrl
         isOnSale
         pageCount
+        userRatings
         price
         rating
         salePrice
@@ -1485,3 +1735,56 @@ export function useBookLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookQ
 export type BookQueryHookResult = ReturnType<typeof useBookQuery>;
 export type BookLazyQueryHookResult = ReturnType<typeof useBookLazyQuery>;
 export type BookQueryResult = Apollo.QueryResult<BookQuery, BookQueryVariables>;
+export const RatingsDocument = gql`
+    query Ratings($bookId: ID!, $userId: ID!) {
+  ratings(
+    filters: {book: {id: {eq: $bookId}}, and: {user_ids: {id: {eq: $userId}}}}
+  ) {
+    data {
+      id
+      attributes {
+        user_ids {
+          data {
+            id
+          }
+        }
+        book {
+          data {
+            id
+          }
+        }
+        rating
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useRatingsQuery__
+ *
+ * To run a query within a React component, call `useRatingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRatingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRatingsQuery({
+ *   variables: {
+ *      bookId: // value for 'bookId'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useRatingsQuery(baseOptions: Apollo.QueryHookOptions<RatingsQuery, RatingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RatingsQuery, RatingsQueryVariables>(RatingsDocument, options);
+      }
+export function useRatingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RatingsQuery, RatingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RatingsQuery, RatingsQueryVariables>(RatingsDocument, options);
+        }
+export type RatingsQueryHookResult = ReturnType<typeof useRatingsQuery>;
+export type RatingsLazyQueryHookResult = ReturnType<typeof useRatingsLazyQuery>;
+export type RatingsQueryResult = Apollo.QueryResult<RatingsQuery, RatingsQueryVariables>;

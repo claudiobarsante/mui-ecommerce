@@ -40,6 +40,7 @@ export const BOOK_QUERY = gql`
           coverImageUrl
           isOnSale
           pageCount
+          userRatings
           price
           rating
           salePrice

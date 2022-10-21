@@ -4,7 +4,8 @@ import { initializeApollo } from 'graphql/apolloClient';
 import { BookQuery, FeaturedQuery } from 'graphql/generated/graphql';
 import { BOOK_QUERY, FEATURED_QUERY } from 'graphql/queries/books';
 // -- Templates
-import BookPageTemplate from 'templates/BookPageTemplate/index';
+import BookPageTemplate from 'templates/BookPage/index';
+// -- Utils
 import { bookMapper, BookProps } from 'utils/mappers';
 
 const apolloClient = initializeApollo();
@@ -32,11 +33,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     query: BOOK_QUERY,
     variables: {
       id: params?.id
-    }
+    },
+    fetchPolicy: 'no-cache'
   });
 
-  //Todo: if there's an error, send it to error page
-  console.log('data', data.book);
+  if (error) {
+    return {
+      redirect: {
+        destination: `/error`,
+        permanent: false
+      }
+    };
+  }
 
   return {
     props: {

@@ -1,29 +1,17 @@
 import * as React from 'react';
+import type { GetStaticProps } from 'next';
 
 // --  Apollo
 import { initializeApollo } from 'graphql/apolloClient';
 // -- Types
-import type { GetStaticProps, NextPage } from 'next';
 import { FEATURED_QUERY } from 'graphql/queries/books';
-// -- Custom components
-import BaseLayout from 'templates/BaseLayout';
-import HeroBanner from 'components/HeroBanner';
-import PromotionsSlider from 'components/PromotionsSlider';
-import { Box, Typography } from '@mui/material';
 import { FeaturedQuery } from 'graphql/generated/graphql';
-import Featured, { FeaturedProps } from 'components/Featured';
+// -- Custom components
+import { FeaturedProps } from 'components/Featured';
+import HomeTemplate from 'templates/Home';
 
 const Home = ({ featured }: FeaturedProps) => {
-  return (
-    <BaseLayout>
-      <HeroBanner />
-      <PromotionsSlider />
-      <Box display="flex" justifyContent="center" sx={{ p: 4 }}>
-        <Typography variant="h4">Featured</Typography>
-      </Box>
-      <Featured featured={featured} />
-    </BaseLayout>
-  );
+  return <HomeTemplate featured={featured} />;
 };
 
 export default Home;
@@ -43,7 +31,7 @@ export const getStaticProps: GetStaticProps = async () => {
       }
     };
   }
-  console.log('data', data?.books?.data);
+
   return {
     revalidate: 60 * 60 * 24, //24 hours - revalidate is in seconds, so 60sec * 60 min * 24 hours
     props: {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,7 +9,11 @@ import {
   DialogContent,
   Typography,
   Button,
-  Stack
+  Stack,
+  Rating,
+  DialogContentText,
+  TextField,
+  DialogActions
 } from '@mui/material';
 import BaseLayout from 'templates/BaseLayout';
 import { Colors } from 'styles/theme/colors';
@@ -29,12 +33,23 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import * as S from './styles';
 import Availability from 'components/Availability';
 
+import BookRating from 'components/BookRating';
+
 type Props = {
   book: BookProps;
 };
 
 const BookPageTemplate = ({ book }: Props) => {
-  console.log('bookTemplate', book);
+  const [rating, setRating] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setRating(() => {
+      if (book.rating) return book.rating;
+      return 0;
+    });
+  }, [book.rating]);
+
   const isMobile = useIsMobile();
 
   return (
@@ -52,6 +67,31 @@ const BookPageTemplate = ({ book }: Props) => {
           </Typography>
           <Typography variant="subtitle1">SKU: {book.bookId}</Typography>
           <Availability qty={book.stock} />
+          <Box
+            onClick={() => setOpen(true)}
+            sx={{
+              '&:hover': {
+                cursor: 'pointer'
+              }
+            }}
+          >
+            <Rating
+              name="current-book-rating"
+              value={rating}
+              precision={0.1}
+              readOnly
+              sx={{ color: Colors.warning }}
+            />
+          </Box>
+          <BookRating
+            bookTitle={book.title}
+            userId="1"
+            bookId={book.id}
+            open={open}
+            setOpen={setOpen}
+            setRating={setRating}
+          />
+
           <Typography variant="body1">{book.synopsis}</Typography>
           <Box
             sx={{ mt: 4 }}
