@@ -13,32 +13,21 @@ import { calculateRating } from 'utils/calculate-rating';
 
 type Props = {
   bookId: string;
-  bookTitle: string;
-  userId: string;
+  currentUserRating: number;
   handleClose: () => void;
   setRating: Dispatch<SetStateAction<number>>;
+  setRenderBookRatingComponent: Dispatch<SetStateAction<boolean>>;
 };
-
-type UserAction = 'create' | 'update' | null;
 
 export const useBookRating = ({
   bookId,
-  bookTitle,
-  userId,
+  currentUserRating,
   handleClose,
-  setRating
+  setRating,
+  setRenderBookRatingComponent
 }: Props) => {
-  const [action, setAction] = useState<UserAction>(null);
-  const [currentUserRating, setCurrentUserRating] = useState(0);
-  const [modalText, setModalText] = useState('');
-
-  // -- Query
-  const { data, error, loading } = useQueryRatings({
-    variables: { bookId, userId }
-  });
-  //const [getRating, { loading, error, data }] = useLazyQuery(RATINGS_QUERY);
-
   // -- Mutations
+  //? Mutation to update the book rating on Book
   const [updateBookRating, {}] = useMutationBook({
     onError: (err) => console.log('Error', err),
     onCompleted: (data) => {
@@ -46,10 +35,12 @@ export const useBookRating = ({
     }
   });
 
-  const [createRating, { error: createError, loading: createLoading }] =
+  //? Mutation to add a rating for the current user and book on Rating
+  const [addRating, { error: createError, loading: createLoading }] =
     useMutation(CREATE_RATING_MUTATION, {
       onError: (err) => console.log('Error', err),
       onCompleted: (data) => {
+        setRenderBookRatingComponent(true);
         const userRatings =
           data.createRating.data.attributes.book.data.attributes.userRatings;
 
@@ -68,7 +59,7 @@ export const useBookRating = ({
         });
       }
     });
-
+  //? Mutation to update a previous rating for the current user and book on Rating
   const [updateRating, {}] = useMutation(UPDATE_RATING_MUTATION, {
     onError: (err) => console.log('Error', err),
     onCompleted: (data) => {
@@ -92,47 +83,8 @@ export const useBookRating = ({
     }
   });
 
-  const handleRating = () => {
-    if (action === 'create') {
-      createRating({
-        variables: {
-          userId,
-          bookId,
-          rating: currentUserRating
-        }
-      });
-    }
-
-    if (action === 'update') {
-      const ratingId = data?.ratings?.data[0].id;
-      updateRating({
-        variables: {
-          ratingId,
-          rating: currentUserRating
-        }
-      });
-    }
-  };
-
-  useEffect(() => {
-    const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
-
-    if (hasRating) {
-      const userCurrentRating = data?.ratings?.data[0].attributes?.rating!;
-      setAction('update');
-      setModalText(`Please update your current rate of the book ${bookTitle}`);
-      setCurrentUserRating(userCurrentRating);
-    } else {
-      setAction('create');
-      setCurrentUserRating(0);
-      setModalText(`Please rate the book ${bookTitle}`);
-    }
-  }, [bookTitle, data?.ratings?.data]);
-
   return {
-    currentUserRating,
-    setCurrentUserRating,
-    modalText,
-    handleRating
+    addRating,
+    updateRating
   };
 };
