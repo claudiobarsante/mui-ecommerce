@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useMutation, useLazyQuery } from '@apollo/client';
-// -- Query
-import { RATINGS_QUERY, useQueryRatings } from 'graphql/queries/ratings';
+import { Dispatch, SetStateAction } from 'react';
+import { useMutation } from '@apollo/client';
+
 // -- Mutations
 import {
   CREATE_RATING_MUTATION,
@@ -60,31 +59,35 @@ export const useBookRating = ({
       }
     });
   //? Mutation to update a previous rating for the current user and book on Rating
-  const [updateRating, {}] = useMutation(UPDATE_RATING_MUTATION, {
-    onError: (err) => console.log('Error', err),
-    onCompleted: (data) => {
-      console.log('update', data);
-      const userRatings =
-        data.updateRating.data.attributes.book.data.attributes.userRatings;
+  const [updateRating, { loading: isLoadingUpdate }] = useMutation(
+    UPDATE_RATING_MUTATION,
+    {
+      onError: (err) => console.log('Error', err),
+      onCompleted: (data) => {
+        console.log('update', data);
+        const userRatings =
+          data.updateRating.data.attributes.book.data.attributes.userRatings;
 
-      const { calculatedRating, updatedUserRatings } = calculateRating({
-        userRatings,
-        currentUserRating
-      });
-      //*using setRating to update de state of the current rating to the calculated one and re-render de page with the updated rating
-      setRating(calculatedRating);
-      updateBookRating({
-        variables: {
-          bookId,
-          userRatings: updatedUserRatings,
-          rating: calculatedRating
-        }
-      });
+        const { calculatedRating, updatedUserRatings } = calculateRating({
+          userRatings,
+          currentUserRating
+        });
+        //*using setRating to update de state of the current rating to the calculated one and re-render de page with the updated rating
+        setRating(calculatedRating);
+        updateBookRating({
+          variables: {
+            bookId,
+            userRatings: updatedUserRatings,
+            rating: calculatedRating
+          }
+        });
+      }
     }
-  });
+  );
 
   return {
     addRating,
+    isLoadingUpdate,
     updateRating
   };
 };

@@ -8,6 +8,7 @@ import {
   DialogTitle,
   Rating
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useLazyQuery } from '@apollo/client';
 // -- Custom hook
 import { useBookRating } from './hooks/use-book-rating';
@@ -70,7 +71,7 @@ const BookRating = ({
     }
   });
   // -- Custom hook
-  const { addRating, updateRating } = useBookRating({
+  const { addRating, isLoadingUpdate, updateRating } = useBookRating({
     bookId,
     currentUserRating,
     handleClose,
@@ -125,7 +126,9 @@ const BookRating = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleRating}>Save</Button>
+        <LoadingButton loading={isLoadingUpdate} onClick={handleRating}>
+          Save
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );
