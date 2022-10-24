@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useMutation } from '@apollo/client';
+import { toast } from 'react-hot-toast';
 
 // -- Mutations
 import {
@@ -35,8 +36,9 @@ export const useBookRating = ({
   });
 
   //? Mutation to add a rating for the current user and book on Rating
-  const [addRating, { error: createError, loading: createLoading }] =
-    useMutation(CREATE_RATING_MUTATION, {
+  const [addRating, { loading: isLoadingAddRating }] = useMutation(
+    CREATE_RATING_MUTATION,
+    {
       onError: (err) => console.log('Error', err),
       onCompleted: (data) => {
         setRenderBookRatingComponent(true);
@@ -57,12 +59,16 @@ export const useBookRating = ({
           }
         });
       }
-    });
+    }
+  );
   //? Mutation to update a previous rating for the current user and book on Rating
-  const [updateRating, { loading: isLoadingUpdate }] = useMutation(
+  const [updateRating, { loading: isLoadingUpdateRating }] = useMutation(
     UPDATE_RATING_MUTATION,
     {
-      onError: (err) => console.log('Error', err),
+      onError: (err) => {
+        console.log('Error', err);
+        toast.error('An error ocuuref', { duration: 5000 });
+      },
       onCompleted: (data) => {
         console.log('update', data);
         const userRatings =
@@ -84,10 +90,10 @@ export const useBookRating = ({
       }
     }
   );
-
+  const isLoading = isLoadingUpdateRating || isLoadingAddRating;
   return {
     addRating,
-    isLoadingUpdate,
+    isLoading,
     updateRating
   };
 };

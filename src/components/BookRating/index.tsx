@@ -71,7 +71,7 @@ const BookRating = ({
     }
   });
   // -- Custom hook
-  const { addRating, isLoadingUpdate, updateRating } = useBookRating({
+  const { addRating, isLoading, updateRating } = useBookRating({
     bookId,
     currentUserRating,
     handleClose,
@@ -126,7 +126,7 @@ const BookRating = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <LoadingButton loading={isLoadingUpdate} onClick={handleRating}>
+        <LoadingButton loading={isLoading} onClick={handleRating}>
           Save
         </LoadingButton>
       </DialogActions>
