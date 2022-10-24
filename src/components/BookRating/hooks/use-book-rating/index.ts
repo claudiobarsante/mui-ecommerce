@@ -32,6 +32,7 @@ export const useBookRating = ({
     onError: (err) => console.log('Error', err),
     onCompleted: (data) => {
       handleClose();
+      toast.success('Your rating was added!', { duration: Infinity });
     }
   });
 

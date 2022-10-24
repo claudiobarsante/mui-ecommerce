@@ -9,7 +9,7 @@ import type { AppProps as NextAppProps } from 'next/app';
 import NextNprogress from 'nextjs-progressbar';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from 'graphql/apolloClient';
-import { Toaster } from 'react-hot-toast';
+import Toast from 'components/Toast';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -43,7 +43,8 @@ export default function MyApp(props: AppProps) {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Toaster />
+          <Toast />
+
           <NextNprogress
             color="#73bd73"
             startPosition={0.3}
