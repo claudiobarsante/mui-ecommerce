@@ -11,81 +11,27 @@ import { useMutationBook } from 'graphql/mutations/book';
 // -- Utils
 import { calculateRating } from 'utils/calculate-rating';
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
-import { BOOK_QUERY } from 'graphql/queries/books';
-
-import { gql } from '@apollo/client';
 
 type Props = {
   bookId: string;
   currentUserRating: number;
   handleClose: () => void;
   setRating: Dispatch<SetStateAction<number>>;
-  setRenderBookRatingComponent: Dispatch<SetStateAction<boolean>>;
   userId: string;
 };
 
-const READ_RATING = gql`
-  query ReadRating($id: ID!) {
-    rating(id: $id) {
-      data {
-        id
-        attributes {
-          book {
-            data {
-              attributes {
-                userRatings
-                rating
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
 export const useBookRating = ({
   bookId,
   currentUserRating,
   handleClose,
   setRating,
-  setRenderBookRatingComponent,
   userId
 }: Props) => {
   // -- Mutations
   //? Mutation to update the book rating on Book
   const [updateBookRating, {}] = useMutationBook({
     onError: (error) => console.log('error-updateBookRating', error),
-    update: (cache, { data: updateBook }) => {
-      // const readedCache: any = cache.readQuery({
-      //   query: BOOK_QUERY,
-      //   variables: { bookId }
-      // });
-      // cache.writeQuery({
-      //   query: BOOK_QUERY,
-      //   data: { updateBook: { ...readedCache?.updateBook, updateBook } }
-      // });
-      const readedCache: any = cache.readQuery({
-        query: RATINGS_QUERY,
-        variables: { bookId, userId }
-      });
-      console.log('updateBook', updateBook);
-      console.log('readedCache', readedCache);
-      cache.writeQuery({
-        query: RATINGS_QUERY,
-        data: {
-          ratings: {
-            ...readedCache?.ratings,
-            test: {
-              userRatings:
-                updateBook?.updateBook?.data?.attributes?.userRatings,
-              rating: updateBook?.updateBook?.data?.attributes?.rating
-            }
-          }
-        }
-      });
-    },
     onCompleted: () => {
-      handleClose();
       toast.success('Your rating was saved!', {
         duration: 4000,
         ariaProps: {
@@ -101,17 +47,49 @@ export const useBookRating = ({
     CREATE_RATING_MUTATION,
     {
       onError: (error) => console.log('error-CREATE_RATING_MUTATION', error),
-      update: (cache, { data: { createRating } }) => {
-        console.log('createRating', createRating);
-        const readedCache = cache.readQuery({
+      update: (cache, data) => {
+        const readedCache: any = cache.readQuery({
           query: RATINGS_QUERY,
           variables: { bookId, userId }
         });
-        console.log('readedCache', readedCache);
-        //cache.writeQuery({query:RATINGS_QUERY,data:{ratings:}})
+
+        const ratingId = data.data.createRating.data.id;
+        const updatedUserRatings =
+          data.data.createRating.data.attributes.book.data.attributes
+            .userRatings;
+        const updatedRating =
+          data.data.createRating.data.attributes.book.data.attributes.rating;
+
+        cache.writeQuery({
+          query: RATINGS_QUERY,
+          variables: { bookId, userId },
+          data: {
+            ratings: {
+              ...readedCache?.ratings,
+              data: [
+                {
+                  id: ratingId,
+                  attributes: {
+                    user_ids: { data: [{ id: userId }] },
+                    rating: currentUserRating,
+                    book: {
+                      data: {
+                        id: bookId,
+                        attributes: {
+                          userRatings: updatedUserRatings,
+                          rating: updatedRating
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        });
       },
       onCompleted: (data) => {
-        setRenderBookRatingComponent(true);
+        handleClose();
         //? -- If the book don't have any ratings, it'll be initialized with default values in a JSON format
         const defaultRatingsValues = '{"1":0,"2":0,"3":0,"4":0,"5":0}';
         const userRatings =
@@ -138,9 +116,10 @@ export const useBookRating = ({
   const [updateRating, { loading: isLoadingUpdateRating }] = useMutation(
     UPDATE_RATING_MUTATION,
     {
-      onError: () => console.log('error-UPDATE_RATING_MUTATION'),
+      onError: (error) => console.log('error-UPDATE_RATING_MUTATION', error),
       onCompleted: (data) => {
-        console.log('update', data);
+        handleClose();
+        console.log('data-no update', data);
         const userRatings =
           data.updateRating.data.attributes.book.data.attributes.userRatings;
 

@@ -1,4 +1,11 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, {
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  useCallback
+} from 'react';
+import { useQuery } from '@apollo/client';
 import {
   Button,
   Dialog,
@@ -9,7 +16,6 @@ import {
   Rating
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useLazyQuery } from '@apollo/client';
 // -- Custom hook
 import { useBookRating } from './hooks/use-book-rating';
 // -- Styles
@@ -40,21 +46,22 @@ const BookRating = ({
   const [currentUserRating, setCurrentUserRating] = useState(0);
   const [modalText, setModalText] = useState('');
   const [previousUserRatingId, setPreviousUserRatingId] = useState('');
-  const [renderBookRatingComponent, setRenderBookRatingComponent] =
-    useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
 
   // -- Query
-  const [getPreviousRating] = useLazyQuery(RATINGS_QUERY, {
-    onError: (err) => console.log('Error', err),
-    onCompleted: (data) => {
+  const { data } = useQuery(RATINGS_QUERY, { variables: { bookId, userId } });
+
+  useEffect(() => {
+    console.log('passei - useEffect');
+    if (data?.ratings?.data) {
       const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
       console.log('getPreviousRating-->', hasRating);
-      console.log('data-->', data);
+      console.log('data-inside-useEffect-->', data);
       if (hasRating) {
+        console.log('update-hasRating');
         const userCurrentRating = data?.ratings?.data[0].attributes?.rating!;
         const ratingId = data?.ratings?.data[0].id;
         setPreviousUserRatingId(ratingId);
@@ -69,18 +76,18 @@ const BookRating = ({
         setModalText(`Please rate the book ${bookTitle}`);
       }
     }
-  });
+  }, [bookTitle, data, data?.ratings?.data]);
+
   // -- Custom hook
   const { addRating, isLoading, updateRating } = useBookRating({
     bookId,
     currentUserRating,
     handleClose,
     setRating,
-    setRenderBookRatingComponent,
     userId
   });
 
-  const handleRating = () => {
+  const handleRating = useCallback(() => {
     if (action === 'create') {
       addRating({
         variables: {
@@ -99,17 +106,15 @@ const BookRating = ({
         }
       });
     }
-  };
-
-  useEffect(() => {
-    /*getPreviousRating will run on the first render, bookId or userId changes
-    # renderBookRatingComponent is set on the useBookRating hook and it's function is to signal
-    that the component needs to re-render to get the updated rating of the book after a user create/update the rating*/
-    getPreviousRating({
-      variables: { bookId, userId }
-      //fetchPolicy: 'no-cache'
-    });
-  }, [bookId, getPreviousRating, renderBookRatingComponent, userId]);
+  }, [
+    action,
+    addRating,
+    bookId,
+    currentUserRating,
+    previousUserRatingId,
+    updateRating,
+    userId
+  ]);
 
   return (
     <Dialog open={open} onClose={handleClose}>
