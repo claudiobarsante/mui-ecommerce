@@ -7,6 +7,7 @@ import { BOOK_QUERY, FEATURED_QUERY } from 'graphql/queries/books';
 import BookPageTemplate from 'templates/BookPage/index';
 // -- Utils
 import { bookMapper, BookProps } from 'utils/mappers';
+import ErrorBoundary from 'components/ErrorBoundary';
 
 const apolloClient = initializeApollo();
 
@@ -15,7 +16,11 @@ export type Props = {
 };
 
 export default function Index({ book }: Props) {
-  return <BookPageTemplate book={book} />;
+  return (
+    <ErrorBoundary>
+      <BookPageTemplate book={book} />
+    </ErrorBoundary>
+  );
 }
 
 export async function getStaticPaths() {
@@ -33,8 +38,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     query: BOOK_QUERY,
     variables: {
       id: params?.id
-    },
-    fetchPolicy: 'no-cache'
+    }
+    //fetchPolicy: 'no-cache'
   });
 
   if (error) {

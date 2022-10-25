@@ -20,6 +20,10 @@ export const RATINGS_QUERY = gql`
           book {
             data {
               id
+              attributes {
+                userRatings
+                rating
+              }
             }
           }
           rating

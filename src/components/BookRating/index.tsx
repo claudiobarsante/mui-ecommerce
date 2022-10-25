@@ -76,7 +76,8 @@ const BookRating = ({
     currentUserRating,
     handleClose,
     setRating,
-    setRenderBookRatingComponent
+    setRenderBookRatingComponent,
+    userId
   });
 
   const handleRating = () => {
@@ -105,8 +106,8 @@ const BookRating = ({
     # renderBookRatingComponent is set on the useBookRating hook and it's function is to signal
     that the component needs to re-render to get the updated rating of the book after a user create/update the rating*/
     getPreviousRating({
-      variables: { bookId, userId },
-      fetchPolicy: 'no-cache'
+      variables: { bookId, userId }
+      //fetchPolicy: 'no-cache'
     });
   }, [bookId, getPreviousRating, renderBookRatingComponent, userId]);
 

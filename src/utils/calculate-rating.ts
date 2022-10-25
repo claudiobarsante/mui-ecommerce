@@ -15,6 +15,7 @@ export function calculateRating({
   // -- The rating is from 1 -> 5 stars
   // -- userRating object {1: x, 2: x, 3: x, 4: x, 5: x}
   const parsedObject = JSON.parse(userRatings);
+  console.log('parsedObject', parsedObject);
   const updatedUserRatings = {
     ...parsedObject,
     [currentUserRating]: parsedObject[currentUserRating] + 1
