@@ -43,11 +43,12 @@ export const useBookRating = ({
   });
 
   //? Mutation to add a rating for the current user and book on Rating
-  const [addRating, { loading: isLoadingAddRating }] = useMutation(
+  const [createRating, { loading: isLoadingAddRating }] = useMutation(
     CREATE_RATING_MUTATION,
     {
       onError: (error) => console.log('error-CREATE_RATING_MUTATION', error),
       update: (cache, data) => {
+        //? updating the cache after creating a new rating will force to re-run the query getRating, so the user will have the updated ratings on the screen
         const readedCache: any = cache.readQuery({
           query: RATINGS_QUERY,
           variables: { bookId, userId }
@@ -141,7 +142,7 @@ export const useBookRating = ({
   );
   const isLoading = isLoadingUpdateRating || isLoadingAddRating;
   return {
-    addRating,
+    createRating,
     isLoading,
     updateRating
   };

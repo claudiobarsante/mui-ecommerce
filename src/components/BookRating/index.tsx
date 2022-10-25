@@ -5,7 +5,7 @@ import React, {
   SetStateAction,
   useCallback
 } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import {
   Button,
   Dialog,
@@ -52,16 +52,10 @@ const BookRating = ({
   };
 
   // -- Query
-  const { data } = useQuery(RATINGS_QUERY, { variables: { bookId, userId } });
-
-  useEffect(() => {
-    console.log('passei - useEffect');
-    if (data?.ratings?.data) {
+  const [getRating] = useLazyQuery(RATINGS_QUERY, {
+    onCompleted(data) {
       const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
-      console.log('getPreviousRating-->', hasRating);
-      console.log('data-inside-useEffect-->', data);
       if (hasRating) {
-        console.log('update-hasRating');
         const userCurrentRating = data?.ratings?.data[0].attributes?.rating!;
         const ratingId = data?.ratings?.data[0].id;
         setPreviousUserRatingId(ratingId);
@@ -75,11 +69,18 @@ const BookRating = ({
         setCurrentUserRating(0);
         setModalText(`Please rate the book ${bookTitle}`);
       }
+    },
+    onError(error) {
+      console.log('Error-getRating', error);
     }
-  }, [bookTitle, data, data?.ratings?.data]);
+  });
+
+  useEffect(() => {
+    getRating({ variables: { bookId, userId } });
+  }, [bookId, bookTitle, getRating, userId]);
 
   // -- Custom hook
-  const { addRating, isLoading, updateRating } = useBookRating({
+  const { createRating, isLoading, updateRating } = useBookRating({
     bookId,
     currentUserRating,
     handleClose,
@@ -89,7 +90,7 @@ const BookRating = ({
 
   const handleRating = useCallback(() => {
     if (action === 'create') {
-      addRating({
+      createRating({
         variables: {
           userId,
           bookId,
@@ -108,7 +109,7 @@ const BookRating = ({
     }
   }, [
     action,
-    addRating,
+    createRating,
     bookId,
     currentUserRating,
     previousUserRatingId,
