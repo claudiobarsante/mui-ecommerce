@@ -5,7 +5,7 @@ import React, {
   SetStateAction,
   useCallback
 } from 'react';
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import {
   Button,
   Dialog,
@@ -53,7 +53,7 @@ const BookRating = ({
 
   // -- Query
   const [getRating] = useLazyQuery(RATINGS_QUERY, {
-    onCompleted(data) {
+    onCompleted: (data) => {
       const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
       if (hasRating) {
         const userCurrentRating = data?.ratings?.data[0].attributes?.rating!;
@@ -70,7 +70,7 @@ const BookRating = ({
         setModalText(`Please rate the book ${bookTitle}`);
       }
     },
-    onError(error) {
+    onError: (error) => {
       console.log('Error-getRating', error);
     }
   });
