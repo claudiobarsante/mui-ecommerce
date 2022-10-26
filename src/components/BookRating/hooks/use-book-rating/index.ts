@@ -11,21 +11,24 @@ import { useMutationBook } from 'graphql/mutations/book';
 // -- Utils
 import { calculateRating } from 'utils/calculate-rating';
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
+import { UserRatings } from 'components/BookRating';
 
 type Props = {
   bookId: string;
-  currentUserRating: number;
   handleClose: () => void;
   setRating: Dispatch<SetStateAction<number>>;
   userId: string;
+  userRating: UserRatings;
+  setTotalRatings: Dispatch<SetStateAction<number>>;
 };
 
 export const useBookRating = ({
   bookId,
-  currentUserRating,
   handleClose,
   setRating,
-  userId
+  userId,
+  userRating,
+  setTotalRatings
 }: Props) => {
   // -- Mutations
   //? Mutation to update the book rating on Book
@@ -72,7 +75,7 @@ export const useBookRating = ({
                   id: ratingId,
                   attributes: {
                     user_ids: { data: [{ id: userId }] },
-                    rating: currentUserRating,
+                    rating: userRating.current,
                     book: {
                       data: {
                         id: bookId,
@@ -97,12 +100,15 @@ export const useBookRating = ({
           data.createRating.data.attributes.book.data.attributes.userRatings ||
           defaultRatingsValues;
 
-        const { calculatedRating, updatedUserRatings } = calculateRating({
-          userRatings,
-          currentUserRating
-        });
+        const { calculatedRating, updatedUserRatings, totalBookRatings } =
+          calculateRating({
+            userRatings,
+            currentUserRating: userRating.current,
+            action: 'create'
+          });
         //*using setRating to update de state of the current rating to the calculated one and re-render de page with the updated rating
         setRating(calculatedRating);
+        setTotalRatings(totalBookRatings);
         updateBookRating({
           variables: {
             bookId,
@@ -124,12 +130,16 @@ export const useBookRating = ({
         const userRatings =
           data.updateRating.data.attributes.book.data.attributes.userRatings;
 
-        const { calculatedRating, updatedUserRatings } = calculateRating({
-          userRatings,
-          currentUserRating
-        });
+        const { calculatedRating, updatedUserRatings, totalBookRatings } =
+          calculateRating({
+            userRatings,
+            currentUserRating: userRating.current,
+            action: 'update',
+            previousUserRating: userRating.previous
+          });
         //*using setRating to update de state of the current rating to the calculated one and re-render de page with the updated rating
         setRating(calculatedRating);
+        setTotalRatings(totalBookRatings);
         updateBookRating({
           variables: {
             bookId,

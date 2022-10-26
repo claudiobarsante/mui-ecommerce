@@ -14,6 +14,7 @@ export type BookProps = {
   stock: number;
   authors: (string | null | undefined)[] | undefined;
   publisher: string | undefined | null;
+  totalRatings: number | null | undefined;
 };
 
 export const bookMapper = (bookData: BookQuery) => {
@@ -28,7 +29,8 @@ export const bookMapper = (bookData: BookQuery) => {
     rating,
     salePrice,
     synopsis,
-    stock
+    stock,
+    totalRatings
   } = bookData.book?.data?.attributes!;
 
   if (bookData.book?.data) {
@@ -48,6 +50,7 @@ export const bookMapper = (bookData: BookQuery) => {
       salePrice,
       synopsis,
       stock,
+      totalRatings,
       authors: extractedAuthors,
       publisher:
         bookData.book?.data?.attributes?.publisher?.data?.attributes?.name

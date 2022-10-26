@@ -92,6 +92,7 @@ export type Book = {
   stock: Scalars['Int'];
   synopsis: Scalars['String'];
   title: Scalars['String'];
+  totalRatings?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   userRatings?: Maybe<Scalars['JSON']>;
 };
@@ -141,6 +142,7 @@ export type BookFiltersInput = {
   stock?: InputMaybe<IntFilterInput>;
   synopsis?: InputMaybe<StringFilterInput>;
   title?: InputMaybe<StringFilterInput>;
+  totalRatings?: InputMaybe<IntFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
   userRatings?: InputMaybe<JsonFilterInput>;
 };
@@ -160,6 +162,7 @@ export type BookInput = {
   stock?: InputMaybe<Scalars['Int']>;
   synopsis?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
+  totalRatings?: InputMaybe<Scalars['Int']>;
   userRatings?: InputMaybe<Scalars['JSON']>;
 };
 
@@ -1404,13 +1407,6 @@ export type WishlistInput = {
   user?: InputMaybe<Scalars['ID']>;
 };
 
-export type ReadRatingQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type ReadRatingQuery = { __typename?: 'Query', rating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null } | null } | null } | null };
-
 export type UpdateBookMutationVariables = Exact<{
   bookId: Scalars['ID'];
   userRatings: Scalars['JSON'];
@@ -1454,7 +1450,7 @@ export type BookQueryVariables = Exact<{
 }>;
 
 
-export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, bookId: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
+export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, bookId: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
 
 export type RatingsQueryVariables = Exact<{
   bookId: Scalars['ID'];
@@ -1477,53 +1473,6 @@ export const RatingFragmentFragmentDoc = gql`
   }
 }
     `;
-export const ReadRatingDocument = gql`
-    query ReadRating($id: ID!) {
-  rating(id: $id) {
-    data {
-      id
-      attributes {
-        book {
-          data {
-            attributes {
-              userRatings
-              rating
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useReadRatingQuery__
- *
- * To run a query within a React component, call `useReadRatingQuery` and pass it any options that fit your needs.
- * When your component renders, `useReadRatingQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useReadRatingQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useReadRatingQuery(baseOptions: Apollo.QueryHookOptions<ReadRatingQuery, ReadRatingQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ReadRatingQuery, ReadRatingQueryVariables>(ReadRatingDocument, options);
-      }
-export function useReadRatingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReadRatingQuery, ReadRatingQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ReadRatingQuery, ReadRatingQueryVariables>(ReadRatingDocument, options);
-        }
-export type ReadRatingQueryHookResult = ReturnType<typeof useReadRatingQuery>;
-export type ReadRatingLazyQueryHookResult = ReturnType<typeof useReadRatingLazyQuery>;
-export type ReadRatingQueryResult = Apollo.QueryResult<ReadRatingQuery, ReadRatingQueryVariables>;
 export const UpdateBookDocument = gql`
     mutation UpdateBook($bookId: ID!, $userRatings: JSON!, $rating: Float!) {
   updateBook(id: $bookId, data: {userRatings: $userRatings, rating: $rating}) {
@@ -1742,6 +1691,7 @@ export const BookDocument = gql`
         salePrice
         synopsis
         stock
+        totalRatings
         authors {
           data {
             attributes {

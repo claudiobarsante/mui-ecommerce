@@ -46,6 +46,7 @@ export const BOOK_QUERY = gql`
           salePrice
           synopsis
           stock
+          totalRatings
           authors {
             data {
               attributes {

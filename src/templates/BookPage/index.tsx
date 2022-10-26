@@ -40,15 +40,9 @@ type Props = {
 };
 
 const BookPageTemplate = ({ book }: Props) => {
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(book.rating || 0);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    setRating(() => {
-      if (book.rating) return book.rating;
-      return 0;
-    });
-  }, [book.rating]);
+  const [totalRatings, setTotalRatings] = useState(book.totalRatings || 0);
 
   const isMobile = useIsMobile();
 
@@ -72,7 +66,10 @@ const BookPageTemplate = ({ book }: Props) => {
             sx={{
               '&:hover': {
                 cursor: 'pointer'
-              }
+              },
+              display: 'flex',
+              justifyContent: 'flex-start',
+              alignItens: 'center'
             }}
           >
             <Rating
@@ -82,6 +79,10 @@ const BookPageTemplate = ({ book }: Props) => {
               readOnly
               sx={{ color: Colors.warning }}
             />
+            <Typography variant="subtitle1" sx={{ marginLeft: 3 }}>
+              {' '}
+              based on {totalRatings} user ratings
+            </Typography>
           </Box>
           <BookRating
             bookTitle={book.title}
@@ -90,6 +91,7 @@ const BookPageTemplate = ({ book }: Props) => {
             open={open}
             setOpen={setOpen}
             setRating={setRating}
+            setTotalRatings={setTotalRatings}
           />
 
           <Typography variant="body1">{book.synopsis}</Typography>

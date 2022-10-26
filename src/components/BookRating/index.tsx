@@ -30,9 +30,15 @@ type Props = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setRating: Dispatch<SetStateAction<number>>;
+  setTotalRatings: Dispatch<SetStateAction<number>>;
 };
 
-type UserAction = 'create' | 'update' | null;
+export type UserAction = 'create' | 'update' | null;
+
+export type UserRatings = {
+  previous: number;
+  current: number;
+};
 
 const BookRating = ({
   bookTitle,
@@ -40,10 +46,14 @@ const BookRating = ({
   userId,
   open,
   setOpen,
-  setRating
+  setRating,
+  setTotalRatings
 }: Props) => {
   const [action, setAction] = useState<UserAction>(null);
-  const [currentUserRating, setCurrentUserRating] = useState(0);
+  const [userRating, setUserRating] = useState<UserRatings>({
+    previous: 0,
+    current: 0
+  });
   const [modalText, setModalText] = useState('');
   const [previousUserRatingId, setPreviousUserRatingId] = useState('');
 
@@ -56,17 +66,21 @@ const BookRating = ({
     onCompleted: (data) => {
       const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
       if (hasRating) {
-        const userCurrentRating = data?.ratings?.data[0].attributes?.rating!;
+        const userCurrentRating: number =
+          data?.ratings?.data[0].attributes?.rating!;
         const ratingId = data?.ratings?.data[0].id;
         setPreviousUserRatingId(ratingId);
         setAction('update');
         setModalText(
           `Please update your current rate of the book ${bookTitle}`
         );
-        setCurrentUserRating(userCurrentRating);
+        setUserRating({
+          current: userCurrentRating, //to show the previous rate on the modal to the user
+          previous: userCurrentRating
+        });
       } else {
         setAction('create');
-        setCurrentUserRating(0);
+        setUserRating({ previous: 0, current: 0 });
         setModalText(`Please rate the book ${bookTitle}`);
       }
     },
@@ -82,10 +96,11 @@ const BookRating = ({
   // -- Custom hook
   const { createRating, isLoading, updateRating } = useBookRating({
     bookId,
-    currentUserRating,
     handleClose,
     setRating,
-    userId
+    userId,
+    userRating,
+    setTotalRatings
   });
 
   const handleRating = useCallback(() => {
@@ -94,7 +109,7 @@ const BookRating = ({
         variables: {
           userId,
           bookId,
-          rating: currentUserRating
+          rating: userRating.current
         }
       });
     }
@@ -103,18 +118,18 @@ const BookRating = ({
       updateRating({
         variables: {
           ratingId: previousUserRatingId,
-          rating: currentUserRating
+          rating: userRating.current
         }
       });
     }
   }, [
     action,
     createRating,
+    userId,
     bookId,
-    currentUserRating,
-    previousUserRatingId,
+    userRating,
     updateRating,
-    userId
+    previousUserRatingId
   ]);
 
   return (
@@ -124,10 +139,13 @@ const BookRating = ({
         <DialogContentText>{modalText}</DialogContentText>
         <Rating
           name="book-rating"
-          value={currentUserRating}
+          value={userRating.current}
           sx={{ color: Colors.warning }}
           onChange={(event, newValue) => {
-            setCurrentUserRating(newValue ?? 0);
+            setUserRating((ratings) => ({
+              ...ratings,
+              current: newValue ?? 0
+            }));
           }}
         />
       </DialogContent>
