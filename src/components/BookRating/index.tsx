@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -40,6 +41,11 @@ export type UserRatings = {
   current: number;
 };
 
+export type DialogState = {
+  isResponse: boolean;
+  hasError: boolean;
+};
+
 const BookRating = ({
   bookTitle,
   bookId,
@@ -50,12 +56,16 @@ const BookRating = ({
   setTotalRatings
 }: Props) => {
   const [action, setAction] = useState<UserAction>(null);
+  const [dialogState, setDialogState] = useState<DialogState>({
+    isResponse: false,
+    hasError: false
+  });
+  const [modalText, setModalText] = useState('');
+  const [previousUserRatingId, setPreviousUserRatingId] = useState('');
   const [userRating, setUserRating] = useState<UserRatings>({
     previous: 0,
     current: 0
   });
-  const [modalText, setModalText] = useState('');
-  const [previousUserRatingId, setPreviousUserRatingId] = useState('');
 
   const handleClose = () => {
     setOpen(false);
@@ -135,26 +145,28 @@ const BookRating = ({
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Rating</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{modalText}</DialogContentText>
-        <Rating
-          name="book-rating"
-          value={userRating.current}
-          sx={{ color: Colors.warning }}
-          onChange={(event, newValue) => {
-            setUserRating((ratings) => ({
-              ...ratings,
-              current: newValue ?? 0
-            }));
-          }}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <LoadingButton loading={isLoading} onClick={handleRating}>
-          Save
-        </LoadingButton>
-      </DialogActions>
+      <Box hidden={dialogState.isResponse}>
+        <DialogContent>
+          <DialogContentText>{modalText}</DialogContentText>
+          <Rating
+            name="book-rating"
+            value={userRating.current}
+            sx={{ color: Colors.warning }}
+            onChange={(event, newValue) => {
+              setUserRating((ratings) => ({
+                ...ratings,
+                current: newValue ?? 0
+              }));
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <LoadingButton loading={isLoading} onClick={handleRating}>
+            Save
+          </LoadingButton>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 };

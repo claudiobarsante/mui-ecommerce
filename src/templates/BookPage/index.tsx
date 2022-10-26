@@ -79,6 +79,7 @@ const BookPageTemplate = ({ book }: Props) => {
               readOnly
               sx={{ color: Colors.warning }}
             />
+
             <Typography variant="subtitle1" sx={{ marginLeft: 3 }}>
               {' '}
               based on {totalRatings} user ratings
