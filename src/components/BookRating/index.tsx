@@ -17,6 +17,8 @@ import {
   Rating
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 // -- Custom hook
 import { useBookRating } from './hooks/use-book-rating';
 // -- Styles
@@ -69,6 +71,7 @@ const BookRating = ({
 
   const handleClose = () => {
     setOpen(false);
+    setDialogState({ isResponse: false, hasError: false });
   };
 
   // -- Query
@@ -106,11 +109,12 @@ const BookRating = ({
   // -- Custom hook
   const { createRating, isLoading, updateRating } = useBookRating({
     bookId,
-    handleClose,
     setRating,
     userId,
     userRating,
-    setTotalRatings
+    setTotalRatings,
+    setDialogState,
+    setModalText
   });
 
   const handleRating = useCallback(() => {
@@ -143,9 +147,15 @@ const BookRating = ({
   ]);
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      disableEscapeKeyDown={true}
+      aria-labelledby="user-interaction"
+      aria-label="Dialog for user interacation"
+    >
       <DialogTitle>Rating</DialogTitle>
-      <Box hidden={dialogState.isResponse}>
+      <Box id="initial-content" hidden={dialogState.isResponse}>
         <DialogContent>
           <DialogContentText>{modalText}</DialogContentText>
           <Rating
@@ -165,6 +175,30 @@ const BookRating = ({
           <LoadingButton loading={isLoading} onClick={handleRating}>
             Save
           </LoadingButton>
+        </DialogActions>
+      </Box>
+      <Box id="response-content" hidden={!dialogState.isResponse}>
+        <DialogContent
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          {dialogState.hasError ? (
+            <CancelIcon
+              sx={{ fontSize: 60, color: Colors.danger, marginBottom: 2 }}
+            />
+          ) : (
+            <CheckCircleIcon
+              sx={{ fontSize: 60, color: Colors.primary, marginBottom: 2 }}
+            />
+          )}
+          <DialogContentText>{modalText}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Ok</Button>
         </DialogActions>
       </Box>
     </Dialog>

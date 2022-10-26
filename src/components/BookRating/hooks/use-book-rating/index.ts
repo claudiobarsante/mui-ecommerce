@@ -11,37 +11,40 @@ import { useMutationBook } from 'graphql/mutations/book';
 // -- Utils
 import { calculateRating } from 'utils/calculate-rating';
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
-import { UserRatings } from 'components/BookRating';
+import { DialogState, UserRatings } from 'components/BookRating';
 
 type Props = {
   bookId: string;
-  handleClose: () => void;
   setRating: Dispatch<SetStateAction<number>>;
   userId: string;
   userRating: UserRatings;
   setTotalRatings: Dispatch<SetStateAction<number>>;
+  setDialogState: Dispatch<SetStateAction<DialogState>>;
+  setModalText: Dispatch<SetStateAction<string>>;
 };
 
 export const useBookRating = ({
   bookId,
-  handleClose,
   setRating,
   userId,
   userRating,
-  setTotalRatings
+  setTotalRatings,
+  setDialogState,
+  setModalText
 }: Props) => {
+  function errorSetting() {
+    setDialogState({ isResponse: true, hasError: true });
+    setModalText(
+      "Your rating wasn't saved due to a techinical issue on your end.Please try connecting again. If the issue keeps happening, contact Customer Care."
+    );
+  }
   // -- Mutations
   //? Mutation to update the book rating on Book
-  const [updateBookRating, {}] = useMutationBook({
-    onError: (error) => console.log('error-updateBookRating', error),
+  const [updateBookRating] = useMutationBook({
+    onError: () => errorSetting(),
     onCompleted: () => {
-      toast.success('Your rating was saved!', {
-        duration: 4000,
-        ariaProps: {
-          role: 'status',
-          'aria-live': 'polite'
-        }
-      });
+      setDialogState({ isResponse: true, hasError: false });
+      setModalText('Your rating was successfully saved');
     }
   });
 
@@ -49,7 +52,7 @@ export const useBookRating = ({
   const [createRating, { loading: isLoadingAddRating }] = useMutation(
     CREATE_RATING_MUTATION,
     {
-      onError: (error) => console.log('error-CREATE_RATING_MUTATION', error),
+      onError: () => errorSetting(),
       update: (cache, data) => {
         //? updating the cache after creating a new rating will force to re-run the query getRating, so the user will have the updated ratings on the screen
         const readedCache: any = cache.readQuery({
@@ -93,7 +96,7 @@ export const useBookRating = ({
         });
       },
       onCompleted: (data) => {
-        handleClose();
+        //handleClose();
         //? -- If the book don't have any ratings, it'll be initialized with default values in a JSON format
         const defaultRatingsValues = '{"1":0,"2":0,"3":0,"4":0,"5":0}';
         const userRatings =
@@ -123,9 +126,8 @@ export const useBookRating = ({
   const [updateRating, { loading: isLoadingUpdateRating }] = useMutation(
     UPDATE_RATING_MUTATION,
     {
-      onError: (error) => console.log('error-UPDATE_RATING_MUTATION', error),
+      onError: () => errorSetting(),
       onCompleted: (data) => {
-        handleClose();
         console.log('data-no update', data);
         const userRatings =
           data.updateRating.data.attributes.book.data.attributes.userRatings;
