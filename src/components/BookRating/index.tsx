@@ -155,52 +155,55 @@ const BookRating = ({
       aria-label="Dialog for user interacation"
     >
       <DialogTitle>Rating</DialogTitle>
-      <Box id="initial-content" hidden={dialogState.isResponse}>
-        <DialogContent>
-          <DialogContentText>{modalText}</DialogContentText>
-          <Rating
-            name="book-rating"
-            value={userRating.current}
-            sx={{ color: Colors.warning }}
-            onChange={(event, newValue) => {
-              setUserRating((ratings) => ({
-                ...ratings,
-                current: newValue ?? 0
-              }));
+      {dialogState.isResponse ? (
+        <Box id="rating-status-response">
+          <DialogContent
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <LoadingButton loading={isLoading} onClick={handleRating}>
-            Save
-          </LoadingButton>
-        </DialogActions>
-      </Box>
-      <Box id="response-content" hidden={!dialogState.isResponse}>
-        <DialogContent
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          {dialogState.hasError ? (
-            <CancelIcon
-              sx={{ fontSize: 60, color: Colors.danger, marginBottom: 2 }}
+          >
+            {dialogState.hasError ? (
+              <CancelIcon
+                sx={{ fontSize: 60, color: Colors.danger, marginBottom: 2 }}
+              />
+            ) : (
+              <CheckCircleIcon
+                sx={{ fontSize: 60, color: Colors.primary, marginBottom: 2 }}
+              />
+            )}
+            <DialogContentText>{modalText}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Ok</Button>
+          </DialogActions>
+        </Box>
+      ) : (
+        <Box id="add-update-rating">
+          <DialogContent>
+            <DialogContentText>{modalText}</DialogContentText>
+            <Rating
+              name="book-rating"
+              value={userRating.current}
+              sx={{ color: Colors.warning }}
+              onChange={(event, newValue) => {
+                setUserRating((ratings) => ({
+                  ...ratings,
+                  current: newValue ?? 0
+                }));
+              }}
             />
-          ) : (
-            <CheckCircleIcon
-              sx={{ fontSize: 60, color: Colors.primary, marginBottom: 2 }}
-            />
-          )}
-          <DialogContentText>{modalText}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Ok</Button>
-        </DialogActions>
-      </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <LoadingButton loading={isLoading} onClick={handleRating}>
+              Save
+            </LoadingButton>
+          </DialogActions>
+        </Box>
+      )}
     </Dialog>
   );
 };
