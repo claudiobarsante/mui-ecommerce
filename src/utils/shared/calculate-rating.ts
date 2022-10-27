@@ -36,10 +36,15 @@ function computeUserRatings({
 
   //to avoid computing 2 times the rate of the user - If it's an update first substract -1 of the previous rate then add the updated user rate
   if (action === 'update') {
+    //remove previous rating
     updatedUserRatings = {
       ...parsedObject,
-      [previousUserRating!]: parsedObject[previousUserRating!] - 1,
-      [currentUserRating]: parsedObject[currentUserRating] + 1
+      [previousUserRating!]: parsedObject[previousUserRating!] - 1
+    };
+    //update with the current rating
+    updatedUserRatings = {
+      ...updatedUserRatings,
+      [currentUserRating]: updatedUserRatings[currentUserRating] + 1
     };
   }
 

@@ -1,5 +1,5 @@
 import { Typography, Rating } from '@mui/material';
-import formatPrice from 'utils/format-price';
+import formatPrice from 'utils/shared/format-price';
 import * as S from '../styles';
 import { Colors } from 'styles/theme/colors';
 export default function ProductInfo({ book, isMobile }: any) {

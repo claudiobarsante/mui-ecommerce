@@ -9,7 +9,7 @@ import {
 } from 'graphql/mutations/ratings';
 import { useMutationBook } from 'graphql/mutations/book';
 // -- Utils
-import { calculateRating } from 'utils/calculate-rating';
+import { calculateRating } from 'utils/shared/calculate-rating';
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
 import { DialogState, UserRatings } from 'components/BookRating';
 
