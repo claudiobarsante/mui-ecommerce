@@ -1,4 +1,5 @@
 import { BookUserRatings, calculateRating } from './calculate-rating';
+import formatPrice from './format-price';
 
 const userRatingsMock = '{"1":17,"2":3,"3":5,"4":15,"5":34}'; //total 74 ratings
 describe('calculateRating', () => {
@@ -48,5 +49,16 @@ describe('calculateRating', () => {
       '{"1":17,"2":3,"3":5,"4":15,"5":34}'
     );
     expect(calculatedRating).toStrictEqual(3.6216216216216215);
+  });
+});
+
+describe('formatPrice', () => {
+  it('should return a formated prince in usd $, with two decimals', () => {
+    const formatedPrice = formatPrice(5);
+    expect(formatedPrice).toBe('$5.00');
+  });
+  it('should return with thousands', () => {
+    const formatedPrice = formatPrice(1200);
+    expect(formatedPrice).toBe('$1,200.00');
   });
 });

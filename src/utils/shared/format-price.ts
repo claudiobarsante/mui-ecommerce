@@ -4,5 +4,5 @@ export default function formatPrice(price: number | bigint): string {
     currency: 'USD',
     currencyDisplay: 'symbol'
   }).format(price);
-  return formatedPrice.slice(1);
+  return formatedPrice;
 }
