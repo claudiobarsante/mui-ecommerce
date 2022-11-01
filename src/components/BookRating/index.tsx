@@ -72,12 +72,14 @@ const BookRating = ({
   const handleClose = () => {
     setOpen(false);
     setDialogState({ isResponse: false, hasError: false });
+    setModalText('');
   };
 
   // -- Query
   const [getRating] = useLazyQuery(RATINGS_QUERY, {
     onCompleted: (data) => {
       const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
+      console.log('hasRating--->', data);
       if (hasRating) {
         const userCurrentRating: number =
           data?.ratings?.data[0].attributes?.rating!;
@@ -118,6 +120,7 @@ const BookRating = ({
   });
 
   const handleRating = useCallback(() => {
+    console.log('action-->', action);
     if (action === 'create') {
       createRating({
         variables: {

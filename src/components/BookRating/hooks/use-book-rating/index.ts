@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-hot-toast';
 
 // -- Mutations
 import {
@@ -122,13 +121,55 @@ export const useBookRating = ({
       }
     }
   );
+
   //? Mutation to update a previous rating for the current user and book on Rating
   const [updateRating, { loading: isLoadingUpdateRating }] = useMutation(
     UPDATE_RATING_MUTATION,
     {
       onError: () => errorSetting(),
+      update: (cache, data) => {
+        //? updating the cache after creating a new rating will force to re-run the query getRating, so the user will have the updated ratings on the screen
+        const readedCache: any = cache.readQuery({
+          query: RATINGS_QUERY,
+          variables: { bookId, userId }
+        });
+        console.log('data-updateRating', data);
+        const ratingId = data.data.updateRating.data.id;
+        const updatedUserRatings =
+          data.data.updateRating.data.attributes.book.data.attributes
+            .userRatings;
+        const updatedRating =
+          data.data.updateRating.data.attributes.book.data.attributes.rating;
+
+        cache.writeQuery({
+          query: RATINGS_QUERY,
+          variables: { bookId, userId },
+          data: {
+            ratings: {
+              ...readedCache?.ratings,
+              data: [
+                {
+                  id: ratingId,
+                  attributes: {
+                    user_ids: { data: [{ id: userId }] },
+                    rating: userRating.current,
+                    book: {
+                      data: {
+                        id: bookId,
+                        attributes: {
+                          userRatings: updatedUserRatings,
+                          rating: updatedRating
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        });
+      },
       onCompleted: (data) => {
-        console.log('data-no update', data);
         const userRatings =
           data.updateRating.data.attributes.book.data.attributes.userRatings;
 
@@ -152,7 +193,9 @@ export const useBookRating = ({
       }
     }
   );
+
   const isLoading = isLoadingUpdateRating || isLoadingAddRating;
+
   return {
     createRating,
     isLoading,

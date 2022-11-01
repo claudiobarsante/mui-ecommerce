@@ -15,6 +15,7 @@ const mapped = {
   synopsis:
     'Paddington Bear had just traveled all the way from Peru when the Brown family first met him in Paddington Station. Since then, their lives have never been quite the same . . . for ordinary things become extraordinary when Paddington is involved.',
   stock: 3,
+  totalRatings: 10,
   authors: ['Michael Bond'],
   publisher: 'HarperCollins'
 };
@@ -39,6 +40,7 @@ const data = {
         synopsis:
           'Paddington Bear had just traveled all the way from Peru when the Brown family first met him in Paddington Station. Since then, their lives have never been quite the same . . . for ordinary things become extraordinary when Paddington is involved.',
         stock: 3,
+        totalRatings: 10,
         authors: {
           __typename: 'AuthorRelationResponseCollection',
           data: [

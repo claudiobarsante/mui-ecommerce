@@ -12,10 +12,10 @@ export default function ProductInfo({ book, isMobile }: any) {
         name="read-only"
         value={book.attributes.rating}
         readOnly
-        sx={{ color: Colors.primary }}
+        sx={{ color: Colors.warning }}
       />
       <Typography variant={isMobile ? 'caption' : 'body1'}>
-        ${formatPrice(book.attributes.price)}
+        {formatPrice(book.attributes.price)}
       </Typography>
     </S.BookInfoContainer>
   );
