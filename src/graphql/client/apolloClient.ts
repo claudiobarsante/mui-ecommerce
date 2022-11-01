@@ -5,6 +5,7 @@ import {
   InMemoryCache,
   NormalizedCacheObject
 } from '@apollo/client';
+import apolloCache from './apolloCache';
 
 let apolloClient: ApolloClient<NormalizedCacheObject | null>;
 
@@ -17,7 +18,7 @@ function createApolloClient() {
         authorization: `Bearer ${process.env.NEXT_PUBLIC_GRAPHQL_TOKEN}`
       }
     }),
-    cache: new InMemoryCache()
+    cache: apolloCache
   });
 }
 

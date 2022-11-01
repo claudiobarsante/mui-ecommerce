@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { GetStaticProps } from 'next';
 
 // --  Apollo
-import { initializeApollo } from 'graphql/apolloClient';
+import { initializeApollo } from 'graphql/client/apolloClient';
 // -- Types
 import { FEATURED_QUERY } from 'graphql/queries/books';
 import { FeaturedQuery } from 'graphql/generated/graphql';

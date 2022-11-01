@@ -1,6 +1,6 @@
 import { GetStaticProps } from 'next';
 // --  Apollo
-import { initializeApollo } from 'graphql/apolloClient';
+import { initializeApollo } from 'graphql/client/apolloClient';
 import { BookQuery, FeaturedQuery } from 'graphql/generated/graphql';
 import { BOOK_QUERY, FEATURED_QUERY } from 'graphql/queries/books';
 // -- Templates
@@ -39,7 +39,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     variables: {
       id: params?.id
     }
-    //fetchPolicy: 'no-cache'
   });
 
   if (error) {

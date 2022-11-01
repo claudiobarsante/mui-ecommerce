@@ -8,7 +8,7 @@ import createEmotionCache from 'utils/emotion/createEmotionCache';
 import type { AppProps as NextAppProps } from 'next/app';
 import NextNprogress from 'nextjs-progressbar';
 import { ApolloProvider } from '@apollo/client';
-import { useApollo } from 'graphql/apolloClient';
+import { useApollo } from 'graphql/client/apolloClient';
 import Toast from 'components/Toast';
 
 // Client-side cache, shared for the whole session of the user in the browser.

@@ -128,7 +128,7 @@ export const useBookRating = ({
     {
       onError: () => errorSetting(),
       update: (cache, data) => {
-        //? updating the cache after creating a new rating will force to re-run the query getRating, so the user will have the updated ratings on the screen
+        //? updating the cache after updating
         const readedCache: any = cache.readQuery({
           query: RATINGS_QUERY,
           variables: { bookId, userId }
