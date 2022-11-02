@@ -97,7 +97,7 @@ const BookRating = ({
     }
   };
 
-  if (dialogState.modalText === '') return null;
+  if (dialogState?.modalText === '') return null;
 
   return (
     <Dialog
@@ -108,7 +108,7 @@ const BookRating = ({
       aria-label="Dialog for user interacation"
     >
       <DialogTitle>Rating</DialogTitle>
-      {dialogState.isResponse ? (
+      {dialogState?.isResponse ? (
         <Box id="rating-status-response">
           <DialogContent
             sx={{
@@ -118,7 +118,7 @@ const BookRating = ({
               alignItems: 'center'
             }}
           >
-            {dialogState.hasError ? (
+            {dialogState?.hasError ? (
               <CancelIcon
                 sx={{ fontSize: 60, color: Colors.danger, marginBottom: 2 }}
               />
@@ -136,10 +136,10 @@ const BookRating = ({
       ) : (
         <Box id="add-update-rating">
           <DialogContent>
-            <DialogContentText>{dialogState.modalText}</DialogContentText>
+            <DialogContentText>{dialogState?.modalText}</DialogContentText>
             <Rating
               name="book-rating"
-              value={userRating.current}
+              value={userRating?.current}
               sx={{ color: Colors.warning }}
               onChange={(event, newValue) => {
                 setUserRating((ratings) => ({

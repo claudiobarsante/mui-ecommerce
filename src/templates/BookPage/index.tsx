@@ -61,7 +61,7 @@ const BookPageTemplate = ({ book }: Props) => {
   const [getRating] = useLazyQuery(RATINGS_QUERY, {
     onCompleted: (data) => {
       const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
-      console.log('hasRating--->rodei', data);
+
       if (hasRating) {
         const userCurrentRating: number =
           data?.ratings?.data[0].attributes?.rating!;

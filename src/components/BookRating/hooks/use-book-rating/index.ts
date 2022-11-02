@@ -10,7 +10,7 @@ import { useMutationBook } from 'graphql/mutations/book';
 // -- Utils
 import { calculateRating } from 'utils/shared/calculate-rating';
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
-import { DialogState, UserRatings } from 'components/BookRating';
+import { DialogState, UserRatings } from 'templates/BookPage';
 
 type Props = {
   bookId: string;
@@ -134,7 +134,7 @@ export const useBookRating = ({
           query: RATINGS_QUERY,
           variables: { bookId, userId }
         });
-        console.log('data-updateRating', data);
+
         const ratingId = data.data.updateRating.data.id;
         const updatedUserRatings =
           data.data.updateRating.data.attributes.book.data.attributes
