@@ -25,88 +25,99 @@ import { useBookRating } from './hooks/use-book-rating';
 import { Colors } from 'styles/theme/colors';
 // -- Query
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
+import { DialogState, UserAction, UserRatings } from 'templates/BookPage';
 
 type Props = {
+  action: UserAction;
   bookTitle: string;
   userId: string;
   bookId: string;
   open: boolean;
+  previousUserRatingId: string;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setRating: Dispatch<SetStateAction<number>>;
   setTotalRatings: Dispatch<SetStateAction<number>>;
+  dialogState: DialogState;
+  setDialogState: Dispatch<SetStateAction<DialogState>>;
+  userRating: UserRatings;
+  setUserRating: Dispatch<SetStateAction<UserRatings>>;
 };
 
-export type UserAction = 'create' | 'update' | null;
+//export type UserAction = 'create' | 'update' | null;
 
-export type UserRatings = {
-  previous: number;
-  current: number;
-};
+// export type UserRatings = {
+//   previous: number;
+//   current: number;
+// };
 
-export type DialogState = {
-  isResponse: boolean;
-  hasError: boolean;
-};
+// export type DialogState = {
+//   isResponse: boolean;
+//   hasError: boolean;
+//   modalText: string;
+// };
 
 const BookRating = ({
+  action,
   bookTitle,
   bookId,
   userId,
   open,
+  previousUserRatingId,
   setOpen,
   setRating,
-  setTotalRatings
+  setTotalRatings,
+  dialogState,
+  setDialogState,
+  userRating,
+  setUserRating
 }: Props) => {
-  const [action, setAction] = useState<UserAction>(null);
-  const [dialogState, setDialogState] = useState<DialogState>({
-    isResponse: false,
-    hasError: false
-  });
-  const [modalText, setModalText] = useState('');
-  const [previousUserRatingId, setPreviousUserRatingId] = useState('');
-  const [userRating, setUserRating] = useState<UserRatings>({
-    previous: 0,
-    current: 0
-  });
-
   const handleClose = () => {
     setOpen(false);
-    setDialogState({ isResponse: false, hasError: false });
-    setModalText('');
+    setDialogState((previous) => ({
+      ...previous,
+      isResponse: false,
+      hasError: false
+    }));
   };
 
   // -- Query
-  const [getRating] = useLazyQuery(RATINGS_QUERY, {
-    onCompleted: (data) => {
-      const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
-      console.log('hasRating--->', data);
-      if (hasRating) {
-        const userCurrentRating: number =
-          data?.ratings?.data[0].attributes?.rating!;
-        const ratingId = data?.ratings?.data[0].id;
-        setPreviousUserRatingId(ratingId);
-        setAction('update');
-        setModalText(
-          `Please update your current rate of the book ${bookTitle}`
-        );
-        setUserRating({
-          current: userCurrentRating, //to show the previous rate on the modal to the user
-          previous: userCurrentRating
-        });
-      } else {
-        setAction('create');
-        setUserRating({ previous: 0, current: 0 });
-        setModalText(`Please rate the book ${bookTitle}`);
-      }
-    },
-    onError: (error) => {
-      console.log('Error-getRating', error);
-    }
-  });
+  // const [getRating] = useLazyQuery(RATINGS_QUERY, {
+  //   onCompleted: (data) => {
+  //     const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
+  //     console.log('hasRating--->rodei', data);
+  //     if (hasRating) {
+  //       const userCurrentRating: number =
+  //         data?.ratings?.data[0].attributes?.rating!;
+  //       const ratingId = data?.ratings?.data[0].id;
+  //       setPreviousUserRatingId(ratingId);
+  //       setAction('update');
+  //       setDialogState((previous) => ({
+  //         ...previous,
+  //         modalText: `Please update your current rate of the book ${bookTitle}`
+  //       }));
 
-  useEffect(() => {
-    getRating({ variables: { bookId, userId } });
-  }, [bookId, bookTitle, getRating, userId]);
+  //       setUserRating({
+  //         current: userCurrentRating, //to show the previous rate on the modal to the user
+  //         previous: userCurrentRating
+  //       });
+  //     } else {
+  //       setAction('create');
+  //       setDialogState((previous) => ({
+  //         ...previous,
+  //         modalText: `Please rate the book ${bookTitle}`
+  //       }));
+  //       setUserRating({ previous: 0, current: 0 });
+
+  //     }
+  //   },
+  //   onError: (error) => {
+  //     console.log('Error-getRating', error);
+  //   }
+  // });
+
+  // useEffect(() => {
+  //   getRating({ variables: { bookId, userId } });
+  // }, [bookId, bookTitle, getRating, userId]);
 
   // -- Custom hook
   const { createRating, isLoading, updateRating } = useBookRating({
@@ -115,12 +126,10 @@ const BookRating = ({
     userId,
     userRating,
     setTotalRatings,
-    setDialogState,
-    setModalText
+    setDialogState
   });
 
-  const handleRating = useCallback(() => {
-    console.log('action-->', action);
+  const handleRating = () => {
     if (action === 'create') {
       createRating({
         variables: {
@@ -139,15 +148,7 @@ const BookRating = ({
         }
       });
     }
-  }, [
-    action,
-    createRating,
-    userId,
-    bookId,
-    userRating,
-    updateRating,
-    previousUserRatingId
-  ]);
+  };
 
   return (
     <Dialog
@@ -157,7 +158,7 @@ const BookRating = ({
       aria-labelledby="user-interaction"
       aria-label="Dialog for user interacation"
     >
-      <DialogTitle>Rating</DialogTitle>
+      <DialogTitle>Rating {dialogState.modalText}</DialogTitle>
       {dialogState.isResponse ? (
         <Box id="rating-status-response">
           <DialogContent
@@ -177,7 +178,7 @@ const BookRating = ({
                 sx={{ fontSize: 60, color: Colors.primary, marginBottom: 2 }}
               />
             )}
-            <DialogContentText>{modalText}</DialogContentText>
+            <DialogContentText>{dialogState.modalText}</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Ok</Button>
@@ -186,7 +187,7 @@ const BookRating = ({
       ) : (
         <Box id="add-update-rating">
           <DialogContent>
-            <DialogContentText>{modalText}</DialogContentText>
+            <DialogContentText>{dialogState.modalText}</DialogContentText>
             <Rating
               name="book-rating"
               value={userRating.current}

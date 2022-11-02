@@ -19,7 +19,6 @@ type Props = {
   userRating: UserRatings;
   setTotalRatings: Dispatch<SetStateAction<number>>;
   setDialogState: Dispatch<SetStateAction<DialogState>>;
-  setModalText: Dispatch<SetStateAction<string>>;
 };
 
 export const useBookRating = ({
@@ -28,22 +27,23 @@ export const useBookRating = ({
   userId,
   userRating,
   setTotalRatings,
-  setDialogState,
-  setModalText
+  setDialogState
 }: Props) => {
   function errorSetting() {
-    setDialogState({ isResponse: true, hasError: true });
-    setModalText(
-      "Your rating wasn't saved due to a techinical issue on your end.Please try connecting again. If the issue keeps happening, contact Customer Care."
-    );
+    const MESSAGE =
+      "Your rating wasn't saved due to a techinical issue on your end.Please try connecting again. If the issue keeps happening, contact Customer Care.";
+    setDialogState({ isResponse: true, hasError: true, modalText: MESSAGE });
   }
   // -- Mutations
   //? Mutation to update the book rating on Book
   const [updateBookRating] = useMutationBook({
     onError: () => errorSetting(),
     onCompleted: () => {
-      setDialogState({ isResponse: true, hasError: false });
-      setModalText('Your rating was successfully saved');
+      setDialogState({
+        isResponse: true,
+        hasError: false,
+        modalText: 'Your rating was successfully saved'
+      });
     }
   });
 
