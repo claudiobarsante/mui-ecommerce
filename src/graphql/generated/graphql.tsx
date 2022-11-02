@@ -1411,10 +1411,11 @@ export type UpdateBookMutationVariables = Exact<{
   bookId: Scalars['ID'];
   userRatings: Scalars['JSON'];
   rating: Scalars['Float'];
+  totalRatings: Scalars['Int'];
 }>;
 
 
-export type UpdateBookMutation = { __typename?: 'Mutation', updateBook?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null };
+export type UpdateBookMutation = { __typename?: 'Mutation', updateBook?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null, totalRatings?: number | null } | null } | null } | null };
 
 export type RatingFragmentFragment = { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null };
 
@@ -1474,13 +1475,17 @@ export const RatingFragmentFragmentDoc = gql`
 }
     `;
 export const UpdateBookDocument = gql`
-    mutation UpdateBook($bookId: ID!, $userRatings: JSON!, $rating: Float!) {
-  updateBook(id: $bookId, data: {userRatings: $userRatings, rating: $rating}) {
+    mutation UpdateBook($bookId: ID!, $userRatings: JSON!, $rating: Float!, $totalRatings: Int!) {
+  updateBook(
+    id: $bookId
+    data: {userRatings: $userRatings, rating: $rating, totalRatings: $totalRatings}
+  ) {
     data {
       id
       attributes {
         userRatings
         rating
+        totalRatings
       }
     }
   }
@@ -1504,6 +1509,7 @@ export type UpdateBookMutationFn = Apollo.MutationFunction<UpdateBookMutation, U
  *      bookId: // value for 'bookId'
  *      userRatings: // value for 'userRatings'
  *      rating: // value for 'rating'
+ *      totalRatings: // value for 'totalRatings'
  *   },
  * });
  */

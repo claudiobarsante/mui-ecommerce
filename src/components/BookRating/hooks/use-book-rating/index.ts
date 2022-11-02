@@ -115,7 +115,8 @@ export const useBookRating = ({
           variables: {
             bookId,
             userRatings: updatedUserRatings,
-            rating: calculatedRating
+            rating: calculatedRating,
+            totalRatings: totalBookRatings
           }
         });
       }
@@ -187,7 +188,8 @@ export const useBookRating = ({
           variables: {
             bookId,
             userRatings: updatedUserRatings,
-            rating: calculatedRating
+            rating: calculatedRating,
+            totalRatings: totalBookRatings
           }
         });
       }

@@ -40,24 +40,24 @@ type Props = {
 };
 
 const BookPageTemplate = ({ book }: Props) => {
-  const [rating, setRating] = useState(book.rating || 0);
-  const [open, setOpen] = useState(false);
-  const [totalRatings, setTotalRatings] = useState(book.totalRatings || 0);
   //
-  const [previousUserRatingId, setPreviousUserRatingId] = useState('');
   const [action, setAction] = useState<UserAction>(null);
   const [dialogState, setDialogState] = useState<DialogState>({
     isResponse: false,
     hasError: false,
     modalText: ''
   });
+  const [open, setOpen] = useState(false);
+  const [previousUserRatingId, setPreviousUserRatingId] = useState('');
+  const [rating, setRating] = useState(book.rating || 0);
+  const [totalRatings, setTotalRatings] = useState(book.totalRatings || 0);
   const [userRating, setUserRating] = useState<UserRatings>({
     previous: 0,
     current: 0
   });
-  //
 
   const isMobile = useIsMobile();
+  //
   const [getRating] = useLazyQuery(RATINGS_QUERY, {
     onCompleted: (data) => {
       const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
@@ -90,11 +90,12 @@ const BookPageTemplate = ({ book }: Props) => {
       console.log('Error-getRating', error);
     }
   });
+
   const handleRatingClick = () => {
     setOpen(true);
     getRating({
       variables: { bookId: book.id, userId: '1' },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'cache-and-network'
     });
   };
 
@@ -134,23 +135,25 @@ const BookPageTemplate = ({ book }: Props) => {
 
             <Typography variant="subtitle1" sx={{ marginLeft: 3 }}>
               {' '}
-              based on {totalRatings} user ratings
+              {totalRatings === 0
+                ? 'Be the first to rate this book'
+                : `Based on ${totalRatings} user ratings`}
             </Typography>
           </Box>
           <BookRating
             action={action}
-            bookTitle={book.title}
-            userId="1"
             bookId={book.id}
+            bookTitle={book.title}
+            dialogState={dialogState}
             open={open}
             previousUserRatingId={previousUserRatingId}
+            setDialogState={setDialogState}
             setOpen={setOpen}
             setRating={setRating}
             setTotalRatings={setTotalRatings}
-            dialogState={dialogState}
-            setDialogState={setDialogState}
-            userRating={userRating}
             setUserRating={setUserRating}
+            userId="1"
+            userRating={userRating}
           />
 
           <Typography variant="body1">{book.synopsis}</Typography>

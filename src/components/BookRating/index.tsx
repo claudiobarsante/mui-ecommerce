@@ -97,7 +97,7 @@ const BookRating = ({
     }
   };
 
-  if (dialogState.modalText === '') return;
+  if (dialogState.modalText === '') return null;
 
   return (
     <Dialog
@@ -107,7 +107,7 @@ const BookRating = ({
       aria-labelledby="user-interaction"
       aria-label="Dialog for user interacation"
     >
-      <DialogTitle>Rating {dialogState.modalText}</DialogTitle>
+      <DialogTitle>Rating</DialogTitle>
       {dialogState.isResponse ? (
         <Box id="rating-status-response">
           <DialogContent
