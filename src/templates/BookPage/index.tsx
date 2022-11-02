@@ -1,20 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  Slide,
-  Box,
-  Chip,
-  IconButton,
-  DialogContent,
-  Typography,
-  Button,
-  Stack,
-  Rating,
-  DialogContentText,
-  TextField,
-  DialogActions
-} from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Button, Rating, Typography } from '@mui/material';
 import BaseLayout from 'templates/BaseLayout';
 import { Colors } from 'styles/theme/colors';
 import styled from '@emotion/styled';

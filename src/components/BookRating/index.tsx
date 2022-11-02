@@ -1,9 +1,9 @@
 import React, {
-  useState,
-  useEffect,
   Dispatch,
   SetStateAction,
-  useCallback
+  useCallback,
+  useEffect,
+  useState
 } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import {
@@ -29,47 +29,33 @@ import { DialogState, UserAction, UserRatings } from 'templates/BookPage';
 
 type Props = {
   action: UserAction;
-  bookTitle: string;
-  userId: string;
   bookId: string;
+  bookTitle: string;
+  dialogState: DialogState;
   open: boolean;
   previousUserRatingId: string;
+  setDialogState: Dispatch<SetStateAction<DialogState>>;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setRating: Dispatch<SetStateAction<number>>;
   setTotalRatings: Dispatch<SetStateAction<number>>;
-  dialogState: DialogState;
-  setDialogState: Dispatch<SetStateAction<DialogState>>;
-  userRating: UserRatings;
   setUserRating: Dispatch<SetStateAction<UserRatings>>;
+  userId: string;
+  userRating: UserRatings;
 };
-
-//export type UserAction = 'create' | 'update' | null;
-
-// export type UserRatings = {
-//   previous: number;
-//   current: number;
-// };
-
-// export type DialogState = {
-//   isResponse: boolean;
-//   hasError: boolean;
-//   modalText: string;
-// };
 
 const BookRating = ({
   action,
-  bookTitle,
   bookId,
-  userId,
+  dialogState,
   open,
   previousUserRatingId,
+  setDialogState,
   setOpen,
   setRating,
   setTotalRatings,
-  dialogState,
-  setDialogState,
-  userRating,
-  setUserRating
+  setUserRating,
+  userId,
+  userRating
 }: Props) => {
   const handleClose = () => {
     setOpen(false);
@@ -79,45 +65,6 @@ const BookRating = ({
       hasError: false
     }));
   };
-
-  // -- Query
-  // const [getRating] = useLazyQuery(RATINGS_QUERY, {
-  //   onCompleted: (data) => {
-  //     const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
-  //     console.log('hasRating--->rodei', data);
-  //     if (hasRating) {
-  //       const userCurrentRating: number =
-  //         data?.ratings?.data[0].attributes?.rating!;
-  //       const ratingId = data?.ratings?.data[0].id;
-  //       setPreviousUserRatingId(ratingId);
-  //       setAction('update');
-  //       setDialogState((previous) => ({
-  //         ...previous,
-  //         modalText: `Please update your current rate of the book ${bookTitle}`
-  //       }));
-
-  //       setUserRating({
-  //         current: userCurrentRating, //to show the previous rate on the modal to the user
-  //         previous: userCurrentRating
-  //       });
-  //     } else {
-  //       setAction('create');
-  //       setDialogState((previous) => ({
-  //         ...previous,
-  //         modalText: `Please rate the book ${bookTitle}`
-  //       }));
-  //       setUserRating({ previous: 0, current: 0 });
-
-  //     }
-  //   },
-  //   onError: (error) => {
-  //     console.log('Error-getRating', error);
-  //   }
-  // });
-
-  // useEffect(() => {
-  //   getRating({ variables: { bookId, userId } });
-  // }, [bookId, bookTitle, getRating, userId]);
 
   // -- Custom hook
   const { createRating, isLoading, updateRating } = useBookRating({
@@ -149,6 +96,8 @@ const BookRating = ({
       });
     }
   };
+
+  if (dialogState.modalText === '') return;
 
   return (
     <Dialog
