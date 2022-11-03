@@ -1,35 +1,34 @@
 import React, { useState } from 'react';
-import { Box, Button, Rating, Typography } from '@mui/material';
-import BaseLayout from 'templates/BaseLayout';
-import { Colors } from 'styles/theme/colors';
-import styled from '@emotion/styled';
-import { AddToCartButton, Book } from 'components/Book/styles';
-import { BannerShopButton } from 'components/HeroBanner/styles';
-
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FaceIcon from '@mui/icons-material/Face';
-import useIsMobile from 'hooks/use-IsMobile';
-import { BookProps } from 'utils/mappers';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
-import * as S from './styles';
-import Availability from 'components/Availability';
-
-import BookRating from 'components/BookRating';
-
-//
 import { useLazyQuery } from '@apollo/client';
+import { Box, Button, Rating, Typography } from '@mui/material';
+// -- Templates
+import BaseLayout from 'templates/BaseLayout';
+// --Styles
+import * as S from './styles';
+import { Colors } from 'styles/theme/colors';
+import { Book } from 'components/Book/styles';
+// -- Icons
+import FacebookIcon from '@mui/icons-material/Facebook';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import TwitterIcon from '@mui/icons-material/Twitter';
+// -- Custom components
+import Availability from 'components/Availability';
+import BookRating from 'components/BookRating';
+// -- Querys
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
+// -- Custom hooks
+import useIsMobile from 'hooks/use-IsMobile';
+// -- Utils
+import { BookProps } from 'utils/mappers';
 
-export type UserAction = 'create' | 'update' | null;
+// --Types
 export type DialogState = {
   isResponse: boolean;
   hasError: boolean;
   modalText: string;
 };
+export type UserAction = 'create' | 'update' | null;
 export type UserRatings = {
   previous: number;
   current: number;
@@ -58,37 +57,35 @@ const BookPageTemplate = ({ book }: Props) => {
 
   const isMobile = useIsMobile();
   //
-  const [getRating] = useLazyQuery(RATINGS_QUERY, {
-    onCompleted: (data) => {
-      const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
+  const handleRating = (data: any) => {
+    const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
 
-      if (hasRating) {
-        const userCurrentRating: number =
-          data?.ratings?.data[0].attributes?.rating!;
-        const ratingId = data?.ratings?.data[0].id;
-        setPreviousUserRatingId(ratingId);
-        setAction('update');
-        setDialogState((previous) => ({
-          ...previous,
-          modalText: `Please update your current rate of the book ${book.title}`
-        }));
-
-        setUserRating({
-          current: userCurrentRating, //to show the previous rate on the modal to the user
-          previous: userCurrentRating
-        });
-      } else {
-        setAction('create');
-        setDialogState((previous) => ({
-          ...previous,
-          modalText: `Please rate the book ${book.title}`
-        }));
-        setUserRating({ previous: 0, current: 0 });
-      }
-    },
-    onError: (error) => {
-      console.log('Error-getRating', error);
+    if (hasRating) {
+      const userCurrentRating: number =
+        data?.ratings?.data[0].attributes?.rating!;
+      const ratingId = data?.ratings?.data[0].id;
+      setPreviousUserRatingId(ratingId);
+      setAction('update');
+      setDialogState((previous) => ({
+        ...previous,
+        modalText: `Please update your current rate of the book ${book.title}`
+      }));
+      setUserRating({
+        current: userCurrentRating, //to show the previous rate on the modal to the user
+        previous: userCurrentRating
+      });
+    } else {
+      setAction('create');
+      setDialogState((previous) => ({
+        ...previous,
+        modalText: `Please rate the book ${book.title}`
+      }));
+      setUserRating({ previous: 0, current: 0 });
     }
+  };
+
+  const [getRating] = useLazyQuery(RATINGS_QUERY, {
+    onCompleted: (data) => handleRating(data)
   });
 
   const handleRatingClick = () => {
