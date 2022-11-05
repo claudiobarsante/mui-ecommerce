@@ -14,6 +14,7 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { REGISTER_MUTATION } from 'graphql/mutations/user';
+import { signIn } from 'next-auth/react';
 
 type FormValues = {
   email: string;
@@ -32,7 +33,12 @@ const FormSignUp = () => {
 
   const [createUser, { loading }] = useMutation(REGISTER_MUTATION, {
     onCompleted: (data) => {
-      console.log(data);
+      console.log('createuser-completed', data);
+      signIn('credentials', {
+        email: values.email,
+        password: values.password,
+        callbackUrl: '/'
+      });
     },
     onError: (error) => console.log('eroorr', error)
   });

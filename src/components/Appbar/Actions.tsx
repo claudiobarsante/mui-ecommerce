@@ -1,4 +1,4 @@
-import { Divider, ListItemButton, ListItemIcon } from '@mui/material';
+import { Badge, Divider, ListItemButton, ListItemIcon } from '@mui/material';
 import {
   ActionIconsContainerDesktop,
   ActionIconsContainerMobile,
@@ -64,7 +64,9 @@ export default function Actions({ isMobile }: AppbarProps) {
               color: isMobile ? Colors.secondary : ''
             }}
           >
-            <PersonIcon />
+            <Badge color="primary" variant="dot" aria-label="User logged in">
+              <PersonIcon />
+            </Badge>
           </ListItemIcon>
         </ListItemButton>
         <Divider orientation="vertical" flexItem />
