@@ -15,6 +15,9 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { REGISTER_MUTATION } from 'graphql/mutations/user';
 import { signIn } from 'next-auth/react';
+import Paper from '@mui/material/Paper';
+import { AppbarHeader } from 'components/Appbar/styles';
+import Link from 'next/link';
 
 type FormValues = {
   email: string;
@@ -70,68 +73,81 @@ const FormSignUp = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        <TextField
-          id="username"
-          fullWidth
-          label="Username"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange('username', event)
-          }
-          sx={{ marginBottom: 3 }}
-          value={values.username}
-        />
-        <TextField
-          id="email"
-          fullWidth
-          label="Email"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange('email', event)
-          }
-          sx={{ marginBottom: 3 }}
-          value={values.email}
-        />
-        <FormControl variant="outlined" fullWidth>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <OutlinedInput
-            id="password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange('password', event)
-            }
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-          />
-        </FormControl>
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{ color: 'white', textTransform: 'none' }}
+    <Paper elevation={5} sx={{ width: '30%', height: '42%' }}>
+      <form onSubmit={handleSubmit}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: '0 8%'
+          }}
         >
-          Register
-        </Button>
-      </Box>
-    </form>
+          <Link href="/" passHref>
+            <AppbarHeader>Book Store</AppbarHeader>
+          </Link>
+          <TextField
+            id="username"
+            fullWidth
+            label="Username"
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleChange('username', event)
+            }
+            sx={{ marginBottom: 3 }}
+            value={values.username}
+          />
+          <TextField
+            id="email"
+            fullWidth
+            label="Email"
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleChange('email', event)
+            }
+            sx={{ marginBottom: 3 }}
+            value={values.email}
+          />
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <OutlinedInput
+              id="password"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                handleChange('password', event)
+              }
+              type={values.showPassword ? 'text' : 'password'}
+              value={values.password}
+            />
+          </FormControl>
+          <Button
+            aria-label="sign up"
+            type="submit"
+            variant="contained"
+            sx={{
+              color: 'white',
+              textTransform: 'none',
+              height: '3.2rem',
+              width: '100%',
+              marginTop: '6%'
+            }}
+          >
+            Sign up
+          </Button>
+        </Box>
+      </form>
+    </Paper>
   );
 };
 

@@ -9,7 +9,6 @@ export const AppbarContainer = styled(Box)(() => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-
   marginTop: '1rem',
   padding: '0.2rem 0.8rem'
 }));
