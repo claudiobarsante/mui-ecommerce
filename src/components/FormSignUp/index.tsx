@@ -25,6 +25,7 @@ import {
 } from 'utils/validations';
 import { Typography } from '@mui/material';
 import { Colors } from 'styles/theme/colors';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 export type FormValues = {
   email: string;
@@ -44,17 +45,20 @@ const FormSignUp = () => {
   });
   const [fieldError, setFieldError] = useState<FieldErrors>({} as FieldErrors);
 
-  const [createUser, { loading }] = useMutation(REGISTER_MUTATION, {
-    onCompleted: (data) => {
-      console.log('createuser-completed', data);
-      signIn('credentials', {
-        email: values.email,
-        password: values.password,
-        callbackUrl: '/'
-      });
-    },
-    onError: (error) => console.log('eroorr', error)
-  });
+  const [createUser, { loading: loadingCreateUser }] = useMutation(
+    REGISTER_MUTATION,
+    {
+      onCompleted: (data) => {
+        console.log('createuser-completed', data);
+        signIn('credentials', {
+          email: values.email,
+          password: values.password,
+          callbackUrl: '/'
+        });
+      },
+      onError: (error) => console.log('eroorr', error)
+    }
+  );
 
   const handleOnChange = (
     field: keyof FormValues,
@@ -104,7 +108,9 @@ const FormSignUp = () => {
         fieldError.hasOwnProperty(field) && !errorCheck.hasOwnProperty(field);
       if (hasPreviousError) {
         setFieldError((previous) => {
-          // assign to the [field] regex _ indicating that the [field] it will be not included
+          // Using the object restructuring and rest syntax, we can destructure the object with the property to be removed and create a new copy of it.
+          // After the destructuring, a new copy of the object gets created and assigned to a new variable without the property that we chose to remove.
+          // Assign to the [field] regex _ indicating that the [field] it will be not included
           const { [field]: _, ...updatedErrors } = previous;
           return updatedErrors as FieldErrors;
         });
@@ -245,7 +251,8 @@ const FormSignUp = () => {
             {fieldError.confirmPassword}
           </FormHelperText>
         </FormControl>
-        <Button
+        <LoadingButton
+          loading={loadingCreateUser}
           aria-label="sign up"
           type="submit"
           variant="contained"
@@ -257,7 +264,7 @@ const FormSignUp = () => {
           }}
         >
           Sign up now
-        </Button>
+        </LoadingButton>
       </Box>
       <span>Already hava an account? Sign in</span>
     </form>
