@@ -23,6 +23,8 @@ import {
   signUpValidate,
   validateField
 } from 'utils/validations';
+import { Typography } from '@mui/material';
+import { Colors } from 'styles/theme/colors';
 
 export type FormValues = {
   email: string;
@@ -97,6 +99,17 @@ const FormSignUp = () => {
     (field: keyof FormFields) => {
       const errorCheck = validateField(field, values[field]) as FieldErrors;
 
+      //? cleaning previous error
+      const hasPreviousError =
+        fieldError.hasOwnProperty(field) && !errorCheck.hasOwnProperty(field);
+      if (hasPreviousError) {
+        setFieldError((previous) => {
+          // assign to the [field] regex _ indicating that the [field] it will be not included
+          const { [field]: _, ...updatedErrors } = previous;
+          return updatedErrors as FieldErrors;
+        });
+      }
+
       if (errorCheck.hasOwnProperty(field)) {
         setFieldError((previous) => ({
           ...previous,
@@ -104,7 +117,7 @@ const FormSignUp = () => {
         }));
       }
     },
-    [values]
+    [fieldError, values]
   );
 
   return (
@@ -115,13 +128,27 @@ const FormSignUp = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '25rem'
+          width: '25rem',
+          position: 'relative'
         }}
       >
         {JSON.stringify(fieldError)}
         <Link href="/" passHref>
           <AppbarHeader>Book {''} Store</AppbarHeader>
         </Link>
+        <Box
+          sx={{
+            borderLeft: `0.4rem solid ${Colors.primary}`,
+            paddingLeft: '0.5rem',
+            position: 'absolute',
+            top: '6.5rem',
+            left: 0
+          }}
+        >
+          <Typography sx={{ fontWeight: '500' }} variant="h5">
+            Sign Up
+          </Typography>
+        </Box>
         <TextField
           id="username"
           aria-label="input for username"
@@ -232,6 +259,7 @@ const FormSignUp = () => {
           Sign up now
         </Button>
       </Box>
+      <span>Already hava an account? Sign in</span>
     </form>
   );
 };

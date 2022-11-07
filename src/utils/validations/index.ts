@@ -58,7 +58,7 @@ export function validateField(field: keyof FormFields, value: string) {
   const schema = Joi.object(fieldValidation);
 
   const { error } = schema.validate({ [field]: value });
-  console.log('field', field, 'error', error);
+
   if (!error) return {};
 
   const fieldError = {} as FieldErrors;
