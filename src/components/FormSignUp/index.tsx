@@ -163,24 +163,18 @@ const FormSignUp = () => {
           handleOnChange={handleOnChange}
           label="Username"
           values={values}
-          sx={{ marginBottom: 3, marginTop: 5 }}
+          sx={{ marginBottom: '2rem', marginTop: '4rem' }}
+        />
+        <StandardInput
+          field="email"
+          fieldError={fieldError}
+          handleOnBlur={handleOnBlur}
+          handleOnChange={handleOnChange}
+          label="E-mail"
+          values={values}
+          sx={{ marginBottom: '2rem' }}
         />
 
-        <TextField
-          id="email"
-          aria-label="input for email"
-          fullWidth
-          label="Email"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleOnChange('email', event)
-          }
-          sx={{ marginBottom: 3 }}
-          variant="standard"
-          value={values.email}
-          error={fieldError.hasOwnProperty('email')}
-          helperText={fieldError.email}
-          onBlur={() => handleOnBlur('email')}
-        />
         <FormControl variant="standard" fullWidth sx={{ marginBottom: 3 }}>
           <InputLabel htmlFor="password">Password</InputLabel>
           <Input
