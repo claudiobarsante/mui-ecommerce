@@ -14,8 +14,10 @@ const fieldValidations = {
 };
 
 export type FieldErrors = Omit<FormValues, 'showPassword'>;
-type FormFields = Omit<FormValues, 'showPassword'>;
-
+export type FormFields = Omit<FormValues, 'showPassword'>;
+type Field = {
+  [field in 'username' | 'password']: string;
+};
 function getFieldErrors(objError: Joi.ValidationResult) {
   const errors = {} as FieldErrors;
   /** Sample error details
@@ -49,4 +51,16 @@ function getFieldErrors(objError: Joi.ValidationResult) {
 export function signUpValidate(values: FormFields) {
   const schema = Joi.object(fieldValidations);
   return getFieldErrors(schema.validate(values, { abortEarly: false }));
+}
+
+export function validateField(field: keyof FormFields, value: string) {
+  const fieldValidation = { [field]: fieldValidations[field] };
+  const schema = Joi.object(fieldValidation);
+
+  const { error } = schema.validate({ [field]: value });
+  console.log('field', field, 'error', error);
+  if (!error) return {};
+
+  const fieldError = {} as FieldErrors;
+  return { ...fieldError, [field]: error?.message };
 }
