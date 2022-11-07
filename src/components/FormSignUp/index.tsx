@@ -1,17 +1,18 @@
 import { useState, useCallback } from 'react';
 import { useMutation } from '@apollo/client';
-import Button from '@mui/material/Button';
+// Material ui
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
-
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
+import { Typography } from '@mui/material';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { REGISTER_MUTATION } from 'graphql/mutations/user';
 import { signIn } from 'next-auth/react';
 
@@ -23,9 +24,8 @@ import {
   signUpValidate,
   validateField
 } from 'utils/validations';
-import { Typography } from '@mui/material';
 import { Colors } from 'styles/theme/colors';
-import LoadingButton from '@mui/lab/LoadingButton';
+import StandardInput from 'components/Inputs/Standard';
 
 export type FormValues = {
   email: string;
@@ -138,16 +138,17 @@ const FormSignUp = () => {
           position: 'relative'
         }}
       >
-        {JSON.stringify(fieldError)}
         <Link href="/" passHref>
-          <AppbarHeader>Book {''} Store</AppbarHeader>
+          <AppbarHeader sx={{ marginBottom: '2rem' }}>
+            Book {''} Store
+          </AppbarHeader>
         </Link>
         <Box
           sx={{
             borderLeft: `0.4rem solid ${Colors.primary}`,
             paddingLeft: '0.5rem',
             position: 'absolute',
-            top: '6.5rem',
+            top: '8.5rem',
             left: 0
           }}
         >
@@ -155,21 +156,16 @@ const FormSignUp = () => {
             Sign Up
           </Typography>
         </Box>
-        <TextField
-          id="username"
-          aria-label="input for username"
-          fullWidth
+        <StandardInput
+          field="username"
+          fieldError={fieldError}
+          handleOnBlur={handleOnBlur}
+          handleOnChange={handleOnChange}
           label="Username"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleOnChange('username', event)
-          }
+          values={values}
           sx={{ marginBottom: 3, marginTop: 5 }}
-          variant="standard"
-          value={values.username}
-          error={fieldError.hasOwnProperty('username')}
-          helperText={fieldError.username}
-          onBlur={() => handleOnBlur('username')}
         />
+
         <TextField
           id="email"
           aria-label="input for email"
@@ -241,7 +237,6 @@ const FormSignUp = () => {
             type={values.showPassword ? 'text' : 'password'}
             value={values.confirmPassword}
             error={fieldError.hasOwnProperty('confirmPassword')}
-            //onBlur={() => handleOnBlur('confirmPassword')}
           />
           <FormHelperText
             id="component-error-text"
@@ -260,13 +255,19 @@ const FormSignUp = () => {
             color: 'white',
             height: '3.4rem',
             width: '100%',
-            marginTop: '10%'
+            marginTop: '10%',
+            marginBottom: '3%'
           }}
         >
           Sign up now
         </LoadingButton>
+        <Typography variant="subtitle2" gutterBottom>
+          Already hava an account?{'  '}
+          <Link href="/sign-in">
+            <a>Sign In</a>
+          </Link>
+        </Typography>
       </Box>
-      <span>Already hava an account? Sign in</span>
     </form>
   );
 };

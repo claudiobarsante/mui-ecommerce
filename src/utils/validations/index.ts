@@ -15,9 +15,7 @@ const fieldValidations = {
 
 export type FieldErrors = Omit<FormValues, 'showPassword'>;
 export type FormFields = Omit<FormValues, 'showPassword'>;
-type Field = {
-  [field in 'username' | 'password']: string;
-};
+
 function getFieldErrors(objError: Joi.ValidationResult) {
   const errors = {} as FieldErrors;
   /** Sample error details
