@@ -26,6 +26,7 @@ import {
 } from 'utils/validations';
 import { Colors } from 'styles/theme/colors';
 import StandardInput from 'components/Inputs/Standard';
+import FormHeader from 'components/FormHeader';
 
 export type FormValues = {
   email: string;
@@ -143,19 +144,9 @@ const FormSignUp = () => {
             Book {''} Store
           </AppbarHeader>
         </Link>
-        <Box
-          sx={{
-            borderLeft: `0.4rem solid ${Colors.primary}`,
-            paddingLeft: '0.5rem',
-            position: 'absolute',
-            top: '8.5rem',
-            left: 0
-          }}
-        >
-          <Typography sx={{ fontWeight: '500' }} variant="h5">
-            Sign Up
-          </Typography>
-        </Box>
+
+        <FormHeader text="Sign Up" color="primary" />
+
         <StandardInput
           field="username"
           fieldError={fieldError}
