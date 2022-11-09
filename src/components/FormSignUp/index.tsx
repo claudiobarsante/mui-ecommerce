@@ -144,9 +144,7 @@ const FormSignUp = () => {
             Book {''} Store
           </AppbarHeader>
         </Link>
-
         <FormHeader text="Sign Up" color="primary" />
-
         <StandardInput
           field="username"
           fieldError={fieldError}
@@ -165,7 +163,7 @@ const FormSignUp = () => {
           values={values}
           sx={{ marginBottom: '2rem' }}
         />
-
+        {/* //Todo create a custom component for password input field */}
         <FormControl variant="standard" fullWidth sx={{ marginBottom: 3 }}>
           <InputLabel htmlFor="password">Password</InputLabel>
           <Input
