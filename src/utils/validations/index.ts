@@ -13,8 +13,9 @@ const fieldValidations = {
     .messages({ 'any.only': 'confirmed password does not match with password' })
 };
 
-export type FieldErrors = Omit<FormValues, 'showPassword'>;
-export type FormFields = Omit<FormValues, 'showPassword'>;
+//? I know it sounds repetitive, but it's to name the type in a more meaningful way
+export type FieldErrors = FormValues;
+export type FormFields = FormValues;
 
 function getFieldErrors(objError: Joi.ValidationResult) {
   const errors = {} as FieldErrors;

@@ -3,7 +3,7 @@ import { FormValues } from 'components/FormSignUp';
 import { FieldErrors, FormFields } from 'utils/validations';
 import { SxProps, Theme } from '@mui/material/styles';
 
-type Props = {
+export type StandardInputProps = {
   field: keyof FormFields;
   fieldError: FieldErrors;
   handleOnBlur: (field: keyof FormFields) => void;
@@ -24,10 +24,10 @@ const StandardInput = ({
   label,
   values,
   sx
-}: Props) => {
+}: StandardInputProps) => {
   return (
     <TextField
-      id={`${field}`}
+      id={field}
       aria-label={`input for ${field}`}
       fullWidth
       label={label}

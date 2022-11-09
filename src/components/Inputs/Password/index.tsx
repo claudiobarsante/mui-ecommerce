@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   FormControl,
   InputLabel,
@@ -6,42 +7,66 @@ import {
   IconButton,
   FormHelperText
 } from '@mui/material';
+// -- Material Icons
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+// -- Types
+import { StandardInputProps } from '../Standard';
 
-const PasswordInput = () => {
+type PasswordInputProps = Omit<StandardInputProps, 'label'>;
+
+const PasswordInput = ({
+  field,
+  fieldError,
+  handleOnBlur,
+  handleOnChange,
+  sx,
+  values
+}: PasswordInputProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleOnClickShowPassword = () => {
+    setShowPassword((previous) => !previous);
+  };
+
+  const handleOnMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
   return (
-    <FormControl variant="standard" fullWidth sx={{ marginBottom: 3 }}>
-      <InputLabel htmlFor="password">Password</InputLabel>
+    <FormControl variant="standard" fullWidth sx={sx}>
+      <InputLabel htmlFor={field}>Password</InputLabel>
       <Input
-        aria-label="input for password"
-        id="password"
+        aria-label={`input for ${field}`}
+        id={field}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
-              aria-label="toggle password visibility"
+              aria-label={`toggle ${field} visibility`}
               onClick={handleOnClickShowPassword}
               onMouseDown={handleOnMouseDownPassword}
               edge="end"
             >
-              {values.showPassword ? <VisibilityOff /> : <Visibility />}
+              {showPassword ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           </InputAdornment>
         }
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-          handleOnChange('password', event)
+          handleOnChange(field, event)
         }
-        type={values.showPassword ? 'text' : 'password'}
-        value={values.password}
-        error={fieldError.hasOwnProperty('password')}
-        onBlur={() => handleOnBlur('password')}
+        type={showPassword ? 'text' : 'password'}
+        value={values[field]}
+        error={fieldError.hasOwnProperty(field)}
+        onBlur={() => handleOnBlur(field)}
       />
       <FormHelperText
         id="component-error-text"
-        aria-labelledby="password"
-        error={fieldError.hasOwnProperty('password')}
+        aria-labelledby={field}
+        error={fieldError.hasOwnProperty(field)}
       >
-        {fieldError.password}
+        {fieldError[field]}
       </FormHelperText>
     </FormControl>
   );

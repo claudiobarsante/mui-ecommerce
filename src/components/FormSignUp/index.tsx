@@ -2,16 +2,9 @@ import { useState, useCallback } from 'react';
 import { useMutation } from '@apollo/client';
 // Material ui
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import Visibility from '@mui/icons-material/Visibility';
+
 import { Typography } from '@mui/material';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 import LoadingButton from '@mui/lab/LoadingButton';
 import { REGISTER_MUTATION } from 'graphql/mutations/user';
 import { signIn } from 'next-auth/react';
@@ -24,15 +17,15 @@ import {
   signUpValidate,
   validateField
 } from 'utils/validations';
-import { Colors } from 'styles/theme/colors';
+
 import StandardInput from 'components/Inputs/Standard';
 import FormHeader from 'components/FormHeader';
+import PasswordInput from 'components/Inputs/Password';
 
 export type FormValues = {
   email: string;
   password: string;
   confirmPassword: string;
-  showPassword: boolean;
   username: string;
 };
 
@@ -41,7 +34,6 @@ const FormSignUp = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    showPassword: false,
     username: ''
   });
   const [fieldError, setFieldError] = useState<FieldErrors>({} as FieldErrors);
@@ -49,8 +41,7 @@ const FormSignUp = () => {
   const [createUser, { loading: loadingCreateUser }] = useMutation(
     REGISTER_MUTATION,
     {
-      onCompleted: (data) => {
-        console.log('createuser-completed', data);
+      onCompleted: () => {
         signIn('credentials', {
           email: values.email,
           password: values.password,
@@ -66,19 +57,6 @@ const FormSignUp = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setValues({ ...values, [field]: event.target.value });
-  };
-
-  const handleOnClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword
-    });
-  };
-
-  const handleOnMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
   };
 
   const handleOnSubmit = async (event: React.FormEvent) => {
@@ -163,72 +141,23 @@ const FormSignUp = () => {
           values={values}
           sx={{ marginBottom: '2rem' }}
         />
-        {/* //Todo create a custom component for password input field */}
-        <FormControl variant="standard" fullWidth sx={{ marginBottom: 3 }}>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <Input
-            aria-label="input for password"
-            id="password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleOnClickShowPassword}
-                  onMouseDown={handleOnMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleOnChange('password', event)
-            }
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            error={fieldError.hasOwnProperty('password')}
-            onBlur={() => handleOnBlur('password')}
-          />
-          <FormHelperText
-            id="component-error-text"
-            aria-labelledby="password"
-            error={fieldError.hasOwnProperty('password')}
-          >
-            {fieldError.password}
-          </FormHelperText>
-        </FormControl>
-        <FormControl variant="standard" fullWidth>
-          <InputLabel htmlFor="confirm-password">Confirm password</InputLabel>
-          <Input
-            id="confirm-password"
-            aria-label="input for confirm password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleOnClickShowPassword}
-                  onMouseDown={handleOnMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleOnChange('confirmPassword', event)
-            }
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.confirmPassword}
-            error={fieldError.hasOwnProperty('confirmPassword')}
-          />
-          <FormHelperText
-            id="component-error-text"
-            error={fieldError.hasOwnProperty('confirmPassword')}
-            aria-labelledby="confirm-password"
-          >
-            {fieldError.confirmPassword}
-          </FormHelperText>
-        </FormControl>
+
+        <PasswordInput
+          field="password"
+          fieldError={fieldError}
+          handleOnBlur={handleOnBlur}
+          handleOnChange={handleOnChange}
+          values={values}
+          sx={{ marginBottom: 3 }}
+        />
+        <PasswordInput
+          field="confirmPassword"
+          fieldError={fieldError}
+          handleOnBlur={handleOnBlur}
+          handleOnChange={handleOnChange}
+          values={values}
+        />
+
         <LoadingButton
           loading={loadingCreateUser}
           aria-label="sign up"
