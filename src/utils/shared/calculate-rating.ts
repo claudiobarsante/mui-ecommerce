@@ -1,9 +1,7 @@
-import { UserAction } from 'components/BookRating';
-
 export type BookUserRatings = {
   userRatings: string; //it's a JSON  received
   currentUserRating: number;
-  action: UserAction;
+  action: 'create' | 'update';
   previousUserRating?: number;
 };
 
