@@ -19,6 +19,7 @@ export const decorators = [withThemeProvider];
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
+    expanded: true, //to show the type of the property
     matchers: {
       color: /(background|color)$/i,
       date: /Date$/

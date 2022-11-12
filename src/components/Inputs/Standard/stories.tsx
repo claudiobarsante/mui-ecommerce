@@ -2,136 +2,84 @@ import React, { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { within, userEvent } from '@storybook/testing-library';
 import StandardInput, { StandardInputProps } from '.';
-import { FieldErrors } from 'utils/validations';
+import {
+  FieldErrors,
+  FormFields,
+  validateField
+} from '../../../utils/validations';
 import { FormValues } from 'components/FormSignUp';
 
 export default {
-  title: 'Inputs/StandardInput',
+  title: 'Components/Inputs/StandardInput',
   component: StandardInput,
-  args: {
-    field: 'username',
-    fieldError: {} as FormValues,
-    handleOnBlur: () => {},
-    handleOnChange: () => {},
-    label: 'Username',
-    values: {} as FormValues
+  parameters: {
+    layout: 'centered'
   }
 } as ComponentMeta<typeof StandardInput>;
-
-const defaultValues: FormValues = {
-  email: '',
-  password: '',
-  confirmPassword: '',
-  username: ''
-};
 
 const Template: ComponentStory<typeof StandardInput> = (
   args: StandardInputProps
 ) => {
-  // const [values, setValues] = useState<FormValues>(defaultValues);
-  // const handleOnChange = (
-  //   field: keyof FormValues,
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   setValues({ ...values, [field]: event.target.value });
-  // };
+  const [values, setValues] = useState<FormValues>({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    username: ''
+  });
+  const [fieldError, setFieldError] = useState<FieldErrors>({} as FieldErrors);
 
-  // const handleOnBlur = () => {};
+  const handleOnChange = (
+    field: keyof FormValues,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setValues({ ...values, [field]: event.target.value });
+  };
+
+  const handleOnBlur = (field: keyof FormFields) => {
+    const errorCheck = validateField(field, values[field]) as FieldErrors;
+
+    //? cleaning previous error
+    const hasPreviousError =
+      fieldError.hasOwnProperty(field) && !errorCheck.hasOwnProperty(field);
+    if (hasPreviousError) {
+      setFieldError((previous) => {
+        const { [field]: _, ...updatedErrors } = previous;
+        return updatedErrors as FieldErrors;
+      });
+    }
+
+    if (errorCheck.hasOwnProperty(field)) {
+      setFieldError((previous) => ({
+        ...previous,
+        [field]: errorCheck[field]
+      }));
+    }
+  };
+
   return (
     <StandardInput
-      {...args}
-      sx={{ marginBottom: '2rem', marginTop: '4rem', width: '200px' }}
+      field="username"
+      fieldError={fieldError}
+      handleOnBlur={handleOnBlur}
+      handleOnChange={handleOnChange}
+      label="Username"
+      values={values}
+      sx={{ marginBottom: '2rem', marginTop: '4rem' }}
     />
   );
 };
 
 export const Default = Template.bind({});
-Default.args = {
-  label: 'Username'
-};
 
-export const WithError = Template.bind({});
-WithError.play = async ({ canvasElement }) => {
+export const Error = Template.bind({});
+Error.play = async ({ canvasElement, args }) => {
   const canvas = within(canvasElement);
 
   const input = canvas.getByLabelText('Username', { selector: 'input' });
 
-  await userEvent.type(input, 'any text', {
-    delay: 100
+  await userEvent.type(input, 'any', {
+    delay: 700
   });
+
+  userEvent.tab(); //input lost focus and will call handleOnBlur and show error
 };
-WithError.args = {
-  fieldError: { ...defaultValues, username: 'any error message for username' }
-};
-
-// export const Default = () => {
-//   const [values, setValues] = useState<FormValues>(defaultValues);
-//   const handleOnChange = (
-//     field: keyof FormValues,
-//     event: React.ChangeEvent<HTMLInputElement>
-//   ) => {
-//     setValues({ ...values, [field]: event.target.value });
-//   };
-
-//   const handleOnBlur = () => {};
-//   return (
-//     <StandardInput
-//       field="username"
-//       fieldError={{} as FormValues} //
-//       handleOnBlur={handleOnBlur}
-//       handleOnChange={handleOnChange}
-//       label="Username"
-//       values={values}
-//       sx={{ marginBottom: '2rem', marginTop: '4rem', width: '200px' }}
-//     />
-//   );
-// };
-// const Template: ComponentStory<typeof StandardInput> = (
-//   args: StandardInputProps
-// ) => {
-//   const [values, setValues] = useState<FormValues>(defaultValues);
-//   const handleOnChange = (
-//     field: keyof FormValues,
-//     event: React.ChangeEvent<HTMLInputElement>
-//   ) => {
-//     setValues({ ...values, [field]: event.target.value });
-//   };
-
-//   const handleOnBlur = () => {};
-//   return (
-//     <StandardInput
-//       field="username"
-//       fieldError={{} as FormValues} //
-//       handleOnBlur={handleOnBlur}
-//       handleOnChange={handleOnChange}
-//       label="Username"
-//       values={values}
-//       sx={{ marginBottom: '2rem', marginTop: '4rem', width: '200px' }}
-//     />
-//   );
-// };
-
-// export const Default = Template.bind({});
-// Default.args = {
-//   field: 'email'
-// };
-
-// export const WithError = Template.bind({});
-// WithError.args = {
-//   field:'username'
-//   fieldError: { ...defaultValues, username: 'dfgdfgdfg' }
-// };
-
-// const mockFormValues: FormValues = {
-//   email: '',
-//   password: '',
-//   confirmPassword: '',
-//   username: ''
-// };
-// Default.args = {
-//   field: 'username',
-//   fieldError: {} as FormValues,
-//   values: mockFormValues,
-//   label: 'Username',
-//   sx: { width: '200px' }
-// };
