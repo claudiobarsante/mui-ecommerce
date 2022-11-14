@@ -21,6 +21,7 @@ import {
 import StandardInput from 'components/Inputs/Standard';
 import FormHeader from 'components/FormHeader';
 import PasswordInput from 'components/Inputs/Password';
+import CustomTitle from 'components/Title';
 
 export type FormValues = {
   email: string;
@@ -117,11 +118,14 @@ const FormSignUp = () => {
           position: 'relative'
         }}
       >
-        <Link href="/" passHref>
-          <AppbarHeader sx={{ marginBottom: '2rem' }}>
-            Book {''} Store
-          </AppbarHeader>
-        </Link>
+        <CustomTitle
+          color="primary"
+          href="/"
+          size="medium"
+          sx={{ marginBottom: '2rem' }}
+          text="Book  Store"
+        />
+
         <FormHeader text="Sign Up" color="primary" />
         <StandardInput
           field="username"
