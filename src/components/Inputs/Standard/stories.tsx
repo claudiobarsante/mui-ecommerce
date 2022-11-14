@@ -77,7 +77,7 @@ Error.play = async ({ canvasElement, args }) => {
 
   const input = canvas.getByLabelText('Username', { selector: 'input' });
 
-  await userEvent.type(input, 'any', {
+  await userEvent.type(input, 'Anna', {
     delay: 700
   });
 
