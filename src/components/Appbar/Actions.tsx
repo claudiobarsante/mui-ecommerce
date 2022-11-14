@@ -18,10 +18,21 @@ import { Colors } from 'styles/theme/colors';
 // -- types
 import { AppbarProps } from './types';
 
-export default function Actions({ isMobile }: AppbarProps) {
+export default function Actions({ isMobile, userStatus }: AppbarProps) {
   const ComponentContainer = isMobile
     ? ActionIconsContainerMobile
     : ActionIconsContainerDesktop;
+
+  const colors = {
+    authenticated: Colors.primary,
+    unauthenticated: Colors.gray,
+    loading: ''
+  };
+  const badgeStyle = {
+    '& .MuiBadge-badge': {
+      backgroundColor: colors[userStatus]
+    }
+  };
 
   return (
     <ComponentContainer>
@@ -71,7 +82,11 @@ export default function Actions({ isMobile }: AppbarProps) {
             }}
           >
             <Tooltip title="Account settings">
-              <Badge color="primary" variant="dot" aria-label="User logged in">
+              <Badge
+                sx={badgeStyle}
+                variant="dot"
+                aria-label={`user status is ${userStatus}`}
+              >
                 <PersonIcon />
               </Badge>
             </Tooltip>

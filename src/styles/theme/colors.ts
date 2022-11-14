@@ -5,7 +5,7 @@ export const Colors = {
   secondary: '#d1adcc',
 
   info: '#00a2ff',
-  danger: '#FF5722',
+  error: '#FF5722',
   warning: '#FFC107',
   dark: '#0e1b20',
   light: '#aaa',
@@ -21,6 +21,7 @@ export const Colors = {
   success: '#73bd73',
   white: '#ffffff',
   black: '#030517',
+  gray: '#686868',
   ///////////////
   // Grays
   ///////////////

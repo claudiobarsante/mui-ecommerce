@@ -10,9 +10,9 @@ export default function Appbar() {
   return (
     <>
       {isMobile ? (
-        <AppbarMobile isMobile={isMobile} />
+        <AppbarMobile isMobile={isMobile} userStatus={status} />
       ) : (
-        <AppbarDesktop isMobile={isMobile} />
+        <AppbarDesktop isMobile={isMobile} userStatus={status} />
       )}
     </>
   );

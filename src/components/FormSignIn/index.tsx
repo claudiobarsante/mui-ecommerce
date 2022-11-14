@@ -1,138 +1,180 @@
-import { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import FilledInput from '@mui/material/FilledInput';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { REGISTER_MUTATION } from 'graphql/mutations/user';
+import { useState, useCallback } from 'react';
+import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
+// Material ui
+import Box from '@mui/material/Box';
 
-type FormValues = {
-  email: string;
-  password: string;
-  showPassword: boolean;
-  username: string;
-};
+import { Typography } from '@mui/material';
+
+import LoadingButton from '@mui/lab/LoadingButton';
+import { REGISTER_MUTATION } from 'graphql/mutations/user';
+
+import Link from 'next/link';
+import {
+  FieldErrors,
+  FormFields,
+  signInValidate,
+  signUpValidate,
+  validateField
+} from 'utils/validations';
+
+import StandardInput from 'components/Inputs/Standard';
+import FormHeader from 'components/FormHeader';
+import PasswordInput from 'components/Inputs/Password';
+import CustomTitle from 'components/Title';
+import { FormValues } from 'components/FormSignUp';
 
 const FormSignIn = () => {
   const [values, setValues] = useState<FormValues>({
     email: '',
     password: '',
-    showPassword: false,
+    confirmPassword: '',
     username: ''
   });
+  const [formError, setFormError] = useState('');
+  const [fieldError, setFieldError] = useState<FieldErrors>({} as FieldErrors);
+  const [loading, setLoading] = useState(false);
 
-  const [createUser, { loading }] = useMutation(REGISTER_MUTATION, {
-    onCompleted: (data) => {
-      console.log('createuser-completed', data);
-      signIn('credentials', {
-        email: values.email,
-        password: values.password,
-        callbackUrl: '/'
-      });
-    },
-    onError: (error) => console.log('eroorr', error)
-  });
+  const router = useRouter();
+  const { push, query } = router;
 
-  const handleChange = (
-    key: keyof FormValues,
+  const handleOnChange = (
+    field: keyof FormValues,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setValues({ ...values, [key]: event.target.value });
+    setValues({ ...values, [field]: event.target.value });
   };
 
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword
+  const handleOnSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    setLoading(true);
+
+    const errors = signInValidate({
+      email: values.email,
+      password: values.password
     });
+
+    if (Object.keys(errors).length) {
+      setFieldError(errors);
+      setLoading(false);
+      return;
+    }
+
+    setFieldError({} as FieldErrors);
+
+    // sign in
+    const result = await signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+      callbackUrl: `${window.location.origin}${query?.callbackUrl || ''}`
+    });
+
+    if (result?.url) {
+      return push(result?.url);
+    }
+
+    setLoading(false);
+    // jogar o erro
+    setFormError('username or password is invalid');
   };
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
+  const handleOnBlur = useCallback(
+    (field: keyof FormFields) => {
+      const errorCheck = validateField(field, values[field]) as FieldErrors;
+      //const errorCheck = validateField(field, values[field] as string);
+      //? cleaning previous error
+      const hasPreviousError =
+        fieldError.hasOwnProperty(field) && !errorCheck.hasOwnProperty(field);
+      if (hasPreviousError) {
+        setFieldError((previous) => {
+          // Using the object restructuring and rest syntax, we can destructure the object with the property to be removed and create a new copy of it.
+          // After the destructuring, a new copy of the object gets created and assigned to a new variable without the property that we chose to remove.
+          // Assign to the [field] regex _ indicating that the [field] it will be not included
+          const { [field]: _, ...updatedErrors } = previous;
+          return updatedErrors as FieldErrors;
+        });
+      }
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const { email, password, username } = values;
-    createUser({ variables: { username, email, password } });
-  };
+      if (errorCheck.hasOwnProperty(field)) {
+        setFieldError((previous) => ({
+          ...previous,
+          [field]: errorCheck[field]
+        }));
+      }
+    },
+    [fieldError, values]
+  );
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        <TextField
-          id="username"
-          fullWidth
-          label="Username"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange('username', event)
-          }
-          sx={{ marginBottom: 3 }}
-          value={values.username}
-        />
-        <TextField
-          id="email"
-          fullWidth
-          label="Email"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange('email', event)
-          }
-          sx={{ marginBottom: 3 }}
-          value={values.email}
-        />
-        <FormControl variant="outlined" fullWidth>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <OutlinedInput
-            id="password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange('password', event)
-            }
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-          />
-        </FormControl>
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{ color: 'white', textTransform: 'none' }}
+    <>
+      {!!formError && <p>{formError}</p>}
+      <form onSubmit={handleOnSubmit}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '25rem',
+            position: 'relative'
+          }}
         >
-          Register
-        </Button>
-      </Box>
-    </form>
+          <CustomTitle
+            color="primary"
+            href="/"
+            size="medium"
+            sx={{ marginBottom: '2rem' }}
+            text="Book  Store"
+          />
+
+          <FormHeader text="Sign In" color="primary" />
+
+          <StandardInput
+            field="email"
+            fieldError={fieldError}
+            handleOnBlur={handleOnBlur}
+            handleOnChange={handleOnChange}
+            label="E-mail"
+            values={values}
+            sx={{ marginBottom: '2rem', marginTop: '4rem' }}
+          />
+
+          <PasswordInput
+            field="password"
+            fieldError={fieldError}
+            handleOnBlur={handleOnBlur}
+            handleOnChange={handleOnChange}
+            values={values}
+            sx={{ marginBottom: 3 }}
+          />
+
+          <LoadingButton
+            loading={loading}
+            aria-label="sign in"
+            type="submit"
+            variant="contained"
+            sx={{
+              color: 'white',
+              height: '3.4rem',
+              width: '100%',
+              marginTop: '10%',
+              marginBottom: '3%'
+            }}
+          >
+            Sign in
+          </LoadingButton>
+          <Typography variant="subtitle2" gutterBottom>
+            Forgot your password?{'  '}
+            <Link href="/">
+              <a>Remember me</a>
+            </Link>
+          </Typography>
+        </Box>
+      </form>
+    </>
   );
 };
 
-export default FormSignUp;
+export default FormSignIn;

@@ -52,6 +52,13 @@ export function signUpValidate(values: FormFields) {
   return getFieldErrors(schema.validate(values, { abortEarly: false }));
 }
 
+type SignInValues = Omit<FormFields, 'username' | 'confirmPassword'>;
+export function signInValidate(values: SignInValues) {
+  const { email, password } = fieldValidations;
+  const schema = Joi.object({ email, password });
+  return getFieldErrors(schema.validate(values, { abortEarly: false }));
+}
+
 export function validateField(field: keyof FormFields, value: string) {
   const fieldValidation = { [field]: fieldValidations[field] };
   const schema = Joi.object(fieldValidation);

@@ -11,7 +11,7 @@ import * as S from './styles';
 // -- Types
 import { AppbarProps } from './types';
 
-export default function AppbarMobile({ isMobile }: AppbarProps) {
+export default function AppbarMobile({ isMobile, userStatus }: AppbarProps) {
   const { setDrawerOpen, setShowSearchBox } = useUIContext();
   return (
     <S.AppbarContainer>
@@ -24,7 +24,7 @@ export default function AppbarMobile({ isMobile }: AppbarProps) {
       <IconButton onClick={() => setShowSearchBox(true)}>
         <SearchIcon />
       </IconButton>
-      <Actions isMobile={isMobile} />
+      <Actions isMobile={isMobile} userStatus={userStatus} />
     </S.AppbarContainer>
   );
 }

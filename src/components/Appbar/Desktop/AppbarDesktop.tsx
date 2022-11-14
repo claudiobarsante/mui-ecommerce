@@ -9,7 +9,7 @@ import * as S from '../styles';
 import Actions from '../Actions';
 import TopMenuLink from './TopMenuLink';
 
-export default function AppbarDesktop({ isMobile }: AppbarProps) {
+export default function AppbarDesktop({ isMobile, userStatus }: AppbarProps) {
   return (
     <S.AppbarContainer>
       <Link href="/" passHref>
@@ -21,7 +21,7 @@ export default function AppbarDesktop({ isMobile }: AppbarProps) {
         <TopMenuLink text="About" href="/about" />
         <TopMenuLink text="Contact us" href="/contact" />
       </S.TopMenu>
-      <Actions isMobile={isMobile} />
+      <Actions isMobile={isMobile} userStatus={userStatus} />
     </S.AppbarContainer>
   );
 }

@@ -13,7 +13,7 @@ const theme = createTheme({
       main: Colors.secondary
     },
     error: {
-      main: Colors.danger
+      main: Colors.error
     }
   },
 
