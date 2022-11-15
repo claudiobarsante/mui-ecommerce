@@ -17,6 +17,7 @@ import { Colors } from 'styles/theme/colors';
 type PasswordInputProps = Omit<StandardInputProps, 'label'>;
 
 const PasswordInput = ({
+  color,
   field,
   fieldError,
   handleOnBlur,
@@ -38,10 +39,10 @@ const PasswordInput = ({
 
   const textCustomStyle = {
     '& label.Mui-focused': {
-      color: Colors.lightBlue
+      color: Colors[color]
     },
     '& .MuiInput-underline:after': {
-      borderBottomColor: Colors.lightBlue
+      borderBottomColor: Colors[color]
     }
   };
   const mergedStyles = { ...textCustomStyle, ...sx };

@@ -128,6 +128,7 @@ const FormSignUp = () => {
 
         <FormHeader text="Sign Up" color="primary" />
         <StandardInput
+          color="primary"
           field="username"
           fieldError={fieldError}
           handleOnBlur={handleOnBlur}
@@ -137,6 +138,7 @@ const FormSignUp = () => {
           sx={{ marginBottom: '2rem', marginTop: '4rem' }}
         />
         <StandardInput
+          color="primary"
           field="email"
           fieldError={fieldError}
           handleOnBlur={handleOnBlur}
@@ -147,6 +149,7 @@ const FormSignUp = () => {
         />
 
         <PasswordInput
+          color="primary"
           field="password"
           fieldError={fieldError}
           handleOnBlur={handleOnBlur}
@@ -155,6 +158,7 @@ const FormSignUp = () => {
           sx={{ marginBottom: 3 }}
         />
         <PasswordInput
+          color="primary"
           field="confirmPassword"
           fieldError={fieldError}
           handleOnBlur={handleOnBlur}

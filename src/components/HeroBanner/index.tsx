@@ -11,7 +11,7 @@ export default function HeroBanner() {
       />
       <S.BannerContent>
         <Typography variant="h6">Huge Collection</Typography>
-        <S.BannerTitle variant="h2">New Bags</S.BannerTitle>
+        <S.BannerTitle variant="h2">New Books</S.BannerTitle>
         <S.BannerDescription variant="subtitle1">
           Torem ipsum dolor sit amet, consectetur adipisicing elitsed do eiusmo
           tempor incididunt ut labore et dolore magna

@@ -58,6 +58,7 @@ const Template: ComponentStory<typeof StandardInput> = (
 
   return (
     <StandardInput
+      color="lightBlue"
       field="username"
       fieldError={fieldError}
       handleOnBlur={handleOnBlur}

@@ -5,6 +5,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import { Colors } from 'styles/theme/colors';
 
 export type StandardInputProps = {
+  color: keyof typeof Colors;
   field: keyof FormFields;
   fieldError: FieldErrors;
   handleOnBlur: (field: keyof FormFields) => void;
@@ -18,6 +19,7 @@ export type StandardInputProps = {
 };
 
 const StandardInput = ({
+  color,
   field,
   fieldError,
   handleOnBlur,
@@ -28,10 +30,10 @@ const StandardInput = ({
 }: StandardInputProps) => {
   const textCustomStyle = {
     '& label.Mui-focused': {
-      color: Colors.lightBlue
+      color: Colors[color]
     },
     '& .MuiInput-underline:after': {
-      borderBottomColor: Colors.lightBlue
+      borderBottomColor: Colors[color]
     }
   };
   const mergedStyles = { ...textCustomStyle, ...sx };

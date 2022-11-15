@@ -30,7 +30,11 @@ module.exports = {
         alias: {
           ...config.resolve.alias,
           '@emotion/core': toPath('node_modules/@emotion/react'),
-          'emotion-theming': toPath('node_modules/@emotion/react')
+          'emotion-theming': toPath('node_modules/@emotion/react'),
+          'styles/theme/colors': path.resolve(
+            __dirname,
+            '../src/styles/theme/colors'
+          )
         }
       }
     };

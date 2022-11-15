@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { darken } from 'polished';
 // Material ui
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
@@ -130,6 +131,7 @@ const FormSignIn = () => {
           <FormHeader text="Sign In" color="lightBlue" />
 
           <StandardInput
+            color="lightBlue"
             field="email"
             fieldError={fieldError}
             handleOnBlur={handleOnBlur}
@@ -138,12 +140,12 @@ const FormSignIn = () => {
             values={values}
             sx={{
               marginBottom: '2rem',
-              marginTop: '4rem',
-              textColoe: Colors.lightBlue
+              marginTop: '4rem'
             }}
           />
 
           <PasswordInput
+            color="lightBlue"
             field="password"
             fieldError={fieldError}
             handleOnBlur={handleOnBlur}
@@ -163,7 +165,10 @@ const FormSignIn = () => {
               width: '100%',
               marginTop: '10%',
               marginBottom: '3%',
-              backgroundColor: Colors.lightBlue
+              backgroundColor: Colors.lightBlue,
+              '&:hover': {
+                backgroundColor: darken(0.1, Colors.lightBlue)
+              }
             }}
           >
             Sign in
