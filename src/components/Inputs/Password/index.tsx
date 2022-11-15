@@ -12,6 +12,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 // -- Types
 import { StandardInputProps } from '../Standard';
+import { Colors } from 'styles/theme/colors';
 
 type PasswordInputProps = Omit<StandardInputProps, 'label'>;
 
@@ -35,8 +36,18 @@ const PasswordInput = ({
     event.preventDefault();
   };
 
+  const textCustomStyle = {
+    '& label.Mui-focused': {
+      color: Colors.lightBlue
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: Colors.lightBlue
+    }
+  };
+  const mergedStyles = { ...textCustomStyle, ...sx };
+
   return (
-    <FormControl variant="standard" fullWidth sx={sx}>
+    <FormControl variant="standard" fullWidth sx={mergedStyles}>
       <InputLabel htmlFor={field}>Password</InputLabel>
       <Input
         aria-label={`input for ${field}`}

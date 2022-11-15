@@ -1,28 +1,26 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 // Material ui
 import Box from '@mui/material/Box';
-
 import { Typography } from '@mui/material';
-
 import LoadingButton from '@mui/lab/LoadingButton';
-import { REGISTER_MUTATION } from 'graphql/mutations/user';
-
-import Link from 'next/link';
+// -- Validations  and types
 import {
   FieldErrors,
   FormFields,
   signInValidate,
-  signUpValidate,
   validateField
 } from 'utils/validations';
-
-import StandardInput from 'components/Inputs/Standard';
+// -- Custom components
+import { FormValues } from 'components/FormSignUp';
+import CustomTitle from 'components/Title';
 import FormHeader from 'components/FormHeader';
 import PasswordInput from 'components/Inputs/Password';
-import CustomTitle from 'components/Title';
-import { FormValues } from 'components/FormSignUp';
+import StandardInput from 'components/Inputs/Standard';
+// -- Styles
+import { Colors } from 'styles/theme/colors';
 
 const FormSignIn = () => {
   const [values, setValues] = useState<FormValues>({
@@ -83,7 +81,7 @@ const FormSignIn = () => {
   const handleOnBlur = useCallback(
     (field: keyof FormFields) => {
       const errorCheck = validateField(field, values[field]) as FieldErrors;
-      //const errorCheck = validateField(field, values[field] as string);
+
       //? cleaning previous error
       const hasPreviousError =
         fieldError.hasOwnProperty(field) && !errorCheck.hasOwnProperty(field);
@@ -122,14 +120,14 @@ const FormSignIn = () => {
           }}
         >
           <CustomTitle
-            color="primary"
+            color="lightBlue"
             href="/"
             size="medium"
             sx={{ marginBottom: '2rem' }}
             text="Book  Store"
           />
 
-          <FormHeader text="Sign In" color="primary" />
+          <FormHeader text="Sign In" color="lightBlue" />
 
           <StandardInput
             field="email"
@@ -138,7 +136,11 @@ const FormSignIn = () => {
             handleOnChange={handleOnChange}
             label="E-mail"
             values={values}
-            sx={{ marginBottom: '2rem', marginTop: '4rem' }}
+            sx={{
+              marginBottom: '2rem',
+              marginTop: '4rem',
+              textColoe: Colors.lightBlue
+            }}
           />
 
           <PasswordInput
@@ -160,7 +162,8 @@ const FormSignIn = () => {
               height: '3.4rem',
               width: '100%',
               marginTop: '10%',
-              marginBottom: '3%'
+              marginBottom: '3%',
+              backgroundColor: Colors.lightBlue
             }}
           >
             Sign in

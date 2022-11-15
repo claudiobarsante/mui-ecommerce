@@ -2,6 +2,7 @@ import TextField from '@mui/material/TextField';
 import { FormValues } from 'components/FormSignUp';
 import { FieldErrors, FormFields } from 'utils/validations';
 import { SxProps, Theme } from '@mui/material/styles';
+import { Colors } from 'styles/theme/colors';
 
 export type StandardInputProps = {
   field: keyof FormFields;
@@ -25,6 +26,15 @@ const StandardInput = ({
   values,
   sx
 }: StandardInputProps) => {
+  const textCustomStyle = {
+    '& label.Mui-focused': {
+      color: Colors.lightBlue
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: Colors.lightBlue
+    }
+  };
+  const mergedStyles = { ...textCustomStyle, ...sx };
   return (
     <TextField
       id={field}
@@ -39,7 +49,7 @@ const StandardInput = ({
       error={fieldError.hasOwnProperty(field)}
       helperText={fieldError[`${field}`]}
       variant="standard"
-      sx={sx}
+      sx={mergedStyles}
     />
   );
 };

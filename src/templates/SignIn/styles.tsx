@@ -29,7 +29,6 @@ export const PictureHeader = styled(Typography)(({ theme }) => ({
 // had to use negative margin on the right, because mui5 layout on small devices
 // add a margin on the right 🤔
 export const ImageContainer = styled(Box)(({ theme }) => ({
-  backgroundColor: Colors.primary,
   [theme.breakpoints.down('sm')]: {
     marginRight: '-2.7rem'
   }

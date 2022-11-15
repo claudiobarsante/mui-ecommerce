@@ -3,7 +3,7 @@ import FormSignIn from 'components/FormSignIn';
 import FormSignUp from 'components/FormSignUp';
 import Image from 'next/image';
 import { Colors } from 'styles/theme/colors';
-const image = '/images/5281.jpg';
+const image = '/images/5281-LB.jpg';
 import * as S from './styles';
 
 const SignInTemplate = () => {
@@ -18,18 +18,18 @@ const SignInTemplate = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: Colors.primary,
+          backgroundColor: Colors.lightBlue,
           position: 'relative'
         }}
       >
-        <S.PictureHeader>All your favorite books in one place</S.PictureHeader>
+        <S.PictureHeader>Your companion anywhere</S.PictureHeader>
         <S.ImageContainer>
           <Image
             src={image}
-            alt="People reading books"
+            alt="People reading books in the subway"
             height={700}
             width={900}
-            aria-label="People reading books"
+            aria-label="People reading books in the subway"
           />
         </S.ImageContainer>
       </Grid>

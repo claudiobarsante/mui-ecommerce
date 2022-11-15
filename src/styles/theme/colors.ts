@@ -1,27 +1,28 @@
 export const Colors = {
-  // primary: '#73bd73',
   primary: '#2cb19e',
-  //primary: '#4B3682',
-  secondary: '#d1adcc',
-
+  secondary: '#4C3585',
   info: '#00a2ff',
-  error: '#FF5722',
+  error: '#E7325D',
   warning: '#FFC107',
+
+  offline: '#686868',
+  pink: '#E7357F',
+  lightBlue: '#80B9E6',
+
   dark: '#0e1b20',
   light: '#aaa',
   muted: '#abafb3',
   border: '#DDDFE1',
   inverse: '#2F3D4A',
   shaft: '#333',
-  lightBlue: '#58bcda',
   lightGrey: '#d5d5d5',
   mustard: '#ffc32e',
-  pink: '#e577ce',
+
   purple: '#7b74c9',
   success: '#73bd73',
   white: '#ffffff',
   black: '#030517',
-  gray: '#686868',
+
   ///////////////
   // Grays
   ///////////////

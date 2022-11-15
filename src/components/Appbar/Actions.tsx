@@ -25,7 +25,7 @@ export default function Actions({ isMobile, userStatus }: AppbarProps) {
 
   const colors = {
     authenticated: Colors.primary,
-    unauthenticated: Colors.gray,
+    unauthenticated: Colors.offline,
     loading: ''
   };
   const badgeStyle = {
