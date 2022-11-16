@@ -120,7 +120,7 @@ const BookRating = ({
           >
             {dialogState?.hasError ? (
               <CancelIcon
-                sx={{ fontSize: 60, color: Colors.danger, marginBottom: 2 }}
+                sx={{ fontSize: 60, color: Colors.error, marginBottom: 2 }}
               />
             ) : (
               <CheckCircleIcon
