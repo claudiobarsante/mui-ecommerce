@@ -33,7 +33,7 @@ export default function Actions({ isMobile, userStatus }: AppbarProps) {
       backgroundColor: colors[userStatus]
     }
   };
-
+  console.log('userStatus: ' + userStatus);
   return (
     <ComponentContainer>
       <TopMenu type="row">
