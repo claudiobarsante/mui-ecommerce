@@ -1503,7 +1503,6 @@ export type WishlistQuery = { __typename?: 'Query', wishlist?: { __typename?: 'W
 
 export type WishlistsQueryVariables = Exact<{
   userId: Scalars['ID'];
-  bookId: Scalars['ID'];
 }>;
 
 
@@ -2059,10 +2058,8 @@ export type WishlistQueryHookResult = ReturnType<typeof useWishlistQuery>;
 export type WishlistLazyQueryHookResult = ReturnType<typeof useWishlistLazyQuery>;
 export type WishlistQueryResult = Apollo.QueryResult<WishlistQuery, WishlistQueryVariables>;
 export const WishlistsDocument = gql`
-    query Wishlists($userId: ID!, $bookId: ID!) {
-  wishlists(
-    filters: {user: {id: {eq: $userId}}, and: {books: {id: {eq: $bookId}}}}
-  ) {
+    query Wishlists($userId: ID!) {
+  wishlists(filters: {user: {id: {eq: $userId}}}) {
     data {
       id
       attributes {
@@ -2086,7 +2083,6 @@ export const WishlistsDocument = gql`
  * const { data, loading, error } = useWishlistsQuery({
  *   variables: {
  *      userId: // value for 'userId'
- *      bookId: // value for 'bookId'
  *   },
  * });
  */

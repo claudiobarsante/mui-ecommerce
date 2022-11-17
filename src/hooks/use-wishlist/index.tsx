@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useMemo } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { BookProps } from 'utils/mappers';
+import { useMutation, useQuery } from '@apollo/client';
 
 export type WishlistContextData = {
   items: BookProps[];
@@ -24,6 +25,15 @@ export type WishlistProviderProps = {
 };
 const WishlistProvider = ({ children }: WishlistProviderProps) => {
   const { data: session, status } = useSession();
+  const [wishlistId, setWishlistId] = useState<string | null>();
+  const [wishlistItems, setWishlistItems] = useState<BookProps[]>([]);
+
+  const isAuthenticated = status === 'authenticated' ? true : false;
+
+  const { data } = useQuery({
+    skip: !isAuthenticated, //can't run the query if there's no authenticated user
+    context
+  });
 
   return (
     <WishlistContext.Provider value={{}}>{children}</WishlistContext.Provider>

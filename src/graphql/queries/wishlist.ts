@@ -14,14 +14,28 @@ export const WISHLIST_QUERY = gql`
   ${WishlistFragment}
 `;
 
+// export const WISHLISTS_QUERY = gql`
+//   query Wishlists($userId: ID!, $bookId: ID!) {
+//     wishlists(
+//       filters: {
+//         user: { id: { eq: $userId } }
+//         and: { books: { id: { eq: $bookId } } }
+//       }
+//     ) {
+//       data {
+//         id
+//         attributes {
+//           ...WishlistFragment
+//         }
+//       }
+//     }
+//   }
+//   ${WishlistFragment}
+// `;
+
 export const WISHLISTS_QUERY = gql`
-  query Wishlists($userId: ID!, $bookId: ID!) {
-    wishlists(
-      filters: {
-        user: { id: { eq: $userId } }
-        and: { books: { id: { eq: $bookId } } }
-      }
-    ) {
+  query Wishlists($userId: ID!) {
+    wishlists(filters: { user: { id: { eq: $userId } } }) {
       data {
         id
         attributes {
