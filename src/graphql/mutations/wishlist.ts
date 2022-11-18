@@ -12,7 +12,7 @@ export const WishlistFragment = gql`
         id
         attributes {
           title
-          bookId
+          sku
           coverImageUrl
           isOnSale
           pageCount
