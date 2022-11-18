@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { BookProps } from 'utils/mappers';
 import { useMutation, useQuery } from '@apollo/client';
+import { WISHLISTS_QUERY } from 'graphql/queries/wishlist';
 
 export type WishlistContextData = {
   items: BookProps[];
@@ -30,9 +31,12 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
 
   const isAuthenticated = status === 'authenticated' ? true : false;
 
-  const { data } = useQuery({
+  const { data } = useQuery(WISHLISTS_QUERY, {
     skip: !isAuthenticated, //can't run the query if there's no authenticated user
-    context
+    context: { session },
+    variables: {
+      userId: session?.user.id
+    }
   });
 
   return (
