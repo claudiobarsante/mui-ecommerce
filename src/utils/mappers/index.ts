@@ -1,8 +1,13 @@
-import { BookQuery } from 'graphql/generated/graphql';
+import {
+  AuthorEntity,
+  BookQuery,
+  WishlistEntity,
+  WishlistEntityResponse
+} from 'graphql/generated/graphql';
 
 export type BookProps = {
   id: string;
-  bookId: string;
+  sku: string;
   title: string;
   coverImageUrl: string;
   isOnSale: boolean;
@@ -21,7 +26,7 @@ export const bookMapper = (bookData: BookQuery) => {
   const id = bookData.book?.data?.id!;
   const {
     title,
-    bookId,
+    sku,
     coverImageUrl,
     isOnSale,
     pageCount,
@@ -40,7 +45,7 @@ export const bookMapper = (bookData: BookQuery) => {
 
     const book: BookProps = {
       id,
-      bookId,
+      sku,
       title,
       coverImageUrl,
       isOnSale,
@@ -54,6 +59,54 @@ export const bookMapper = (bookData: BookQuery) => {
       authors: extractedAuthors,
       publisher:
         bookData.book?.data?.attributes?.publisher?.data?.attributes?.name
+    };
+
+    return book;
+  }
+
+  return {};
+};
+
+export const wishlistMapper = (bookData: WishlistEntity) => {
+  console.log('bookData', bookData);
+  const id = bookData?.attributes?.books?.data[0].id!;
+  const {
+    title,
+    sku,
+    coverImageUrl,
+    isOnSale,
+    pageCount,
+    price,
+    rating,
+    salePrice,
+    synopsis,
+    stock,
+    totalRatings
+  } = bookData.attributes?.books?.data[0].attributes!;
+
+  if (bookData?.attributes?.books?.data[0]) {
+    const extractedAuthors =
+      bookData?.attributes?.books?.data[0].attributes?.authors?.data.map(
+        (author: AuthorEntity) => author.attributes?.name
+      );
+
+    const book: BookProps = {
+      id,
+      sku,
+      title,
+      coverImageUrl,
+      isOnSale,
+      pageCount,
+      price,
+      rating,
+      salePrice,
+      synopsis,
+      stock,
+      totalRatings,
+      authors: extractedAuthors,
+      publisher:
+        bookData.attributes?.books?.data[0].attributes?.publisher?.data
+          ?.attributes?.name
     };
 
     return book;

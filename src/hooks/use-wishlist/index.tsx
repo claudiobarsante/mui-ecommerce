@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { bookMapper, BookProps } from 'utils/mappers';
+import { bookMapper, BookProps, wishlistMapper } from 'utils/mappers';
 import { useMutation, useQuery } from '@apollo/client';
 import { WISHLISTS_QUERY } from 'graphql/queries/wishlist';
 import {
@@ -44,27 +44,27 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
   });
 
   useEffect(() => {
-    if (data.wishlists.data.length > 0) {
-      const items = bookMapper(data.wishlists.data[0].books) as BookProps[];
-      setWishlistItems(items);
+    if (data?.wishlists?.data?.length > 0 && isAuthenticated) {
+      const items = wishlistMapper(data.wishlists.data[0]) as BookProps;
+      setWishlistItems([items]);
       setWishlistId(data.wishlists.data[0].id);
     }
-  }, [data.wishlists.data]);
+  }, [data?.wishlists?.data, isAuthenticated]);
 
   //#region Mutations
   const [createWishlist] = useMutation(CREATE_WISHLIST_MUTATION, {
     context: { session },
     onCompleted: (data) => {
-      const items = bookMapper(data.wishlists.data[0].books) as BookProps[];
-      setWishlistItems(items);
-      setWishlistId(data.wishlists.data[0].id);
+      const items = wishlistMapper(data.createWishlist.data) as BookProps;
+      setWishlistItems([items]);
+      setWishlistId(data.createWishlist.data.id);
     }
   });
   const [updateWishlist] = useMutation(UPDATE_WISHLIST_MUTATION, {
     context: { session },
     onCompleted: (data) => {
-      const items = bookMapper(data.wishlists.data[0].books) as BookProps[];
-      setWishlistItems(items);
+      const items = wishlistMapper(data.updateWishlist.data) as BookProps;
+      setWishlistItems([items]);
     }
   });
   //#endregion
@@ -79,6 +79,7 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
 
   const addToWishlist = (bookId: string) => {
     //*if the wishlist exists, update it
+    console.log('iwhlistId', wishlistId);
     if (wishlistId) {
       return updateWishlist({
         variables: {

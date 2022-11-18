@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as S from '../styles';
 
-import { Stack, Tooltip, Typography } from '@mui/material';
+import { Stack, Tooltip } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import FitScreenIcon from '@mui/icons-material/FitScreen';
@@ -13,6 +13,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import ProductInfo from '../Info';
 
 import { FeaturedBook } from 'components/Featured';
+import WishlistButton from 'components/Buttons/Wishlist';
 
 type Props = {
   book: FeaturedBook;
@@ -32,7 +33,6 @@ export default function SingleBookDesktop({ book, isMobile }: Props) {
     setShowOptions(false);
   }, []);
 
-  console.log('isMobile: ', isMobile, showOptions);
   return (
     <>
       <S.Book onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -46,11 +46,12 @@ export default function SingleBookDesktop({ book, isMobile }: Props) {
             aria-label={book.attributes.title}
           />
         </S.BookImage>
-        <S.FavButton isfav={0}>
+        <WishlistButton bookId={book.id} />
+        {/* <S.FavButton isfav={0}>
           <Tooltip placement="left" title="add to my wishlist">
             <FavoriteIcon />
           </Tooltip>
-        </S.FavButton>
+        </S.FavButton> */}
         {(showOptions || isMobile) && (
           <S.AddToCartButton istoshow={`${showOptions}`} variant="contained">
             Add to cart
