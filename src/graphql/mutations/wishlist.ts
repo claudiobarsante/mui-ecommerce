@@ -10,6 +10,34 @@ export const WishlistFragment = gql`
     books {
       data {
         id
+        attributes {
+          title
+          bookId
+          coverImageUrl
+          isOnSale
+          pageCount
+          userRatings
+          price
+          rating
+          salePrice
+          synopsis
+          stock
+          totalRatings
+          authors {
+            data {
+              attributes {
+                name
+              }
+            }
+          }
+          publisher {
+            data {
+              attributes {
+                name
+              }
+            }
+          }
+        }
       }
     }
   }

@@ -39,6 +39,12 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
     }
   });
 
+  useEffect(() => {
+    if (data.wishlists.data.length > 0) {
+      setWishlistId(data.wishlists.data[0].id);
+    }
+  }, [data.wishlists.data]);
+
   return (
     <WishlistContext.Provider value={{}}>{children}</WishlistContext.Provider>
   );

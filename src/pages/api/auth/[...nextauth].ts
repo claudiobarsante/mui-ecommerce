@@ -22,6 +22,7 @@ export const authOptions: NextAuthOptions = {
         email: {},
         password: {}
       },
+
       async authorize(credentials) {
         //returns a User object
         const res = await fetch(
@@ -39,7 +40,7 @@ export const authOptions: NextAuthOptions = {
 
         // Return null if user data could not be retrieved
         if (!data.user) return null;
-        console.log('data-login', data);
+
         // Any object returned will be saved in `user` property of the JWT
         const user: CustomUser = {
           id: data.user.id.toString(),
