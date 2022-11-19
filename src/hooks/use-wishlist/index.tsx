@@ -1,6 +1,18 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 import { useSession } from 'next-auth/react';
-import { bookMapper, BookProps, wishlistMapper } from 'utils/mappers';
+import {
+  bookMapper,
+  BookProps,
+  wishlistMapper,
+  wishlistsQueryMapper
+} from 'utils/mappers';
 import { useMutation, useQuery } from '@apollo/client';
 import { WISHLISTS_QUERY } from 'graphql/queries/wishlist';
 import {
@@ -45,8 +57,24 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
 
   useEffect(() => {
     if (data?.wishlists?.data?.length > 0 && isAuthenticated) {
-      const items = wishlistMapper(data.wishlists.data[0]) as BookProps;
-      setWishlistItems([items]);
+      console.log(
+        'passei,useeffect',
+        data.wishlists.data[0].attributes.books.data[0]
+      );
+      let favorites: BookProps[] = [];
+      for (
+        let i = 0;
+        i < data.wishlists.data[0].attributes.books.data.length;
+        i++
+      ) {
+        const items = wishlistsQueryMapper(
+          data.wishlists.data[0].attributes.books.data[i]
+        ) as BookProps;
+        console.log('passei', items);
+        favorites.push(items);
+      }
+      console.log('favorites: ', favorites);
+      setWishlistItems((previous) => [...previous, ...favorites]);
       setWishlistId(data.wishlists.data[0].id);
     }
   }, [data?.wishlists?.data, isAuthenticated]);
@@ -64,13 +92,18 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
     context: { session },
     onCompleted: (data) => {
       const items = wishlistMapper(data.updateWishlist.data) as BookProps;
-      setWishlistItems([items]);
+      setWishlistItems((previous) => [...previous, ...[items]]);
     }
   });
   //#endregion
 
-  const isInWishlist = (bookId: string) =>
-    !!wishlistItems.find((book) => book.id === bookId);
+  const isInWishlist = useCallback(
+    (bookId: string) => {
+      const found = wishlistItems.find((book) => book.id === bookId);
+      return !!found;
+    },
+    [wishlistItems]
+  );
 
   const wishlistBooksIds = useMemo(
     () => wishlistItems.map((book) => book.id),

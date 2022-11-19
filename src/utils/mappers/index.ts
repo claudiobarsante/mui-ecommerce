@@ -68,7 +68,6 @@ export const bookMapper = (bookData: BookQuery) => {
 };
 
 export const wishlistMapper = (bookData: WishlistEntity) => {
-  console.log('bookData', bookData);
   const id = bookData?.attributes?.books?.data[0].id!;
   const {
     title,
@@ -107,6 +106,51 @@ export const wishlistMapper = (bookData: WishlistEntity) => {
       publisher:
         bookData.attributes?.books?.data[0].attributes?.publisher?.data
           ?.attributes?.name
+    };
+
+    return book;
+  }
+
+  return {};
+};
+
+export const wishlistsQueryMapper = (bookData: any) => {
+  console.log('bookData', bookData);
+  const id = bookData?.id!;
+  const {
+    title,
+    sku,
+    coverImageUrl,
+    isOnSale,
+    pageCount,
+    price,
+    rating,
+    salePrice,
+    synopsis,
+    stock,
+    totalRatings
+  } = bookData.attributes;
+
+  if (bookData?.attributes) {
+    const extractedAuthors = bookData?.attributes?.authors?.data.map(
+      (author: AuthorEntity) => author.attributes?.name
+    );
+
+    const book: BookProps = {
+      id,
+      sku,
+      title,
+      coverImageUrl,
+      isOnSale,
+      pageCount,
+      price,
+      rating,
+      salePrice,
+      synopsis,
+      stock,
+      totalRatings,
+      authors: extractedAuthors,
+      publisher: bookData.attributes.publisher?.data?.attributes?.name
     };
 
     return book;

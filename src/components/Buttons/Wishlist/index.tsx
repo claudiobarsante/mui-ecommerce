@@ -15,18 +15,13 @@ const WishlistButton = ({ bookId }: Props) => {
 
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
 
-  // useEffect(() => {
+  useEffect(() => {
+    setIsFavorite(() => isInWishlist(bookId));
+  }, [bookId, isInWishlist]);
 
-  //   setIsFavorite(()=> isInWishlist(bookId))
-  // }, [input])
   const handleOnClick = () => {
-    console.log('passei handleOnClick');
     setLoading(true);
     isInWishlist(bookId) ? removeFromWishlist(bookId) : addToWishlist(bookId);
-    // setIsFavorite((previous) => {
-    //   if (previous === 0) return 1;
-    //   return 0;
-    // });
     setIsFavorite((previous) => !previous);
     setLoading(false);
   };
