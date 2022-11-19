@@ -7,12 +7,7 @@ import {
   useState
 } from 'react';
 import { useSession } from 'next-auth/react';
-import {
-  bookMapper,
-  BookProps,
-  wishlistMapper,
-  wishlistsQueryMapper
-} from 'utils/mappers';
+import { BookProps, wishlistMapper, bookToWishlistMapper } from 'utils/mappers';
 import { useMutation, useQuery } from '@apollo/client';
 import { WISHLISTS_QUERY } from 'graphql/queries/wishlist';
 import {
@@ -57,23 +52,17 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
 
   useEffect(() => {
     if (data?.wishlists?.data?.length > 0 && isAuthenticated) {
-      console.log(
-        'passei,useeffect',
-        data.wishlists.data[0].attributes.books.data[0]
-      );
       let favorites: BookProps[] = [];
-      for (
-        let i = 0;
-        i < data.wishlists.data[0].attributes.books.data.length;
-        i++
-      ) {
-        const items = wishlistsQueryMapper(
+      const returnedDataLength =
+        data.wishlists.data[0].attributes.books.data.length;
+      for (let i = 0; i < returnedDataLength; i++) {
+        const items = bookToWishlistMapper(
           data.wishlists.data[0].attributes.books.data[i]
         ) as BookProps;
-        console.log('passei', items);
+
         favorites.push(items);
       }
-      console.log('favorites: ', favorites);
+
       setWishlistItems((previous) => [...previous, ...favorites]);
       setWishlistId(data.wishlists.data[0].id);
     }
@@ -83,16 +72,27 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
   const [createWishlist] = useMutation(CREATE_WISHLIST_MUTATION, {
     context: { session },
     onCompleted: (data) => {
-      const items = wishlistMapper(data.createWishlist.data) as BookProps;
+      const items = bookToWishlistMapper(
+        data.createWishlist.data.attributes.books.data[0]
+      ) as BookProps;
       setWishlistItems([items]);
       setWishlistId(data.createWishlist.data.id);
     }
   });
+
   const [updateWishlist] = useMutation(UPDATE_WISHLIST_MUTATION, {
     context: { session },
     onCompleted: (data) => {
-      const items = wishlistMapper(data.updateWishlist.data) as BookProps;
-      setWishlistItems((previous) => [...previous, ...[items]]);
+      const updated: BookProps[] = [];
+      const returnedDataLength =
+        data.updateWishlist.data.attributes.books.data.length;
+      for (let i = 0; i < returnedDataLength; i++) {
+        const items = bookToWishlistMapper(
+          data.updateWishlist.data.attributes.books.data[i]
+        ) as BookProps;
+        updated.push(items);
+      }
+      setWishlistItems(updated);
     }
   });
   //#endregion
@@ -110,45 +110,56 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
     [wishlistItems]
   );
 
-  const addToWishlist = (bookId: string) => {
-    //*if the wishlist exists, update it
-    console.log('iwhlistId', wishlistId);
-    if (wishlistId) {
+  const addToWishlist = useCallback(
+    (bookId: string) => {
+      //*if the wishlist exists, update it
+      if (wishlistId) {
+        return updateWishlist({
+          variables: {
+            id: wishlistId,
+            data: {
+              user: session?.user.id,
+              books: [...wishlistBooksIds, bookId]
+            }
+          }
+        });
+      }
+      //*if the wishlist doesn't exist, create it
+      return createWishlist({
+        variables: {
+          data: {
+            user: session?.user.id,
+            books: [bookId]
+          }
+        }
+      });
+    },
+    [
+      createWishlist,
+      session?.user.id,
+      updateWishlist,
+      wishlistBooksIds,
+      wishlistId
+    ]
+  );
+
+  const removeFromWishlist = useCallback(
+    (bookId: string) => {
+      const updatedWishlistBooksIds = wishlistBooksIds.filter(
+        (id) => id !== bookId
+      );
       return updateWishlist({
         variables: {
           id: wishlistId,
           data: {
             user: session?.user.id,
-            books: [...wishlistBooksIds, bookId]
+            books: updatedWishlistBooksIds
           }
         }
       });
-    }
-    //*if the wishlist doesn't exist, create it
-    return createWishlist({
-      variables: {
-        data: {
-          user: session?.user.id,
-          books: [bookId]
-        }
-      }
-    });
-  };
-
-  const removeFromWishlist = (bookId: string) => {
-    const updatedWishlistBooksIds = wishlistBooksIds.filter(
-      (id) => id !== bookId
-    );
-    return updateWishlist({
-      variables: {
-        id: wishlistId,
-        data: {
-          user: session?.user.id,
-          books: updatedWishlistBooksIds
-        }
-      }
-    });
-  };
+    },
+    [session?.user.id, updateWishlist, wishlistBooksIds, wishlistId]
+  );
 
   return (
     <WishlistContext.Provider
