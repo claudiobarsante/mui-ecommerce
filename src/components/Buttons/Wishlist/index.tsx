@@ -4,6 +4,7 @@ import * as S from './styles';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useWishlist } from 'hooks/use-wishlist';
 import { useSession } from 'next-auth/react';
+import Spinner from 'components/Spinner';
 
 type Props = {
   bookId: string;
@@ -30,9 +31,13 @@ const WishlistButton = ({ bookId }: Props) => {
 
   return (
     <S.FavButton isfav={isFavorite.toString()} onClick={handleOnClick}>
-      <Tooltip placement="left" title="add to my wishlist">
-        <FavoriteIcon />
-      </Tooltip>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <Tooltip placement="left" title="add to my wishlist">
+          <FavoriteIcon />
+        </Tooltip>
+      )}
     </S.FavButton>
   );
 };
