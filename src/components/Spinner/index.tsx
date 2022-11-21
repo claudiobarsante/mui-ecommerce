@@ -1,18 +1,21 @@
 import { Colors } from 'styles/theme/colors';
 import * as S from './styles';
+
 export type SpinnerProps = {
-  size?: number;
+  size?: 'small' | 'medium' | 'large';
   color?: keyof typeof Colors;
 };
 
-const Spinner = ({ size = 38, color = 'primary' }: SpinnerProps) => (
+const Spinner = ({ size = 'medium', color = 'primary' }: SpinnerProps) => (
   <S.Wrapper
-    width={size}
-    height={size}
+    fontSize={size}
     viewBox="-3 -3 42 42"
     xmlns="http://www.w3.org/2000/svg"
-    stroke="#F231A5"
+    stroke="#2cb19e"
     customcolor={color}
+    role="alert"
+    aria-live="polite"
+    aria-busy="true"
   >
     <title>Loading...</title>
     <g fill="none" fillRule="evenodd">

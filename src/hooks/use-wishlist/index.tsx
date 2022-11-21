@@ -7,13 +7,16 @@ import {
   useState
 } from 'react';
 import { useSession } from 'next-auth/react';
-import { BookProps, wishlistMapper, bookToWishlistMapper } from 'utils/mappers';
 import { useMutation, useQuery } from '@apollo/client';
+// -- Query
 import { WISHLISTS_QUERY } from 'graphql/queries/wishlist';
+// -- Mutations
 import {
   CREATE_WISHLIST_MUTATION,
   UPDATE_WISHLIST_MUTATION
 } from 'graphql/mutations/wishlist';
+// -- Mappers
+import { BookProps, bookToWishlistMapper } from 'utils/mappers';
 
 export type WishlistContextData = {
   items: BookProps[];
@@ -35,6 +38,7 @@ export const WishlistContext =
 export type WishlistProviderProps = {
   children: React.ReactNode;
 };
+
 const WishlistProvider = ({ children }: WishlistProviderProps) => {
   const { data: session, status } = useSession();
   const [wishlistId, setWishlistId] = useState<string | null>();
