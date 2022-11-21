@@ -25,15 +25,16 @@ export type WishlistContextData = {
   removeFromWishlist: (bookId: string) => void;
 };
 
-const defaultValues = {
+export const WishlistContextDefaultValues = {
   items: [],
   isInWishlist: () => false,
   addToWishlist: () => null,
   removeFromWishlist: () => null
 };
 
-export const WishlistContext =
-  createContext<WishlistContextData>(defaultValues);
+export const WishlistContext = createContext<WishlistContextData>(
+  WishlistContextDefaultValues
+);
 
 export type WishlistProviderProps = {
   children: React.ReactNode;
@@ -54,6 +55,9 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
     }
   });
 
+  useEffect(() => {
+    console.log('wishlist', wishlistItems);
+  }, [wishlistItems]);
   useEffect(() => {
     if (data?.wishlists?.data?.length > 0 && isAuthenticated) {
       let favorites: BookProps[] = [];
