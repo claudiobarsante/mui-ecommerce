@@ -56,9 +56,6 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
   });
 
   useEffect(() => {
-    console.log('wishlist', wishlistItems);
-  }, [wishlistItems]);
-  useEffect(() => {
     if (data?.wishlists?.data?.length > 0 && isAuthenticated) {
       let favorites: BookProps[] = [];
       const returnedDataLength =
@@ -91,7 +88,6 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
   const [updateWishlist] = useMutation(UPDATE_WISHLIST_MUTATION, {
     context: { session },
     onCompleted: (data) => {
-      console.log('update-data', data);
       const updated: BookProps[] = [];
       const returnedDataLength =
         data.updateWishlist.data.attributes.books.data.length;
@@ -101,7 +97,7 @@ const WishlistProvider = ({ children }: WishlistProviderProps) => {
         ) as BookProps;
         updated.push(items);
       }
-      console.log('updated', updated);
+
       setWishlistItems(updated);
     }
   });

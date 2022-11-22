@@ -6,11 +6,12 @@ import { act, waitFor } from 'utils/tests/test-utils';
 import {
   createWishlistMock,
   // removeWishlistMock,
-  // updateWishlistMock,
+  updateWishlistMock,
   wishlistItems,
   wishlistMock
 } from './mock';
 
+//#region Mock session
 jest.mock('next-auth/react', () => {
   const MOCK_FAKE_USER_ID: string = '1';
   const originalModule = jest.requireActual('next-auth/react');
@@ -31,6 +32,7 @@ jest.mock('next-auth/react', () => {
     })
   };
 });
+//#endregion
 
 describe('useWishlist', () => {
   it('should return wishlist items', async () => {
@@ -91,5 +93,29 @@ describe('useWishlist', () => {
     // wait for the data to load
     await waitForNextUpdate();
     expect(result.current.items).toStrictEqual([wishlistItems[2]]);
+  });
+
+  it('should add item in wishlist updating the current list', async () => {
+    const MOCK_BOOK_ID: string = '8';
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <MockedProvider mocks={[wishlistMock, updateWishlistMock]}>
+        <WishlistProvider>{children}</WishlistProvider>
+      </MockedProvider>
+    );
+
+    const { result, waitForNextUpdate } = renderHook(() => useWishlist(), {
+      wrapper
+    });
+
+    // wait for the data to load
+    await waitForNextUpdate();
+
+    act(() => {
+      result.current.addToWishlist(MOCK_BOOK_ID);
+    });
+
+    await waitFor(() => {
+      expect(result.current.items).toStrictEqual(wishlistItems);
+    });
   });
 });
