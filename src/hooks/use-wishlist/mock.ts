@@ -383,6 +383,89 @@ export const updateWishlistMock = {
   }
 };
 
+export const removeWishlistMock = {
+  request: {
+    query: UPDATE_WISHLIST_MUTATION,
+    context: { session: { jwt: '123' } },
+    variables: {
+      id: MOCK_WISHLIST_ID,
+      data: {
+        user: MOCK_USER_ID,
+        books: ['2']
+      }
+    }
+  },
+  result: {
+    data: {
+      updateWishlist: {
+        data: {
+          id: MOCK_WISHLIST_ID,
+          attributes: {
+            user: {
+              data: {
+                id: MOCK_USER_ID,
+                __typename: 'UsersPermissionsUserEntity'
+              },
+              __typename: 'UsersPermissionsUserEntityResponse'
+            },
+            books: {
+              data: [
+                {
+                  id: '2',
+                  attributes: {
+                    title: 'Voice of War',
+                    sku: '123333',
+                    coverImageUrl:
+                      'https://images-na.ssl-images-amazon.com/images/I/41JodZ5Vl%2BL.jpg',
+                    isOnSale: false,
+                    pageCount: 372,
+                    userRatings: '{"1":3,"2":0,"3":0,"4":0,"5":4}',
+                    price: 34.78,
+                    rating: 3.2857142857142856,
+                    salePrice: 0,
+                    synopsis:
+                      "Chrys Valerian is a threadweaver, a high general, and soon-to-be father. But to the people of Alchea, he is the Apogee—the man who won the war.\\n\\nWhen a stranger's prophecy foretells danger to Chrys' child, he must do everything in his power to protect his family—even if the most dangerous enemy is the voice in his own head.\\n\\nTo the west, a sheltered girl seeks to find her place in the world.\\n\\nTo the south, a young man's life changes after he dies.\\n\\nTogether, they will change the world—whether they intend to or not",
+                    stock: 1,
+                    totalRatings: 0,
+                    authors: {
+                      data: [
+                        {
+                          attributes: {
+                            name: 'Zack Argyle',
+                            __typename: 'Author'
+                          },
+                          __typename: 'AuthorEntity'
+                        }
+                      ],
+                      __typename: 'AuthorRelationResponseCollection'
+                    },
+                    publisher: {
+                      data: {
+                        attributes: {
+                          name: 'Self Published',
+                          __typename: 'Publisher'
+                        },
+                        __typename: 'PublisherEntity'
+                      },
+                      __typename: 'PublisherEntityResponse'
+                    },
+                    __typename: 'Book'
+                  },
+                  __typename: 'BookEntity'
+                }
+              ],
+              __typename: 'BookRelationResponseCollection'
+            },
+            __typename: 'Wishlist'
+          },
+          __typename: 'WishlistEntity'
+        },
+        __typename: 'WishlistEntityResponse'
+      }
+    }
+  }
+};
+
 export const wishlistItems = [
   {
     id: '2',
