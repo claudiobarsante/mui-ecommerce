@@ -78,7 +78,6 @@ export type AuthorRelationResponseCollection = {
 export type Book = {
   __typename?: 'Book';
   authors?: Maybe<AuthorRelationResponseCollection>;
-  bookId: Scalars['String'];
   coverImageUrl: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   isFeatured: Scalars['Boolean'];
@@ -89,6 +88,7 @@ export type Book = {
   publisher?: Maybe<PublisherEntityResponse>;
   rating?: Maybe<Scalars['Float']>;
   salePrice: Scalars['Float'];
+  sku: Scalars['String'];
   stock: Scalars['Int'];
   synopsis: Scalars['String'];
   title: Scalars['String'];
@@ -125,7 +125,6 @@ export type BookEntityResponseCollection = {
 export type BookFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<BookFiltersInput>>>;
   authors?: InputMaybe<AuthorFiltersInput>;
-  bookId?: InputMaybe<StringFilterInput>;
   coverImageUrl?: InputMaybe<StringFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
@@ -139,6 +138,7 @@ export type BookFiltersInput = {
   publisher?: InputMaybe<PublisherFiltersInput>;
   rating?: InputMaybe<FloatFilterInput>;
   salePrice?: InputMaybe<FloatFilterInput>;
+  sku?: InputMaybe<StringFilterInput>;
   stock?: InputMaybe<IntFilterInput>;
   synopsis?: InputMaybe<StringFilterInput>;
   title?: InputMaybe<StringFilterInput>;
@@ -149,7 +149,6 @@ export type BookFiltersInput = {
 
 export type BookInput = {
   authors?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  bookId?: InputMaybe<Scalars['String']>;
   coverImageUrl?: InputMaybe<Scalars['String']>;
   isFeatured?: InputMaybe<Scalars['Boolean']>;
   isOnSale?: InputMaybe<Scalars['Boolean']>;
@@ -159,6 +158,7 @@ export type BookInput = {
   publisher?: InputMaybe<Scalars['ID']>;
   rating?: InputMaybe<Scalars['Float']>;
   salePrice?: InputMaybe<Scalars['Float']>;
+  sku?: InputMaybe<Scalars['String']>;
   stock?: InputMaybe<Scalars['Int']>;
   synopsis?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
@@ -1445,6 +1445,30 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', id: string, username: string, email?: string | null } } };
 
+export type WishlistFragmentFragment = { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null };
+
+export type CreateWishlistMutationVariables = Exact<{
+  data: WishlistInput;
+}>;
+
+
+export type CreateWishlistMutation = { __typename?: 'Mutation', createWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
+
+export type UpdateWishlistMutationVariables = Exact<{
+  id: Scalars['ID'];
+  data: WishlistInput;
+}>;
+
+
+export type UpdateWishlistMutation = { __typename?: 'Mutation', updateWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
+
+export type DeleteWishlistMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteWishlistMutation = { __typename?: 'Mutation', deleteWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
+
 export type BooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1460,7 +1484,7 @@ export type BookQueryVariables = Exact<{
 }>;
 
 
-export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, bookId: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
+export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
 
 export type RatingsQueryVariables = Exact<{
   bookId: Scalars['ID'];
@@ -1470,6 +1494,20 @@ export type RatingsQueryVariables = Exact<{
 
 export type RatingsQuery = { __typename?: 'Query', ratings?: { __typename?: 'RatingEntityResponseCollection', data: Array<{ __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, user_ids?: { __typename?: 'UsersPermissionsUserRelationResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', id?: string | null }> } | null, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null } | null }> } | null };
 
+export type WishlistQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type WishlistQuery = { __typename?: 'Query', wishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
+
+export type WishlistsQueryVariables = Exact<{
+  userId: Scalars['ID'];
+}>;
+
+
+export type WishlistsQuery = { __typename?: 'Query', wishlists?: { __typename?: 'WishlistEntityResponseCollection', data: Array<{ __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null }> } | null };
+
 export const RatingFragmentFragmentDoc = gql`
     fragment RatingFragment on Rating {
   rating
@@ -1478,6 +1516,48 @@ export const RatingFragmentFragmentDoc = gql`
       attributes {
         userRatings
         rating
+      }
+    }
+  }
+}
+    `;
+export const WishlistFragmentFragmentDoc = gql`
+    fragment WishlistFragment on Wishlist {
+  user {
+    data {
+      id
+    }
+  }
+  books {
+    data {
+      id
+      attributes {
+        title
+        sku
+        coverImageUrl
+        isOnSale
+        pageCount
+        userRatings
+        price
+        rating
+        salePrice
+        synopsis
+        stock
+        totalRatings
+        authors {
+          data {
+            attributes {
+              name
+            }
+          }
+        }
+        publisher {
+          data {
+            attributes {
+              name
+            }
+          }
+        }
       }
     }
   }
@@ -1648,6 +1728,121 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CreateWishlistDocument = gql`
+    mutation CreateWishlist($data: WishlistInput!) {
+  createWishlist(data: $data) {
+    data {
+      id
+      attributes {
+        ...WishlistFragment
+      }
+    }
+  }
+}
+    ${WishlistFragmentFragmentDoc}`;
+export type CreateWishlistMutationFn = Apollo.MutationFunction<CreateWishlistMutation, CreateWishlistMutationVariables>;
+
+/**
+ * __useCreateWishlistMutation__
+ *
+ * To run a mutation, you first call `useCreateWishlistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateWishlistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createWishlistMutation, { data, loading, error }] = useCreateWishlistMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateWishlistMutation(baseOptions?: Apollo.MutationHookOptions<CreateWishlistMutation, CreateWishlistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateWishlistMutation, CreateWishlistMutationVariables>(CreateWishlistDocument, options);
+      }
+export type CreateWishlistMutationHookResult = ReturnType<typeof useCreateWishlistMutation>;
+export type CreateWishlistMutationResult = Apollo.MutationResult<CreateWishlistMutation>;
+export type CreateWishlistMutationOptions = Apollo.BaseMutationOptions<CreateWishlistMutation, CreateWishlistMutationVariables>;
+export const UpdateWishlistDocument = gql`
+    mutation UpdateWishlist($id: ID!, $data: WishlistInput!) {
+  updateWishlist(id: $id, data: $data) {
+    data {
+      id
+      attributes {
+        ...WishlistFragment
+      }
+    }
+  }
+}
+    ${WishlistFragmentFragmentDoc}`;
+export type UpdateWishlistMutationFn = Apollo.MutationFunction<UpdateWishlistMutation, UpdateWishlistMutationVariables>;
+
+/**
+ * __useUpdateWishlistMutation__
+ *
+ * To run a mutation, you first call `useUpdateWishlistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateWishlistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateWishlistMutation, { data, loading, error }] = useUpdateWishlistMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateWishlistMutation(baseOptions?: Apollo.MutationHookOptions<UpdateWishlistMutation, UpdateWishlistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateWishlistMutation, UpdateWishlistMutationVariables>(UpdateWishlistDocument, options);
+      }
+export type UpdateWishlistMutationHookResult = ReturnType<typeof useUpdateWishlistMutation>;
+export type UpdateWishlistMutationResult = Apollo.MutationResult<UpdateWishlistMutation>;
+export type UpdateWishlistMutationOptions = Apollo.BaseMutationOptions<UpdateWishlistMutation, UpdateWishlistMutationVariables>;
+export const DeleteWishlistDocument = gql`
+    mutation DeleteWishlist($id: ID!) {
+  deleteWishlist(id: $id) {
+    data {
+      id
+      attributes {
+        ...WishlistFragment
+      }
+    }
+  }
+}
+    ${WishlistFragmentFragmentDoc}`;
+export type DeleteWishlistMutationFn = Apollo.MutationFunction<DeleteWishlistMutation, DeleteWishlistMutationVariables>;
+
+/**
+ * __useDeleteWishlistMutation__
+ *
+ * To run a mutation, you first call `useDeleteWishlistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteWishlistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteWishlistMutation, { data, loading, error }] = useDeleteWishlistMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteWishlistMutation(baseOptions?: Apollo.MutationHookOptions<DeleteWishlistMutation, DeleteWishlistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteWishlistMutation, DeleteWishlistMutationVariables>(DeleteWishlistDocument, options);
+      }
+export type DeleteWishlistMutationHookResult = ReturnType<typeof useDeleteWishlistMutation>;
+export type DeleteWishlistMutationResult = Apollo.MutationResult<DeleteWishlistMutation>;
+export type DeleteWishlistMutationOptions = Apollo.BaseMutationOptions<DeleteWishlistMutation, DeleteWishlistMutationVariables>;
 export const BooksDocument = gql`
     query Books {
   books {
@@ -1736,7 +1931,7 @@ export const BookDocument = gql`
       id
       attributes {
         title
-        bookId
+        sku
         coverImageUrl
         isOnSale
         pageCount
@@ -1851,3 +2046,82 @@ export function useRatingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ra
 export type RatingsQueryHookResult = ReturnType<typeof useRatingsQuery>;
 export type RatingsLazyQueryHookResult = ReturnType<typeof useRatingsLazyQuery>;
 export type RatingsQueryResult = Apollo.QueryResult<RatingsQuery, RatingsQueryVariables>;
+export const WishlistDocument = gql`
+    query Wishlist($id: ID!) {
+  wishlist(id: $id) {
+    data {
+      attributes {
+        ...WishlistFragment
+      }
+    }
+  }
+}
+    ${WishlistFragmentFragmentDoc}`;
+
+/**
+ * __useWishlistQuery__
+ *
+ * To run a query within a React component, call `useWishlistQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWishlistQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWishlistQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useWishlistQuery(baseOptions: Apollo.QueryHookOptions<WishlistQuery, WishlistQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WishlistQuery, WishlistQueryVariables>(WishlistDocument, options);
+      }
+export function useWishlistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WishlistQuery, WishlistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WishlistQuery, WishlistQueryVariables>(WishlistDocument, options);
+        }
+export type WishlistQueryHookResult = ReturnType<typeof useWishlistQuery>;
+export type WishlistLazyQueryHookResult = ReturnType<typeof useWishlistLazyQuery>;
+export type WishlistQueryResult = Apollo.QueryResult<WishlistQuery, WishlistQueryVariables>;
+export const WishlistsDocument = gql`
+    query Wishlists($userId: ID!) {
+  wishlists(filters: {user: {id: {eq: $userId}}}) {
+    data {
+      id
+      attributes {
+        ...WishlistFragment
+      }
+    }
+  }
+}
+    ${WishlistFragmentFragmentDoc}`;
+
+/**
+ * __useWishlistsQuery__
+ *
+ * To run a query within a React component, call `useWishlistsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWishlistsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWishlistsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useWishlistsQuery(baseOptions: Apollo.QueryHookOptions<WishlistsQuery, WishlistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WishlistsQuery, WishlistsQueryVariables>(WishlistsDocument, options);
+      }
+export function useWishlistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WishlistsQuery, WishlistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WishlistsQuery, WishlistsQueryVariables>(WishlistsDocument, options);
+        }
+export type WishlistsQueryHookResult = ReturnType<typeof useWishlistsQuery>;
+export type WishlistsLazyQueryHookResult = ReturnType<typeof useWishlistsLazyQuery>;
+export type WishlistsQueryResult = Apollo.QueryResult<WishlistsQuery, WishlistsQueryVariables>;

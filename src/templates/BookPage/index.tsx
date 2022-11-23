@@ -109,7 +109,7 @@ const BookPageTemplate = ({ book }: Props) => {
           <Typography sx={{ lineHeight: 2 }} variant="h4">
             {book.title}
           </Typography>
-          <Typography variant="subtitle1">SKU: {book.bookId}</Typography>
+          <Typography variant="subtitle1">SKU: {book.sku}</Typography>
           <Availability qty={book.stock} />
           <Box
             onClick={handleRatingClick}

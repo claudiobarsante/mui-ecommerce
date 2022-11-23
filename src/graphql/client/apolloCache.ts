@@ -8,6 +8,15 @@ export default new InMemoryCache({
         books: concatPagination(['filters', 'sort'])
       }
     },
+    Wishlist: {
+      fields: {
+        books: {
+          merge(_, incoming) {
+            return incoming;
+          }
+        }
+      }
+    },
     Rating: {
       fields: {
         tasks: {

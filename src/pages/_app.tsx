@@ -10,6 +10,7 @@ import Head from 'next/head';
 import NextNprogress from 'nextjs-progressbar';
 import theme from 'styles/theme';
 import Toast from 'components/Toast';
+import { WishlistProvider } from 'hooks/use-wishlist';
 import type { AppProps as NextAppProps } from 'next/app';
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -34,31 +35,33 @@ export default function MyApp(props: AppProps) {
     <SessionProvider session={session}>
       <ApolloProvider client={apolloClient}>
         <CacheProvider value={emotionCache}>
-          <Head>
-            <title>Book store</title>
-            <link rel="shortcut icon" href="/img/icon-512.png" />
-            <link rel="apple-touch-icon" href="/img/icon-512.png" />
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <WishlistProvider>
+            <Head>
+              <title>Book store</title>
+              <link rel="shortcut icon" href="/img/icon-512.png" />
+              <link rel="apple-touch-icon" href="/img/icon-512.png" />
+              <link rel="preconnect" href="https://fonts.googleapis.com" />
 
-            <meta name="theme-color" content="#73bd73" />
-            <meta
-              name="description"
-              content="The best collection of books cured by the world's readers'"
-            />
-          </Head>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <Toast />
+              <meta name="theme-color" content="#73bd73" />
+              <meta
+                name="description"
+                content="The best collection of books cured by the world's readers'"
+              />
+            </Head>
+            <ThemeProvider theme={theme}>
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              <CssBaseline />
+              <Toast />
 
-            <NextNprogress
-              color="#73bd73"
-              startPosition={0.3}
-              stopDelayMs={200}
-              showOnShallow={true}
-            />
-            <Component {...pageProps} />
-          </ThemeProvider>
+              <NextNprogress
+                color="#73bd73"
+                startPosition={0.3}
+                stopDelayMs={200}
+                showOnShallow={true}
+              />
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </WishlistProvider>
         </CacheProvider>
       </ApolloProvider>
     </SessionProvider>

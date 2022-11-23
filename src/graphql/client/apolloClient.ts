@@ -1,10 +1,5 @@
-import React, { useMemo } from 'react';
-import {
-  ApolloClient,
-  HttpLink,
-  InMemoryCache,
-  NormalizedCacheObject
-} from '@apollo/client';
+import { useMemo } from 'react';
+import { ApolloClient, HttpLink, NormalizedCacheObject } from '@apollo/client';
 import apolloCache from './apolloCache';
 
 let apolloClient: ApolloClient<NormalizedCacheObject | null>;
@@ -15,7 +10,7 @@ function createApolloClient() {
     link: new HttpLink({
       uri: `${process.env.NEXT_PUBLIC_GRAPHQL_HOST}`,
       headers: {
-        authorization: `Bearer ${process.env.NEXT_PUBLIC_GRAPHQL_TOKEN}`
+        authorization: `Bearer ${process.env.NEXT_PUBLIC_GRAPHQL_TOKEN}` // generated token by Strapi to consume the API
       }
     }),
     cache: apolloCache

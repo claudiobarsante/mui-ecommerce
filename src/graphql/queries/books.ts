@@ -36,7 +36,7 @@ export const BOOK_QUERY = gql`
         id
         attributes {
           title
-          bookId
+          sku
           coverImageUrl
           isOnSale
           pageCount
@@ -66,3 +66,17 @@ export const BOOK_QUERY = gql`
     }
   }
 `;
+
+/**
+ * query BookByAuthor{
+  books(filters:{authors:{name:{in:["J. R. R. Tolkien"]}}}){
+    data{
+      id      
+      attributes{
+        title
+        slug
+      }
+    }
+  }
+}
+ */
