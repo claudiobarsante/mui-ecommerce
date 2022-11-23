@@ -1,10 +1,14 @@
-import { Tooltip } from '@mui/material';
-import React, { useState, useEffect } from 'react';
-import * as S from './styles';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useWishlist } from 'hooks/use-wishlist';
+import React, { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+// -- Custom hooks
+import { useWishlist } from 'hooks/use-wishlist';
+// -- Material
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { Tooltip } from '@mui/material';
+// -- Custom components
 import Spinner from 'components/Spinner';
+// -- Styles
+import * as S from './styles';
 
 type Props = {
   bookId: string;

@@ -34,7 +34,24 @@ module.exports = {
           'styles/theme/colors': path.resolve(
             __dirname,
             '../src/styles/theme/colors'
-          )
+          ),
+          'components/Spinner': path.resolve(
+            __dirname,
+            '../src/components/Spinner'
+          ),
+          'hooks/use-wishlist': path.resolve(
+            __dirname,
+            '../src/hooks/use-wishlist'
+          ),
+          'graphql/mutations/wishlist': path.resolve(
+            __dirname,
+            '../src/graphql/mutations/wishlist'
+          ),
+          'graphql/queries/wishlist': path.resolve(
+            __dirname,
+            '../src/graphql/queries/wishlist'
+          ),
+          'utils/mappers': path.resolve(__dirname, '../src/utils/mappers')
         }
       }
     };

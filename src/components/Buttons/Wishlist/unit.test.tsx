@@ -1,5 +1,4 @@
 import {
-  act,
   renderWithTheme,
   screen,
   setHookState,
@@ -7,11 +6,9 @@ import {
 } from 'utils/tests/helpers';
 import userEvent from '@testing-library/user-event';
 import WishlistButton from '.';
-import { useWishlist } from '../../../hooks/use-wishlist';
+
 import React from 'react';
-import { BookFavButtonProps } from './styles';
-import { FavButton } from './styles';
-import { mocked } from 'jest-mock';
+
 //#region Mock session
 jest.mock('next-auth/react', () => {
   const MOCK_FAKE_USER_ID: string = '1';
