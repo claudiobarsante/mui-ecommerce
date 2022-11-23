@@ -11,8 +11,8 @@ type Props = {
 };
 const WishlistButton = ({ bookId }: Props) => {
   const { status } = useSession();
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isFavorite, setIsFavorite] = React.useState(false); // To enable us to mock useState, we use React.useState
+  const [loading, setLoading] = React.useState(false);
 
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
 
@@ -34,7 +34,10 @@ const WishlistButton = ({ bookId }: Props) => {
       {loading ? (
         <Spinner />
       ) : (
-        <Tooltip placement="left" title="add to my wishlist">
+        <Tooltip
+          placement="left"
+          title={isFavorite ? 'remove from my wishlist' : 'add to my wishlist'}
+        >
           <FavoriteIcon />
         </Tooltip>
       )}

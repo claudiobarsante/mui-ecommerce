@@ -8,7 +8,7 @@ export const ActionButton = styled(IconButton)(() => ({
   margin: 4
 }));
 
-type BookFavButtonProps = {
+export type BookFavButtonProps = {
   isfav: string; //has to be all in lower case to avoid Warning: React does not recognize the `isFav` prop on a DOM element
   theme?: Theme;
 };
