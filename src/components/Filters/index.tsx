@@ -1,8 +1,7 @@
+import React from 'react';
+
 import FormHeader from 'components/FormHeader';
-import * as React from 'react';
-
 import { FiltersQuery } from 'graphql/generated/graphql';
-
 import FilterAccordion from 'components/Accordion';
 
 type Props = {
@@ -14,7 +13,17 @@ const Filters = ({ filters }: Props) => {
   return (
     <>
       <FormHeader color="primary" text=" Filters" sx={{ marginTop: '1rem' }} />
-      <FilterAccordion filters={filters} title="Authors" field="author" />
+      <FilterAccordion filters={filters} title="Authors" filter="authors" />
+      <FilterAccordion
+        filters={filters}
+        title="Categories"
+        filter="categories"
+      />
+      <FilterAccordion
+        filters={filters}
+        title="Publishers"
+        filter="publishers"
+      />
     </>
   );
 };
