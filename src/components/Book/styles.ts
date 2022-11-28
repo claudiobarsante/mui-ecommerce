@@ -11,7 +11,7 @@ export const Book = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   overflow: 'hidden',
 
-  height: '100%',
+  height: '25rem',
   [theme.breakpoints.up('md')]: {
     position: 'relative'
   }
@@ -57,7 +57,7 @@ export const AddToCartButton = styled(Button)(
     fontSize: '12px',
     [theme!.breakpoints.up('md')]: {
       position: 'absolute',
-      bottom: '2%',
+      bottom: 0,
       width: '300px',
       padding: '10px 5px',
       animation:
@@ -65,8 +65,7 @@ export const AddToCartButton = styled(Button)(
           ? `${slideInBottom} 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both`
           : ''
     },
-    background: Colors.primary,
-    opacity: 0.9
+    background: Colors.primary
   })
 );
 

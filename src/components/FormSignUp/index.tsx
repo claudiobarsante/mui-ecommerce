@@ -126,7 +126,16 @@ const FormSignUp = () => {
           text="Book  Store"
         />
 
-        <FormHeader text="Sign Up" color="primary" />
+        <FormHeader
+          text="Sign Up"
+          color="primary"
+          sx={{
+            paddingLeft: '0.5rem',
+            position: 'absolute',
+            top: '8.5rem',
+            left: 0
+          }}
+        />
         <StandardInput
           color="primary"
           field="username"

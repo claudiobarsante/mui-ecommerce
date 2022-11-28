@@ -14,6 +14,8 @@ import ProductInfo from '../Info';
 
 import { FeaturedBook } from 'components/Featured';
 import WishlistButton from 'components/Buttons/Wishlist';
+import Card from '@mui/material/Card';
+import Paper from '@mui/material/Paper';
 
 type Props = {
   book: FeaturedBook;
@@ -35,45 +37,48 @@ export default function SingleBookDesktop({ book, isMobile }: Props) {
 
   return (
     <>
-      <S.Book onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        {/* <S.ProductImage src={book.attributes.coverImageUrl} /> */}
-        <S.BookImage>
-          <Image
-            src={book.attributes.coverImageUrl}
-            alt={book.attributes.title}
-            width={500}
-            height={650}
-            aria-label={book.attributes.title}
-          />
-        </S.BookImage>
-        <WishlistButton bookId={book.id} />
-        {/* <S.FavButton isfav={0}>
+      <Paper elevation={3} sx={{ overflow: 'hidden' }}>
+        <S.Book onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          {/* <S.ProductImage src={book.attributes.coverImageUrl} /> */}
+          <S.BookImage>
+            <Image
+              src={book.attributes.coverImageUrl}
+              alt={book.attributes.title}
+              width={500}
+              height={650}
+              aria-label={book.attributes.title}
+            />
+          </S.BookImage>
+          <WishlistButton bookId={book.id} />
+          {/* <S.FavButton isfav={0}>
           <Tooltip placement="left" title="add to my wishlist">
             <FavoriteIcon />
           </Tooltip>
         </S.FavButton> */}
-        {(showOptions || isMobile) && (
-          <S.AddToCartButton istoshow={`${showOptions}`} variant="contained">
-            Add to cart
-          </S.AddToCartButton>
-        )}
-        <S.ActionsButtonsContainer istoshow={showOptions.toString()}>
-          <Stack direction={isMobile ? 'row' : 'column'}>
-            <S.ActionButton>
-              <Tooltip placement="left" title="share this product">
-                <ShareIcon color="primary" />
-              </Tooltip>
-            </S.ActionButton>
-            <S.ActionButton onClick={() => router.push(`/book/${book.id}`)}>
-              <Tooltip placement="left" title="see details">
-                <VisibilityIcon color="primary" />
-              </Tooltip>
-            </S.ActionButton>
-          </Stack>
-        </S.ActionsButtonsContainer>
-      </S.Book>
-      <ProductInfo book={book} />
-      {/* <ProductDetailDialog product={product} /> */}
+          {(showOptions || isMobile) && (
+            <S.AddToCartButton istoshow={`${showOptions}`} variant="contained">
+              Add to cart
+            </S.AddToCartButton>
+          )}
+          <S.ActionsButtonsContainer istoshow={showOptions.toString()}>
+            <Stack direction={isMobile ? 'row' : 'column'}>
+              <S.ActionButton>
+                <Tooltip placement="left" title="share this product">
+                  <ShareIcon color="primary" />
+                </Tooltip>
+              </S.ActionButton>
+              <S.ActionButton onClick={() => router.push(`/book/${book.id}`)}>
+                <Tooltip placement="left" title="see details">
+                  <VisibilityIcon color="primary" />
+                </Tooltip>
+              </S.ActionButton>
+            </Stack>
+          </S.ActionsButtonsContainer>
+          <ProductInfo book={book} />
+        </S.Book>
+        {/* <ProductInfo book={book} /> */}
+        {/* <ProductDetailDialog product={product} /> */}
+      </Paper>
     </>
   );
 }

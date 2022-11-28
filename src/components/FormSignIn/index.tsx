@@ -128,7 +128,16 @@ const FormSignIn = () => {
             text="Book  Store"
           />
 
-          <FormHeader text="Sign In" color="lightBlue" />
+          <FormHeader
+            text="Sign In"
+            color="lightBlue"
+            sx={{
+              paddingLeft: '0.5rem',
+              position: 'absolute',
+              top: '8.5rem',
+              left: 0
+            }}
+          />
 
           <StandardInput
             color="lightBlue"

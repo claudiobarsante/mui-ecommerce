@@ -11,7 +11,19 @@ export default {
 } as ComponentMeta<typeof WishlistButton>;
 
 const Template: ComponentStory<typeof WishlistButton> = (args) => {
-  return <WishlistButton {...args} />;
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '50px'
+      }}
+    >
+      <WishlistButton {...args} />
+    </div>
+  );
 };
 
 export const Default = Template.bind({});

@@ -67,6 +67,55 @@ export const BOOK_QUERY = gql`
   }
 `;
 
+export const BOOKS_FILTERS_QUERY = gql`
+  query BooksFilters(
+    $page: Int
+    $pageSize: Int
+    $filters: BookFiltersInput
+    $sort: [String]
+  ) {
+    books(
+      filters: $filters
+      sort: $sort
+      pagination: { page: $page, pageSize: $pageSize }
+    ) {
+      data {
+        id
+        attributes {
+          title
+          price
+          coverImageUrl
+          rating
+          authors {
+            data {
+              id
+              attributes {
+                name
+              }
+            }
+          }
+          publisher {
+            data {
+              id
+              attributes {
+                name
+              }
+            }
+          }
+        }
+      }
+      meta {
+        pagination {
+          page
+          pageSize
+          pageCount
+          total
+        }
+      }
+    }
+  }
+`;
+
 /**
  * query BookByAuthor{
   books(filters:{authors:{name:{in:["J. R. R. Tolkien"]}}}){

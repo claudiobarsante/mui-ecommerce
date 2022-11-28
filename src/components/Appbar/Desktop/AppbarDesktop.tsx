@@ -17,7 +17,7 @@ export default function AppbarDesktop({ isMobile, userStatus }: AppbarProps) {
       </Link>
       <S.TopMenu type="row">
         <TopMenuLink text="Home" href="/" />
-        <TopMenuLink text="Products" href="/products" />
+        <TopMenuLink text="Books" href="/books" />
         <TopMenuLink text="About" href="/about" />
         <TopMenuLink text="Contact us" href="/contact" />
       </S.TopMenu>

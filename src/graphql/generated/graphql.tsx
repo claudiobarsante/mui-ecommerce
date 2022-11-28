@@ -78,6 +78,7 @@ export type AuthorRelationResponseCollection = {
 export type Book = {
   __typename?: 'Book';
   authors?: Maybe<AuthorRelationResponseCollection>;
+  category?: Maybe<CategoryEntityResponse>;
   coverImageUrl: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   isFeatured: Scalars['Boolean'];
@@ -125,6 +126,7 @@ export type BookEntityResponseCollection = {
 export type BookFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<BookFiltersInput>>>;
   authors?: InputMaybe<AuthorFiltersInput>;
+  category?: InputMaybe<CategoryFiltersInput>;
   coverImageUrl?: InputMaybe<StringFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
@@ -149,6 +151,7 @@ export type BookFiltersInput = {
 
 export type BookInput = {
   authors?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  category?: InputMaybe<Scalars['ID']>;
   coverImageUrl?: InputMaybe<Scalars['String']>;
   isFeatured?: InputMaybe<Scalars['Boolean']>;
   isOnSale?: InputMaybe<Scalars['Boolean']>;
@@ -898,7 +901,6 @@ export type QueryWishlistArgs = {
 export type QueryWishlistsArgs = {
   filters?: InputMaybe<WishlistFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -1359,7 +1361,6 @@ export type Wishlist = {
   __typename?: 'Wishlist';
   books?: Maybe<BookRelationResponseCollection>;
   createdAt?: Maybe<Scalars['DateTime']>;
-  publishedAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   user?: Maybe<UsersPermissionsUserEntityResponse>;
 };
@@ -1396,14 +1397,12 @@ export type WishlistFiltersInput = {
   id?: InputMaybe<IdFilterInput>;
   not?: InputMaybe<WishlistFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<WishlistFiltersInput>>>;
-  publishedAt?: InputMaybe<DateTimeFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
   user?: InputMaybe<UsersPermissionsUserFiltersInput>;
 };
 
 export type WishlistInput = {
   books?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  publishedAt?: InputMaybe<Scalars['DateTime']>;
   user?: InputMaybe<Scalars['ID']>;
 };
 
@@ -1485,6 +1484,16 @@ export type BookQueryVariables = Exact<{
 
 
 export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
+
+export type BooksFiltersQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<BookFiltersInput>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+}>;
+
+
+export type BooksFiltersQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, price: number, coverImageUrl: string, rating?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', id?: string | null, attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', id?: string | null, attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
 
 export type RatingsQueryVariables = Exact<{
   bookId: Scalars['ID'];
@@ -1989,6 +1998,80 @@ export function useBookLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookQ
 export type BookQueryHookResult = ReturnType<typeof useBookQuery>;
 export type BookLazyQueryHookResult = ReturnType<typeof useBookLazyQuery>;
 export type BookQueryResult = Apollo.QueryResult<BookQuery, BookQueryVariables>;
+export const BooksFiltersDocument = gql`
+    query BooksFilters($page: Int, $pageSize: Int, $filters: BookFiltersInput, $sort: [String]) {
+  books(
+    filters: $filters
+    sort: $sort
+    pagination: {page: $page, pageSize: $pageSize}
+  ) {
+    data {
+      id
+      attributes {
+        title
+        price
+        coverImageUrl
+        rating
+        authors {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+        publisher {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+      }
+    }
+    meta {
+      pagination {
+        page
+        pageSize
+        pageCount
+        total
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useBooksFiltersQuery__
+ *
+ * To run a query within a React component, call `useBooksFiltersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBooksFiltersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBooksFiltersQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
+ *      filters: // value for 'filters'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function useBooksFiltersQuery(baseOptions?: Apollo.QueryHookOptions<BooksFiltersQuery, BooksFiltersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BooksFiltersQuery, BooksFiltersQueryVariables>(BooksFiltersDocument, options);
+      }
+export function useBooksFiltersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BooksFiltersQuery, BooksFiltersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BooksFiltersQuery, BooksFiltersQueryVariables>(BooksFiltersDocument, options);
+        }
+export type BooksFiltersQueryHookResult = ReturnType<typeof useBooksFiltersQuery>;
+export type BooksFiltersLazyQueryHookResult = ReturnType<typeof useBooksFiltersLazyQuery>;
+export type BooksFiltersQueryResult = Apollo.QueryResult<BooksFiltersQuery, BooksFiltersQueryVariables>;
 export const RatingsDocument = gql`
     query Ratings($bookId: ID!, $userId: ID!) {
   ratings(
