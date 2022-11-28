@@ -4,15 +4,22 @@ import BaseLayout from 'templates/BaseLayout';
 import { initializeApollo } from 'graphql/client/apolloClient';
 import {
   BooksFiltersQuery,
-  BooksFiltersQueryVariables
+  BooksFiltersQueryVariables,
+  FiltersQuery,
+  FiltersQueryResult,
+  FiltersQueryVariables
 } from 'graphql/generated/graphql';
 import { BOOKS_FILTERS_QUERY } from 'graphql/queries/books';
 import BooksPageTemplate from './../templates/BooksPage/index';
+import { FILTERS_QUERY } from 'graphql/queries/filters';
 
-const Books = () => {
+export type BooksProps = {
+  filters: FiltersQuery;
+};
+const Books = ({ filters }: BooksProps) => {
   return (
     <BaseLayout>
-      <BooksPageTemplate />
+      <BooksPageTemplate filters={filters} />
     </BaseLayout>
   );
 };
@@ -36,11 +43,16 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   });
 
+  const { data: filters } = await apolloClient.query<
+    FiltersQuery,
+    FiltersQueryVariables
+  >({ query: FILTERS_QUERY });
+
   console.log('data-books', data);
   return {
     props: {
       books: {},
-      filters: {}
+      filters
     }
   };
 };

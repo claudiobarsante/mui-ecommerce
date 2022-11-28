@@ -1,10 +1,17 @@
 import * as S from './styles';
 import Filters from './../../components/Filters/index';
-const BooksPageTemplate = () => {
+import { FiltersQuery, FiltersQueryResult } from 'graphql/generated/graphql';
+import { BooksProps } from 'pages/books';
+
+type Props = {
+  filters: FiltersQuery;
+};
+
+const BooksPageTemplate = ({ filters }: BooksProps) => {
   return (
     <S.PageContainer>
       <S.FiltersContainer>
-        <Filters />
+        <Filters filters={filters} />
       </S.FiltersContainer>
       <S.SearchContainer component="section">
         <p>Search</p>

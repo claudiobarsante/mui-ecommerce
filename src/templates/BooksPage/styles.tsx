@@ -1,7 +1,7 @@
 import { styled, Theme } from '@mui/material/styles';
 import { Box, Container } from '@mui/material';
 
-export const PageContainer = styled(Container)(({ theme }) => ({
+export const PageContainer = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateRows: '10% 85% 5%',
   gridTemplateAreas: "'filters search''filters books' 'filters pagination'",
@@ -28,8 +28,7 @@ export const SearchContainer = styled(Box)(({ theme }) => ({
 export const FiltersContainer = styled(Box)(({ theme }) => ({
   gridArea: 'filters',
   border: '1px solid red',
-  justifyItems: 'flex-start',
-  alignItems: 'center'
+  justifyItems: 'flex-start'
 }));
 
 export const BooksContainer = styled(Box)(({ theme }) => ({

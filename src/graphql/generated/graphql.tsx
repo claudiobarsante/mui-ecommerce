@@ -1495,6 +1495,11 @@ export type BooksFiltersQueryVariables = Exact<{
 
 export type BooksFiltersQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, price: number, coverImageUrl: string, rating?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', id?: string | null, attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', id?: string | null, attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
 
+export type FiltersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FiltersQuery = { __typename?: 'Query', authors?: { __typename?: 'AuthorEntityResponseCollection', data: Array<{ __typename?: 'AuthorEntity', id?: string | null, attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publishers?: { __typename?: 'PublisherEntityResponseCollection', data: Array<{ __typename?: 'PublisherEntity', id?: string | null, attributes?: { __typename?: 'Publisher', name?: string | null } | null }> } | null, categories?: { __typename?: 'CategoryEntityResponseCollection', data: Array<{ __typename?: 'CategoryEntity', id?: string | null, attributes?: { __typename?: 'Category', name: string } | null }> } | null };
+
 export type RatingsQueryVariables = Exact<{
   bookId: Scalars['ID'];
   userId: Scalars['ID'];
@@ -2072,6 +2077,61 @@ export function useBooksFiltersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type BooksFiltersQueryHookResult = ReturnType<typeof useBooksFiltersQuery>;
 export type BooksFiltersLazyQueryHookResult = ReturnType<typeof useBooksFiltersLazyQuery>;
 export type BooksFiltersQueryResult = Apollo.QueryResult<BooksFiltersQuery, BooksFiltersQueryVariables>;
+export const FiltersDocument = gql`
+    query Filters {
+  authors(sort: ["name"]) {
+    data {
+      id
+      attributes {
+        name
+      }
+    }
+  }
+  publishers(sort: ["name"]) {
+    data {
+      id
+      attributes {
+        name
+      }
+    }
+  }
+  categories(sort: ["name"]) {
+    data {
+      id
+      attributes {
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFiltersQuery__
+ *
+ * To run a query within a React component, call `useFiltersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFiltersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFiltersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFiltersQuery(baseOptions?: Apollo.QueryHookOptions<FiltersQuery, FiltersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FiltersQuery, FiltersQueryVariables>(FiltersDocument, options);
+      }
+export function useFiltersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FiltersQuery, FiltersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FiltersQuery, FiltersQueryVariables>(FiltersDocument, options);
+        }
+export type FiltersQueryHookResult = ReturnType<typeof useFiltersQuery>;
+export type FiltersLazyQueryHookResult = ReturnType<typeof useFiltersLazyQuery>;
+export type FiltersQueryResult = Apollo.QueryResult<FiltersQuery, FiltersQueryVariables>;
 export const RatingsDocument = gql`
     query Ratings($bookId: ID!, $userId: ID!) {
   ratings(
