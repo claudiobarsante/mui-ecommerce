@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   console.log('data-books', data);
   return {
     props: {
-      books: {},
+      initialApolloState: apolloClient.cache.extract(),
       filters
     }
   };

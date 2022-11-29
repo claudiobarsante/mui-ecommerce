@@ -24,17 +24,22 @@ const theme = createTheme({
         disableElevation: true
       }
     },
-    MuiTooltip: {
+    MuiCheckbox: {
       defaultProps: {
-        arrow: true
-      },
+        disableRipple: true
+      }
+    },
+    MuiTooltip: {
+      // defaultProps: {
+      //   arrow: true
+      // },
       styleOverrides: {
         tooltip: {
           background: Colors.primary
-        },
-        arrow: {
-          color: Colors.primary
         }
+        // arrow: {
+        //   color: Colors.primary
+        // }
       }
     },
     // MuiListItemText: {

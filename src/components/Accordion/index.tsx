@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -10,6 +10,7 @@ import FormGroup from '@mui/material/FormGroup';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import Typography from '@mui/material/Typography';
 import { FiltersQuery } from 'graphql/generated/graphql';
+import { FilterData } from 'templates/BooksPage';
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -27,15 +28,16 @@ type Props = {
   filters: FiltersQuery;
   filter: 'authors' | 'publishers' | 'categories';
   title: string;
+  setFilterData: Dispatch<SetStateAction<FilterData>>;
 };
 
-type Check = {
+type CheckedItem = {
   [key: string]: boolean;
 };
 
-const FilterAccordion = ({ filters, filter, title }: Props) => {
-  const [checked, setChecked] = useState<Check>({});
-
+const FilterAccordion = ({ filters, filter, title, setFilterData }: Props) => {
+  const [checked, setChecked] = useState<CheckedItem>({});
+  // selectedFilter is the object with the data of a specific filter
   const selectedFilter = filters[filter];
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,41 +45,57 @@ const FilterAccordion = ({ filters, filter, title }: Props) => {
       ...previous,
       [event.target.name]: event.target.checked
     }));
+    // if user is checking the item from filter add to filterData, if not, remove from filterData
+    if (event.target.checked) {
+      setFilterData((previous) => ({
+        ...previous,
+        [filter]: [...previous[filter], event.target.name]
+      }));
+    } else {
+      setFilterData((previous) => {
+        const updatedFilterData = previous[filter].filter(
+          (item) => item !== event.target.name
+        );
+        return { ...previous, [filter]: updatedFilterData };
+      });
+    }
   };
 
   return (
-    <Accordion>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography>{title}</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <FormGroup>
-          {selectedFilter?.data &&
-            selectedFilter?.data.map((author) => (
-              <FormControlLabel
-                key={author.id}
-                control={
-                  <Checkbox
-                    inputProps={{
-                      'aria-label': `checkbox for ${author.attributes?.name}`
-                    }}
-                    onChange={handleChange}
-                    checked={checked[author.attributes?.name!] === true}
-                    name={author.attributes?.name!}
-                  />
-                }
-                label={author.attributes?.name}
-                value={author.id}
-              />
-            ))}
-        </FormGroup>
-      </AccordionDetails>
-      <p>{JSON.stringify(checked)}</p>
-    </Accordion>
+    <>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>{title}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <FormGroup>
+            {selectedFilter?.data &&
+              selectedFilter?.data.map((item) => (
+                <FormControlLabel
+                  key={item.id}
+                  control={
+                    <Checkbox
+                      inputProps={{
+                        'aria-label': `checkbox for ${item.attributes?.name}`
+                      }}
+                      onChange={handleChange}
+                      checked={checked[item.attributes?.name!] === true}
+                      name={item.attributes?.name!}
+                    />
+                  }
+                  label={item.attributes?.name}
+                  value={item.id}
+                />
+              ))}
+          </FormGroup>
+        </AccordionDetails>
+        <p>{JSON.stringify(checked)}</p>
+      </Accordion>
+    </>
   );
 };
 
