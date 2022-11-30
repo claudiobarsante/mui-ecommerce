@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
-
+import { useLazyQuery } from '@apollo/client';
 import * as S from './styles';
 import Filters from './../../components/Filters/index';
 
@@ -12,12 +12,18 @@ import {
   BooksFiltersQueryVariables
 } from 'graphql/generated/graphql';
 import { BOOKS_FILTERS_QUERY } from 'graphql/queries/books';
+import { parseQueryStringToFilter } from 'utils/filter';
 
 export type FilterData = {
   [key: string]: string[] | [];
 };
 const BooksPageTemplate = ({ filters }: BooksProps) => {
-  const [filterData, setFilterData] = useState<FilterData>({ authors: [] });
+  const [filterData, setFilterData] = useState<FilterData>({
+    authors: [],
+    publishers: [],
+    categories: []
+  });
+  const { push, query, pathname } = useRouter();
 
   const { data, error } = useQuery<
     BooksFiltersQuery,
@@ -26,10 +32,30 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
     variables: {
       page: 1,
       pageSize: 3,
-      filters: {},
+      filters: parseQueryStringToFilter({ queryString: query }),
       sort: ['title']
     }
   });
+
+  useEffect(() => {
+    updateQueryResults();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterData]);
+
+  function updateQueryResults() {
+    if (!query) return;
+
+    let updatedQuery: ParsedUrlQueryInput = {};
+
+    Object.keys(filterData).forEach((key) => {
+      if (filterData[key].length) {
+        updatedQuery[key] = filterData[key];
+      }
+    });
+    push({ pathname: '/books', query: updatedQuery });
+    return;
+  }
+
   return (
     <S.PageContainer>
       <S.FiltersContainer>

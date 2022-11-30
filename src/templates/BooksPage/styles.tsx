@@ -7,7 +7,7 @@ export const PageContainer = styled(Box)(({ theme }) => ({
   gridTemplateAreas: "'filters search''filters books' 'filters pagination'",
   gridTemplateColumns: '20% 80%',
   maxWidth: '100%',
-  height: '85vh',
+  //height: '85vh',
   border: '1px solid blue',
 
   [theme.breakpoints.down('md')]: {

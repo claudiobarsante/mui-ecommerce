@@ -11,7 +11,6 @@ type Props = {
 };
 
 const Filters = ({ filters, setFilterData }: Props) => {
-  console.log('datafilters', filters);
   return (
     <>
       <FormHeader color="primary" text=" Filters" sx={{ marginTop: '1rem' }} />
@@ -21,16 +20,18 @@ const Filters = ({ filters, setFilterData }: Props) => {
         filter="authors"
         setFilterData={setFilterData}
       />
-      {/* <FilterAccordion
+      <FilterAccordion
         filters={filters}
         title="Categories"
         filter="categories"
+        setFilterData={setFilterData}
       />
       <FilterAccordion
         filters={filters}
         title="Publishers"
         filter="publishers"
-      /> */}
+        setFilterData={setFilterData}
+      />
     </>
   );
 };
