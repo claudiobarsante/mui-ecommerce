@@ -20,6 +20,9 @@ import { BooksProps } from 'pages/books';
 import Books, { BookSummary } from 'components/Books';
 import Filters from 'components/Filters';
 
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
+
 export type FilterData = {
   [key: string]: string[] | [];
 };
@@ -33,7 +36,7 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
   const { push, query, pathname } = useRouter();
   const [page, setPage] = useState(1);
 
-  const { data, error } = useQuery<
+  const { data, error, loading } = useQuery<
     BooksFiltersQuery,
     BooksFiltersQueryVariables
   >(BOOKS_FILTERS_QUERY, {
@@ -42,8 +45,8 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
       pageSize: 8,
       filters: parseQueryStringToFilter({ queryString: query }),
       sort: ['title']
-    },
-    fetchPolicy: 'cache-first'
+    }
+    //fetchPolicy: 'cache-and-network'
   });
 
   const updateQueryResults = () => {

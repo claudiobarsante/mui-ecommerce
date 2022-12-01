@@ -43,6 +43,8 @@ export default function SingleBookDesktop({ book, isMobile }: Props) {
           <S.BookImage>
             <Image
               src={book.attributes.coverImageUrl}
+              blurDataURL={book.attributes.coverImageUrl}
+              placeholder="blur"
               alt={book.attributes.title}
               width={500}
               height={650}

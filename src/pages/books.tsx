@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     FiltersQueryVariables
   >({ query: FILTERS_QUERY });
 
-  if (booksError) {
+  if (filtersError || booksError) {
     return {
       redirect: {
         destination: `/error`,
