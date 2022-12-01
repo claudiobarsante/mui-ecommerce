@@ -17,7 +17,7 @@ import {
 } from 'graphql/generated/graphql';
 import { BooksProps } from 'pages/books';
 // -- Components
-import Featured, { FeaturedBook } from 'components/Featured';
+import Books, { BookSummary } from 'components/Books';
 import Filters from 'components/Filters';
 
 export type FilterData = {
@@ -41,7 +41,6 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
       page: page,
       pageSize: 8,
       filters: parseQueryStringToFilter({ queryString: query }),
-
       sort: ['title']
     },
     fetchPolicy: 'cache-first'
@@ -85,9 +84,7 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
         <p>Search</p>
       </S.SearchContainer>
       <S.BooksContainer component="section">
-        {data?.books && (
-          <Featured featured={data.books.data as FeaturedBook[]} />
-        )}
+        {data?.books && <Books books={data.books.data as BookSummary[]} />}
       </S.BooksContainer>
       <S.PaginationContainer component="section">
         <Pagination

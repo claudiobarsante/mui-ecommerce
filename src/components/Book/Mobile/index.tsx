@@ -10,10 +10,10 @@ import FitScreenIcon from '@mui/icons-material/FitScreen';
 //import ProductMeta from "./ProductMeta";
 import ProductInfo from '../Info';
 import { ProductType } from 'data';
-import { FeaturedBook } from 'components/Featured';
+import { BookSummary } from 'components/Books';
 
 type Props = {
-  book: FeaturedBook;
+  book: BookSummary;
   isMobile: boolean;
 };
 

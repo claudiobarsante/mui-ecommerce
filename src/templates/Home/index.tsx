@@ -4,10 +4,10 @@ import { Box, Typography } from '@mui/material';
 import BaseLayout from 'templates/BaseLayout';
 import HeroBanner from 'components/HeroBanner';
 import PromotionsSlider from 'components/PromotionsSlider';
-import Featured, { FeaturedBook } from 'components/Featured';
+import Books, { BookSummary } from 'components/Books';
 
 type Props = {
-  featured: FeaturedBook[];
+  featured: BookSummary[];
 };
 const HomeTemplate = ({ featured }: Props) => {
   return (
@@ -17,7 +17,7 @@ const HomeTemplate = ({ featured }: Props) => {
       <Box display="flex" justifyContent="center" sx={{ p: 4 }}>
         <Typography variant="h4">Featured</Typography>
       </Box>
-      <Featured featured={featured} />
+      <Books books={featured} />
     </BaseLayout>
   );
 };

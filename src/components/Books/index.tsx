@@ -1,11 +1,10 @@
 import { Container, Grid } from '@mui/material';
 import useIsMobile from 'hooks/use-IsMobile';
-import { products } from '../../data';
 import SingleBookMobile from 'components/Book/Mobile';
 
 import SingleBookDesktop from 'components/Book/Desktop';
 
-export type FeaturedBook = {
+export type BookSummary = {
   __typename: string;
   id: string;
   attributes: {
@@ -17,14 +16,14 @@ export type FeaturedBook = {
   };
 };
 
-export type FeaturedProps = {
-  featured: FeaturedBook[];
+export type BooksProps = {
+  books: BookSummary[];
 };
 
-export default function Featured({ featured }: FeaturedProps) {
+export default function Books({ books }: BooksProps) {
   const isMobile = useIsMobile();
-  if (!featured) return null;
-  const renderBooks = featured.map((book) => (
+  if (!books) return null;
+  const renderBooks = books.map((book) => (
     <Grid
       item
       key={book.id}

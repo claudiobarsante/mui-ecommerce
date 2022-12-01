@@ -12,13 +12,13 @@ import FitScreenIcon from '@mui/icons-material/FitScreen';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ProductInfo from '../Info';
 
-import { FeaturedBook } from 'components/Featured';
+import { BookSummary } from 'components/Books';
 import WishlistButton from 'components/Buttons/Wishlist';
 import Card from '@mui/material/Card';
 import Paper from '@mui/material/Paper';
 
 type Props = {
-  book: FeaturedBook;
+  book: BookSummary;
   isMobile: boolean;
 };
 export default function SingleBookDesktop({ book, isMobile }: Props) {

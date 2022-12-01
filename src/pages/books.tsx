@@ -1,5 +1,5 @@
-import { GetServerSidePropsContext, GetServerSideProps } from 'next';
 import React from 'react';
+import { GetServerSidePropsContext, GetServerSideProps } from 'next';
 import BaseLayout from 'templates/BaseLayout';
 import { initializeApollo } from 'graphql/client/apolloClient';
 import {

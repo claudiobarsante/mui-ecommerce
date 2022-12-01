@@ -7,10 +7,10 @@ import { initializeApollo } from 'graphql/client/apolloClient';
 import { FEATURED_QUERY } from 'graphql/queries/books';
 import { FeaturedQuery } from 'graphql/generated/graphql';
 // -- Custom components
-import { FeaturedProps } from 'components/Featured';
+import { BooksProps } from 'components/Books';
 import HomeTemplate from 'templates/Home';
 
-const Home = ({ featured }: FeaturedProps) => {
+const Home = ({ books: featured }: BooksProps) => {
   return <HomeTemplate featured={featured} />;
 };
 
