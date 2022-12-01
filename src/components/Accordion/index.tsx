@@ -29,13 +29,20 @@ type Props = {
   filter: 'authors' | 'publishers' | 'categories';
   title: string;
   setFilterData: Dispatch<SetStateAction<FilterData>>;
+  setPage: Dispatch<SetStateAction<number>>;
 };
 
 type CheckedItem = {
   [key: string]: boolean;
 };
 
-const FilterAccordion = ({ filters, filter, title, setFilterData }: Props) => {
+const FilterAccordion = ({
+  filters,
+  filter,
+  title,
+  setFilterData,
+  setPage
+}: Props) => {
   const [checked, setChecked] = useState<CheckedItem>({});
   // selectedFilter is the object with the data of a specific filter
   const selectedFilter = filters[filter];
@@ -59,6 +66,7 @@ const FilterAccordion = ({ filters, filter, title, setFilterData }: Props) => {
         return { ...previous, [filter]: updatedFilterData };
       });
     }
+    setPage(1); // on every cheking reset the page to one to show the first results
   };
 
   return (

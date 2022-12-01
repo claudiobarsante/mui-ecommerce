@@ -8,9 +8,10 @@ import { FilterData } from 'templates/BooksPage';
 type Props = {
   filters: FiltersQuery;
   setFilterData: Dispatch<SetStateAction<FilterData>>;
+  setPage: Dispatch<SetStateAction<number>>;
 };
 
-const Filters = ({ filters, setFilterData }: Props) => {
+const Filters = ({ filters, setFilterData, setPage }: Props) => {
   return (
     <>
       <FormHeader color="primary" text=" Filters" sx={{ marginTop: '1rem' }} />
@@ -19,18 +20,21 @@ const Filters = ({ filters, setFilterData }: Props) => {
         title="Authors"
         filter="authors"
         setFilterData={setFilterData}
+        setPage={setPage}
       />
       <FilterAccordion
         filters={filters}
         title="Categories"
         filter="categories"
         setFilterData={setFilterData}
+        setPage={setPage}
       />
       <FilterAccordion
         filters={filters}
         title="Publishers"
         filter="publishers"
         setFilterData={setFilterData}
+        setPage={setPage}
       />
     </>
   );

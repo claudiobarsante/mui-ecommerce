@@ -1468,15 +1468,12 @@ export type DeleteWishlistMutationVariables = Exact<{
 
 export type DeleteWishlistMutation = { __typename?: 'Mutation', deleteWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
 
-export type BooksQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type BooksQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', attributes?: { __typename?: 'Book', title: string, synopsis: string } | null }> } | null };
+export type BookFragmentFragment = { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null };
 
 export type FeaturedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FeaturedQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, price: number, coverImageUrl: string, rating?: number | null } | null }> } | null };
+export type FeaturedQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null };
 
 export type BookQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1493,7 +1490,7 @@ export type BooksFiltersQueryVariables = Exact<{
 }>;
 
 
-export type BooksFiltersQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, price: number, coverImageUrl: string, rating?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', id?: string | null, attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', id?: string | null, attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
+export type BooksFiltersQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
 
 export type FiltersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1572,6 +1569,36 @@ export const WishlistFragmentFragmentDoc = gql`
             }
           }
         }
+      }
+    }
+  }
+}
+    `;
+export const BookFragmentFragmentDoc = gql`
+    fragment BookFragment on Book {
+  title
+  sku
+  coverImageUrl
+  isOnSale
+  pageCount
+  userRatings
+  price
+  rating
+  salePrice
+  synopsis
+  stock
+  totalRatings
+  authors {
+    data {
+      attributes {
+        name
+      }
+    }
+  }
+  publisher {
+    data {
+      attributes {
+        name
       }
     }
   }
@@ -1857,60 +1884,18 @@ export function useDeleteWishlistMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteWishlistMutationHookResult = ReturnType<typeof useDeleteWishlistMutation>;
 export type DeleteWishlistMutationResult = Apollo.MutationResult<DeleteWishlistMutation>;
 export type DeleteWishlistMutationOptions = Apollo.BaseMutationOptions<DeleteWishlistMutation, DeleteWishlistMutationVariables>;
-export const BooksDocument = gql`
-    query Books {
-  books {
-    data {
-      attributes {
-        title
-        synopsis
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useBooksQuery__
- *
- * To run a query within a React component, call `useBooksQuery` and pass it any options that fit your needs.
- * When your component renders, `useBooksQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBooksQuery({
- *   variables: {
- *   },
- * });
- */
-export function useBooksQuery(baseOptions?: Apollo.QueryHookOptions<BooksQuery, BooksQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BooksQuery, BooksQueryVariables>(BooksDocument, options);
-      }
-export function useBooksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BooksQuery, BooksQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BooksQuery, BooksQueryVariables>(BooksDocument, options);
-        }
-export type BooksQueryHookResult = ReturnType<typeof useBooksQuery>;
-export type BooksLazyQueryHookResult = ReturnType<typeof useBooksLazyQuery>;
-export type BooksQueryResult = Apollo.QueryResult<BooksQuery, BooksQueryVariables>;
 export const FeaturedDocument = gql`
     query Featured {
   books(filters: {isFeatured: {eq: true}}) {
     data {
       id
       attributes {
-        title
-        price
-        coverImageUrl
-        rating
+        ...BookFragment
       }
     }
   }
 }
-    `;
+    ${BookFragmentFragmentDoc}`;
 
 /**
  * __useFeaturedQuery__
@@ -1944,37 +1929,12 @@ export const BookDocument = gql`
     data {
       id
       attributes {
-        title
-        sku
-        coverImageUrl
-        isOnSale
-        pageCount
-        userRatings
-        price
-        rating
-        salePrice
-        synopsis
-        stock
-        totalRatings
-        authors {
-          data {
-            attributes {
-              name
-            }
-          }
-        }
-        publisher {
-          data {
-            attributes {
-              name
-            }
-          }
-        }
+        ...BookFragment
       }
     }
   }
 }
-    `;
+    ${BookFragmentFragmentDoc}`;
 
 /**
  * __useBookQuery__
@@ -2013,26 +1973,7 @@ export const BooksFiltersDocument = gql`
     data {
       id
       attributes {
-        title
-        price
-        coverImageUrl
-        rating
-        authors {
-          data {
-            id
-            attributes {
-              name
-            }
-          }
-        }
-        publisher {
-          data {
-            id
-            attributes {
-              name
-            }
-          }
-        }
+        ...BookFragment
       }
     }
     meta {
@@ -2045,7 +1986,7 @@ export const BooksFiltersDocument = gql`
     }
   }
 }
-    `;
+    ${BookFragmentFragmentDoc}`;
 
 /**
  * __useBooksFiltersQuery__

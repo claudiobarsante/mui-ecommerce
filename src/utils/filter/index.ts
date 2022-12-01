@@ -22,21 +22,23 @@ export const parseQueryStringToFilter = ({ queryString }: ParseArgs) => {
   // -- | categories        | category
   // -- | publishers        | publisher
 
-  Object.keys(queryString).forEach((key) => {
-    const queryMapper: QueryMapper = {
-      authors: 'authors',
-      categories: 'category',
-      publishers: 'publisher'
-    };
+  Object.keys(queryString)
+    .filter((key) => key !== 'page')
+    .forEach((key) => {
+      const queryMapper: QueryMapper = {
+        authors: 'authors',
+        categories: 'category',
+        publishers: 'publisher'
+      };
 
-    const queryKey = queryMapper[key];
+      const queryKey = queryMapper[key];
 
-    if (Array.isArray(queryString[key])) {
-      obj[queryKey] = { name: { in: queryString[key] } };
-    } else {
-      obj[queryKey] = { name: { eq: queryString[key] } };
-    }
-  });
+      if (Array.isArray(queryString[key])) {
+        obj[queryKey] = { name: { in: queryString[key] } };
+      } else {
+        obj[queryKey] = { name: { eq: queryString[key] } };
+      }
+    });
 
   return obj;
 };

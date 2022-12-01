@@ -23,7 +23,7 @@ export type FeaturedProps = {
 
 export default function Featured({ featured }: FeaturedProps) {
   const isMobile = useIsMobile();
-
+  if (!featured) return null;
   const renderBooks = featured.map((book) => (
     <Grid
       item

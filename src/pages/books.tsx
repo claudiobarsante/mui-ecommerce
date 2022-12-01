@@ -6,7 +6,6 @@ import {
   BooksFiltersQuery,
   BooksFiltersQueryVariables,
   FiltersQuery,
-  FiltersQueryResult,
   FiltersQueryVariables
 } from 'graphql/generated/graphql';
 import { BOOKS_FILTERS_QUERY } from 'graphql/queries/books';
@@ -32,24 +31,33 @@ export const getServerSideProps: GetServerSideProps = async ({
 }: GetServerSidePropsContext) => {
   const apolloClient = initializeApollo();
 
-  const { data, error } = await apolloClient.query<
+  const { error: booksError } = await apolloClient.query<
     BooksFiltersQuery,
     BooksFiltersQueryVariables
   >({
     query: BOOKS_FILTERS_QUERY,
     variables: {
-      page: 1,
-      pageSize: 3,
+      page: Number(query.page),
+      pageSize: 8,
       filters: parseQueryStringToFilter({ queryString: query }),
-
       sort: ['title']
-    }
+    },
+    fetchPolicy: 'no-cache'
   });
 
-  const { data: filters } = await apolloClient.query<
+  const { data: filters, error: filtersError } = await apolloClient.query<
     FiltersQuery,
     FiltersQueryVariables
   >({ query: FILTERS_QUERY });
+
+  if (booksError) {
+    return {
+      redirect: {
+        destination: `/error`,
+        permanent: false
+      }
+    };
+  }
 
   return {
     props: {

@@ -8,6 +8,9 @@ export default new InMemoryCache({
         books: concatPagination(['filters', 'sort'])
       }
     },
+    Book: {
+      keyFields: ['sku']
+    },
     Wishlist: {
       fields: {
         books: {
