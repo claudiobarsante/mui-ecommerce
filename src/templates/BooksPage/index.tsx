@@ -46,7 +46,6 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
       filters: parseQueryStringToFilter({ queryString: query }),
       sort: ['title']
     }
-    //fetchPolicy: 'cache-and-network'
   });
 
   const updateQueryResults = () => {
@@ -82,6 +81,7 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
           setPage={setPage}
         />
         {JSON.stringify(filterData)}
+        {loading && <h1>LOADING</h1>}
       </S.FiltersContainer>
       <S.SearchContainer component="section">
         <p>Search</p>

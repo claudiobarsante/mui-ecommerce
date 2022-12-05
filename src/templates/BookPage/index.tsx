@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { Box, Button, Rating, Typography } from '@mui/material';
+import { NextSeo } from 'next-seo';
 // -- Templates
 import BaseLayout from 'templates/BaseLayout';
 // --Styles
@@ -98,6 +99,22 @@ const BookPageTemplate = ({ book }: Props) => {
 
   return (
     <BaseLayout>
+      <NextSeo
+        title={`${book.title} - Book Store`}
+        description={book.synopsis} // use a small description
+        canonical={`https://wwww.bookstore.com/book/${book.id}`}
+        openGraph={{
+          url: `https://wwww.bookstore.com/book/${book.id}`,
+          title: `${book.title} - Book Store`,
+          description: book.synopsis,
+          images: [
+            {
+              url: `${book.coverImageUrl}`,
+              alt: `${book.title}`
+            }
+          ]
+        }}
+      />
       <S.BookDetailContainer
         display={'flex'}
         flexDirection={isMobile ? 'column' : 'row'}

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as S from '../styles';
 
-import { Stack, Tooltip } from '@mui/material';
+import { Stack, Tooltip, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import FitScreenIcon from '@mui/icons-material/FitScreen';
@@ -38,6 +38,7 @@ export default function SingleBookDesktop({ book, isMobile }: Props) {
   return (
     <>
       <Paper elevation={3} sx={{ overflow: 'hidden' }}>
+        <Typography variant="subtitle1"> {book.attributes.title}</Typography>
         <S.Book onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
           {/* <S.ProductImage src={book.attributes.coverImageUrl} /> */}
           <S.BookImage>

@@ -12,6 +12,8 @@ import theme from 'styles/theme';
 import Toast from 'components/Toast';
 import { WishlistProvider } from 'hooks/use-wishlist';
 import type { AppProps as NextAppProps } from 'next/app';
+import { DefaultSeo } from 'next-seo';
+import SEO from '../../next-seo.config';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -48,6 +50,7 @@ export default function MyApp(props: AppProps) {
                 content="The best collection of books cured by the world's readers'"
               />
             </Head>
+            <DefaultSeo {...SEO} />
             <ThemeProvider theme={theme}>
               {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
               <CssBaseline />

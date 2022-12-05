@@ -7,9 +7,9 @@ import PromotionsSlider from 'components/PromotionsSlider';
 import Books, { BookSummary } from 'components/Books';
 
 type Props = {
-  featured: BookSummary[];
+  books: BookSummary[];
 };
-const HomeTemplate = ({ featured }: Props) => {
+const HomeTemplate = ({ books }: Props) => {
   return (
     <BaseLayout>
       <HeroBanner />
@@ -17,7 +17,7 @@ const HomeTemplate = ({ featured }: Props) => {
       <Box display="flex" justifyContent="center" sx={{ p: 4 }}>
         <Typography variant="h4">Featured</Typography>
       </Box>
-      <Books books={featured} />
+      <Books books={books} />
     </BaseLayout>
   );
 };

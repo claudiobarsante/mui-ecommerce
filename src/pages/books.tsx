@@ -31,18 +31,18 @@ export const getServerSideProps: GetServerSideProps = async ({
 }: GetServerSidePropsContext) => {
   const apolloClient = initializeApollo();
 
-  const { error: booksError } = await apolloClient.query<
+  const { data, error: booksError } = await apolloClient.query<
     BooksFiltersQuery,
     BooksFiltersQueryVariables
   >({
     query: BOOKS_FILTERS_QUERY,
     variables: {
-      page: Number(query.page),
+      page: Number(query.page!),
       pageSize: 8,
       filters: parseQueryStringToFilter({ queryString: query }),
       sort: ['title']
-    },
-    fetchPolicy: 'no-cache'
+    }
+    //fetchPolicy: 'network-only'
   });
 
   const { data: filters, error: filtersError } = await apolloClient.query<
@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   return {
     props: {
-      initialApolloState: apolloClient.cache.extract(),
+      initialApolloState: apolloClient.cache.extract(), //extract cache and send to the client
       filters
     }
   };

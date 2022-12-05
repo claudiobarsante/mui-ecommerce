@@ -10,8 +10,8 @@ import { FeaturedQuery } from 'graphql/generated/graphql';
 import { BooksProps } from 'components/Books';
 import HomeTemplate from 'templates/Home';
 
-const Home = ({ books: featured }: BooksProps) => {
-  return <HomeTemplate featured={featured} />;
+const Home = ({ books }: BooksProps) => {
+  return <HomeTemplate books={books} />;
 };
 
 export default Home;
@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 60 * 60 * 24, //24 hours - revalidate is in seconds, so 60sec * 60 min * 24 hours
     props: {
       initialApolloState: apolloClient.cache.extract(),
-      featured: data?.books?.data
+      books: data?.books?.data
     }
   };
 };

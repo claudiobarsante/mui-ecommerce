@@ -3,11 +3,9 @@ import { concatPagination } from '@apollo/client/utilities';
 
 export default new InMemoryCache({
   typePolicies: {
-    Query: {
-      fields: {
-        books: concatPagination(['filters', 'sort'])
-      }
-    },
+    // Query: {
+    //   fields: {}
+    // },
     Book: {
       keyFields: ['sku']
     },
