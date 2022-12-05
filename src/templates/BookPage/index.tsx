@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { useLazyQuery } from '@apollo/client';
 import { Box, Button, Rating, Typography } from '@mui/material';
 import { NextSeo } from 'next-seo';
@@ -57,6 +58,7 @@ const BookPageTemplate = ({ book }: Props) => {
   });
 
   const isMobile = useIsMobile();
+  const { data: session, status } = useSession();
   //
   const handleRating = (data: any) => {
     const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
@@ -92,7 +94,7 @@ const BookPageTemplate = ({ book }: Props) => {
   const handleRatingClick = () => {
     setOpen(true);
     getRating({
-      variables: { bookId: book.id, userId: '1' },
+      variables: { bookId: book.id, userId: session?.user.id },
       fetchPolicy: 'cache-and-network'
     });
   };
@@ -103,6 +105,7 @@ const BookPageTemplate = ({ book }: Props) => {
         title={`${book.title} - Book Store`}
         description={book.synopsis} // use a small description
         canonical={`https://wwww.bookstore.com/book/${book.id}`}
+        //Facebook, Linkedin, Twitter...
         openGraph={{
           url: `https://wwww.bookstore.com/book/${book.id}`,
           title: `${book.title} - Book Store`,
@@ -114,6 +117,7 @@ const BookPageTemplate = ({ book }: Props) => {
             }
           ]
         }}
+        // --
       />
       <S.BookDetailContainer
         display={'flex'}
