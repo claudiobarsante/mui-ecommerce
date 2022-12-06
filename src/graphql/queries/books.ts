@@ -91,6 +91,42 @@ export const BOOKS_FILTERS_QUERY = gql`
 `;
 
 /**
+ * Strapi has a bug that, if you want to use "or", you have to group with another clause. So, in this case I'm using the field price and filtering every book that has price greater than -1 and the group  the or clause
+ * Here is the answer of a Strapi Engineer -->
+ * If you want to use or, you need to pass all the targeted clauses inside its array, putting the or next to another clause will create an and clause between the or components and the other ones.
+ * Basically, what should work would be smth like: or: [{ slug: { eq: $slug } }, { itSlug: { eq: $slug } }]
+ */
+export const BOOKS_SEARCH_QUERY = gql`
+  query BooksSearch($searchText: String) {
+    books(
+      filters: {
+        price: { gt: -1 }
+        or: [
+          { title: { containsi: $searchText } }
+          { authors: { name: { containsi: $searchText } } }
+          { publisher: { name: { containsi: $searchText } } }
+        ]
+      }
+    ) {
+      data {
+        id
+        attributes {
+          ...BookFragment
+        }
+      }
+      meta {
+        pagination {
+          page
+          pageSize
+          pageCount
+          total
+        }
+      }
+    }
+  }
+`;
+
+/**
  * query BookByAuthor{
   books(filters:{authors:{name:{in:["J. R. R. Tolkien"]}}}){
     data{

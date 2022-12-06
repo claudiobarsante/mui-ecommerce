@@ -49,6 +49,7 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
   //     sort: ['title']
   //   }
   // });
+  //todo: Still evaluating caching x useQuery 💥
 
   const data = apolloClient.readQuery({
     query: BOOKS_FILTERS_QUERY,

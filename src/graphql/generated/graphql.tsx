@@ -1492,6 +1492,13 @@ export type BooksFiltersQueryVariables = Exact<{
 
 export type BooksFiltersQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
 
+export type BooksSearchQueryVariables = Exact<{
+  searchText?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type BooksSearchQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
+
 export type FiltersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2018,6 +2025,56 @@ export function useBooksFiltersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type BooksFiltersQueryHookResult = ReturnType<typeof useBooksFiltersQuery>;
 export type BooksFiltersLazyQueryHookResult = ReturnType<typeof useBooksFiltersLazyQuery>;
 export type BooksFiltersQueryResult = Apollo.QueryResult<BooksFiltersQuery, BooksFiltersQueryVariables>;
+export const BooksSearchDocument = gql`
+    query BooksSearch($searchText: String) {
+  books(
+    filters: {price: {gt: -1}, or: [{title: {containsi: $searchText}}, {authors: {name: {containsi: $searchText}}}, {publisher: {name: {containsi: $searchText}}}]}
+  ) {
+    data {
+      id
+      attributes {
+        ...BookFragment
+      }
+    }
+    meta {
+      pagination {
+        page
+        pageSize
+        pageCount
+        total
+      }
+    }
+  }
+}
+    ${BookFragmentFragmentDoc}`;
+
+/**
+ * __useBooksSearchQuery__
+ *
+ * To run a query within a React component, call `useBooksSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBooksSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBooksSearchQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *   },
+ * });
+ */
+export function useBooksSearchQuery(baseOptions?: Apollo.QueryHookOptions<BooksSearchQuery, BooksSearchQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BooksSearchQuery, BooksSearchQueryVariables>(BooksSearchDocument, options);
+      }
+export function useBooksSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BooksSearchQuery, BooksSearchQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BooksSearchQuery, BooksSearchQueryVariables>(BooksSearchDocument, options);
+        }
+export type BooksSearchQueryHookResult = ReturnType<typeof useBooksSearchQuery>;
+export type BooksSearchLazyQueryHookResult = ReturnType<typeof useBooksSearchLazyQuery>;
+export type BooksSearchQueryResult = Apollo.QueryResult<BooksSearchQuery, BooksSearchQueryVariables>;
 export const FiltersDocument = gql`
     query Filters {
   authors(sort: ["name"]) {
