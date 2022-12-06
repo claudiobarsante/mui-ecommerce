@@ -22,6 +22,7 @@ import Filters from 'components/Filters';
 
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import { initializeApollo } from 'graphql/client/apolloClient';
 
 export type FilterData = {
   [key: string]: string[] | [];
@@ -35,11 +36,22 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
 
   const { push, query, pathname } = useRouter();
   const [page, setPage] = useState(1);
+  const apolloClient = initializeApollo();
 
-  const { data, error, loading } = useQuery<
-    BooksFiltersQuery,
-    BooksFiltersQueryVariables
-  >(BOOKS_FILTERS_QUERY, {
+  // const { data, error, loading } = useQuery<
+  //   BooksFiltersQuery,
+  //   BooksFiltersQueryVariables
+  // >(BOOKS_FILTERS_QUERY, {
+  //   variables: {
+  //     page: page,
+  //     pageSize: 8,
+  //     filters: parseQueryStringToFilter({ queryString: query }),
+  //     sort: ['title']
+  //   }
+  // });
+
+  const data = apolloClient.readQuery({
+    query: BOOKS_FILTERS_QUERY,
     variables: {
       page: page,
       pageSize: 8,
@@ -81,7 +93,7 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
           setPage={setPage}
         />
         {JSON.stringify(filterData)}
-        {loading && <h1>LOADING</h1>}
+        {/* {loading && <h1>LOADING</h1>} */}
       </S.FiltersContainer>
       <S.SearchContainer component="section">
         <p>Search</p>

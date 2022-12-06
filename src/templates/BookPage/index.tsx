@@ -58,7 +58,7 @@ const BookPageTemplate = ({ book }: Props) => {
   });
 
   const isMobile = useIsMobile();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   //
   const handleRating = (data: any) => {
     const hasRating = data?.ratings?.data && data.ratings.data.length > 0;

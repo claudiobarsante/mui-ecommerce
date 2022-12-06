@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 }: GetServerSidePropsContext) => {
   const apolloClient = initializeApollo();
 
-  const { data, error: booksError } = await apolloClient.query<
+  const { error: booksError } = await apolloClient.query<
     BooksFiltersQuery,
     BooksFiltersQueryVariables
   >({
