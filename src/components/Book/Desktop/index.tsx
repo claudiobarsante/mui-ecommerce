@@ -16,6 +16,8 @@ import { BookSummary } from 'components/Books';
 import WishlistButton from 'components/Buttons/Wishlist';
 import Card from '@mui/material/Card';
 import Paper from '@mui/material/Paper';
+// -- Utils
+import { shimmer, toBase64 } from './../../../utils/shared/shimmer';
 
 type Props = {
   book: BookSummary;
@@ -37,51 +39,49 @@ export default function SingleBookDesktop({ book, isMobile }: Props) {
 
   return (
     <>
-      <Paper elevation={3} sx={{ overflow: 'hidden' }}>
-        <Typography variant="subtitle1"> {book.attributes.title}</Typography>
-        <S.Book onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-          {/* <S.ProductImage src={book.attributes.coverImageUrl} /> */}
-          <S.BookImage>
-            <Image
-              src={book.attributes.coverImageUrl}
-              blurDataURL={book.attributes.coverImageUrl}
-              placeholder="blur"
-              alt={book.attributes.title}
-              width={500}
-              height={650}
-              aria-label={book.attributes.title}
-            />
-          </S.BookImage>
-          <WishlistButton bookId={book.id} />
-          {/* <S.FavButton isfav={0}>
-          <Tooltip placement="left" title="add to my wishlist">
-            <FavoriteIcon />
-          </Tooltip>
-        </S.FavButton> */}
-          {(showOptions || isMobile) && (
-            <S.AddToCartButton istoshow={`${showOptions}`} variant="contained">
-              Add to cart
-            </S.AddToCartButton>
-          )}
-          <S.ActionsButtonsContainer istoshow={showOptions.toString()}>
-            <Stack direction={isMobile ? 'row' : 'column'}>
-              <S.ActionButton>
-                <Tooltip placement="left" title="share this product">
-                  <ShareIcon color="primary" />
-                </Tooltip>
-              </S.ActionButton>
-              <S.ActionButton onClick={() => router.push(`/book/${book.id}`)}>
-                <Tooltip placement="left" title="see details">
-                  <VisibilityIcon color="primary" />
-                </Tooltip>
-              </S.ActionButton>
-            </Stack>
-          </S.ActionsButtonsContainer>
-          <ProductInfo book={book} />
-        </S.Book>
-        {/* <ProductInfo book={book} /> */}
-        {/* <ProductDetailDialog product={product} /> */}
-      </Paper>
+      {/* <Paper elevation={3} sx={{ overflow: 'hidden' }}> */}
+      <S.Book onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <S.TitleContainer>
+          <Typography variant="subtitle1" noWrap sx={{ fontWeight: 500 }}>
+            {book.attributes.title}
+          </Typography>
+        </S.TitleContainer>
+        <S.BookImage>
+          <Image
+            src={book.attributes.coverImageUrl}
+            blurDataURL={`data:image/svg+xml;base64,${toBase64(
+              shimmer(700, 475)
+            )}`}
+            placeholder="blur"
+            alt={book.attributes.title}
+            layout="fill"
+            quality={100}
+            aria-label={book.attributes.title}
+          />
+        </S.BookImage>
+        <WishlistButton bookId={book.id} />
+        {(showOptions || isMobile) && (
+          <S.AddToCartButton istoshow={`${showOptions}`} variant="contained">
+            Add to cart
+          </S.AddToCartButton>
+        )}
+        <S.ActionsButtonsContainer istoshow={showOptions.toString()}>
+          <Stack direction={isMobile ? 'row' : 'column'}>
+            <S.ActionButton>
+              <Tooltip placement="left" title="share this product">
+                <ShareIcon color="primary" />
+              </Tooltip>
+            </S.ActionButton>
+            <S.ActionButton onClick={() => router.push(`/book/${book.id}`)}>
+              <Tooltip placement="left" title="see details">
+                <VisibilityIcon color="primary" />
+              </Tooltip>
+            </S.ActionButton>
+          </Stack>
+        </S.ActionsButtonsContainer>
+        <ProductInfo book={book} />
+      </S.Book>
+      {/* </Paper> */}
     </>
   );
 }

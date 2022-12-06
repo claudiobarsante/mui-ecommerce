@@ -12,14 +12,28 @@ export const Book = styled(Box)(({ theme }) => ({
   overflow: 'hidden',
 
   height: '25rem',
+  width: '15rem',
   [theme.breakpoints.up('md')]: {
     position: 'relative'
   }
 }));
 
+export const TitleContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+
+  width: '75%'
+}));
 export const BookImage = styled(Box)(({ theme }) => ({
-  width: '70%',
-  padding: '10px',
+  position: 'relative',
+  height: '12rem',
+  width: '8rem',
+
+  margin: '1rem',
+
   [theme.breakpoints.down('md')]: {
     width: '80%',
     padding: '24px'
