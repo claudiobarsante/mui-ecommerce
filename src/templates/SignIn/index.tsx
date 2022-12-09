@@ -3,7 +3,7 @@ import FormSignIn from 'components/FormSignIn';
 import FormSignUp from 'components/FormSignUp';
 import Image from 'next/image';
 import { Colors } from 'styles/theme/colors';
-const image = '/images/5281-LB.jpg';
+const image = '/img/5281-LB.jpg';
 import * as S from './styles';
 
 const SignInTemplate = () => {

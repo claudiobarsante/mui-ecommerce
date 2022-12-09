@@ -6,7 +6,7 @@ export default function HeroBanner() {
   return (
     <S.BannerContainer>
       <S.BannerImage
-        src="/images/banner/banner.png"
+        src="/img/banner/banner.png"
         alt="Clipart one boy and 2 girls reading books"
       />
       <S.BannerContent>

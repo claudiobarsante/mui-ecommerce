@@ -37,8 +37,8 @@ export const getServerSideProps: GetServerSideProps = async ({
   >({
     query: BOOKS_FILTERS_QUERY,
     variables: {
-      page: Number(query.page!),
-      pageSize: 8,
+      page: query.page ? Number(query.page!) : 1,
+      pageSize: Number(process.env.NEXT_PUBLIC_PAGE_SIZE),
       filters: parseQueryStringToFilter({ queryString: query }),
       sort: ['title']
     }

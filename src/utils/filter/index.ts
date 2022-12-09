@@ -23,7 +23,7 @@ export const parseQueryStringToFilter = ({ queryString }: ParseArgs) => {
   // -- | publishers        | publisher
 
   Object.keys(queryString)
-    .filter((key) => key !== 'page')
+    .filter((key) => key !== 'page' && key !== 'searchText')
     .forEach((key) => {
       const queryMapper: QueryMapper = {
         authors: 'authors',
@@ -32,7 +32,7 @@ export const parseQueryStringToFilter = ({ queryString }: ParseArgs) => {
       };
 
       const queryKey = queryMapper[key];
-
+      // -- Left-side filters on BooksPageTemplate
       if (Array.isArray(queryString[key])) {
         obj[queryKey] = { name: { in: queryString[key] } };
       } else {
@@ -40,5 +40,39 @@ export const parseQueryStringToFilter = ({ queryString }: ParseArgs) => {
       }
     });
 
+  //? -- SearchText - will search in book title, author and publisher
+  //#region SearchText
+  /**
+ * Strapi has a bug that, if you want to use "or", you have to group with another clause.
+ * So, in this case I'm using with the filters and then group  with the "or" clause
+ * Here is the answer of a Strapi Engineer -->
+ * If you want to use or, you need to pass all the targeted clauses inside its array, putting the or next to another clause will create an and clause between the or components and the other ones.
+ * Basically, what should work would be smth like: or: [{ slug: { eq: $slug } }, { itSlug: { eq: $slug } }]
+ *
+ * or: [
+          { title: { containsi: $searchText } }
+          { authors: { name: { containsi: $searchText } } }
+          { publisher: { name: { containsi: $searchText } } }
+        ]
+        */
+  /**
+     * or: [
+          { title: { containsi: $searchText } }
+          { authors: { name: { containsi: $searchText } } }
+          { publisher: { name: { containsi: $searchText } } }
+        ]        
+     */
+  //#endregion
+  if (queryString.hasOwnProperty('searchText')) {
+    const searchText = queryString['searchText'];
+    obj = {
+      ...obj,
+      or: [
+        { title: { containsi: searchText } },
+        { authors: { name: { containsi: searchText } } },
+        { publisher: { name: { containsi: searchText } } }
+      ]
+    };
+  }
   return obj;
 };

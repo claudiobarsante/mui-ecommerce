@@ -49,10 +49,10 @@ export default function SingleBookDesktop({ book, isMobile }: Props) {
         <S.BookImage>
           <Image
             src={book.attributes.coverImageUrl}
-            blurDataURL={`data:image/svg+xml;base64,${toBase64(
-              shimmer(700, 475)
-            )}`}
-            placeholder="blur"
+            // blurDataURL={`data:image/svg+xml;base64,${toBase64(
+            //   shimmer(700, 475)
+            // )}`}
+            // placeholder="blur"
             alt={book.attributes.title}
             layout="fill"
             quality={100}

@@ -13,6 +13,8 @@ type Props = {
 
 const TopMenuLink = ({ text, href }: Props) => {
   const router = useRouter();
+
+  //todo: fix to show correct active page
   const isActive = router.asPath === href;
 
   return (

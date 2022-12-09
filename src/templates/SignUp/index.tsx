@@ -2,7 +2,7 @@ import { Box, Container, Grid, Typography } from '@mui/material';
 import FormSignUp from 'components/FormSignUp';
 import Image from 'next/image';
 import { Colors } from 'styles/theme/colors';
-const image = '/images/4807-G.jpg';
+const image = '/img/4807-G.jpg';
 import * as S from './styles';
 
 const SignUpTemplate = () => {
