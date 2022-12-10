@@ -42,7 +42,6 @@ export const getServerSideProps: GetServerSideProps = async ({
       filters: parseQueryStringToFilter({ queryString: query }),
       sort: ['title']
     }
-    //fetchPolicy: 'network-only'
   });
 
   const { data: filters, error: filtersError } = await apolloClient.query<

@@ -56,6 +56,7 @@ export default function SingleBookDesktop({ book, isMobile }: Props) {
             alt={book.attributes.title}
             layout="fill"
             quality={100}
+            priority
             aria-label={book.attributes.title}
           />
         </S.BookImage>

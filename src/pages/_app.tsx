@@ -33,6 +33,7 @@ export default function MyApp(props: AppProps) {
     pageProps: { session, ...pageProps }
   } = props;
   const apolloClient = useApollo(pageProps.initialApolloState);
+
   return (
     <SessionProvider session={session}>
       <ApolloProvider client={apolloClient}>
