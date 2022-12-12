@@ -1,7 +1,7 @@
 import React from 'react';
 import { GetServerSidePropsContext, GetServerSideProps } from 'next';
 import BaseLayout from 'templates/BaseLayout';
-import { initializeApollo } from 'graphql/client/apolloClient';
+import { initializeApollo, addApolloState } from 'graphql/client/apolloClient';
 import {
   BooksFiltersQuery,
   BooksFiltersQueryVariables,
@@ -58,10 +58,15 @@ export const getServerSideProps: GetServerSideProps = async ({
     };
   }
 
-  return {
+  return addApolloState(apolloClient, {
     props: {
-      initialApolloState: apolloClient.cache.extract(), //extract cache and send to the client
       filters
     }
-  };
+  });
+  // return {
+  //   props: {
+  //     initialApolloState: apolloClient.cache.extract(), //extract cache and send to the client
+  //     filters
+  //   }
+  // };
 };

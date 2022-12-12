@@ -32,7 +32,7 @@ export default function MyApp(props: AppProps) {
     emotionCache = clientSideEmotionCache,
     pageProps: { session, ...pageProps }
   } = props;
-  const apolloClient = useApollo(pageProps.initialApolloState);
+  const apolloClient = useApollo(pageProps);
 
   return (
     <SessionProvider session={session}>
