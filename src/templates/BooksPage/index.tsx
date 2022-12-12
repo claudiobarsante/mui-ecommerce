@@ -48,7 +48,8 @@ const BooksPageTemplate = ({ filters }: BooksProps) => {
       pageSize: 8,
       filters: parseQueryStringToFilter({ queryString: query }),
       sort: ['title']
-    }
+    },
+    notifyOnNetworkStatusChange: true
   });
 
   const updateQueryResults = useCallback(
