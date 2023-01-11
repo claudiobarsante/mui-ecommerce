@@ -2,7 +2,7 @@ import { act, waitFor, screen, renderWithTheme } from 'utils/tests/helpers';
 import { useState } from 'react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
-import BookRating from 'components/BookRating';
+import BookRatingModal from 'components/BookRatingModal';
 // -- Query
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
 import React from 'react';
@@ -96,7 +96,7 @@ describe('<BookRating/>', () => {
 
     const { debug, container } = renderWithTheme(
       <MockedProvider mocks={[hasRatingMock]} addTypename={false}>
-        <BookRating
+        <BookRatingModal
           action={'update'}
           bookId={'8'}
           bookTitle={'A Gentleman in Moscow'}

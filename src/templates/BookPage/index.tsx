@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useLazyQuery } from '@apollo/client';
 import { Box, Button, Rating, Typography } from '@mui/material';
 import { NextSeo } from 'next-seo';
+import { useRouter } from 'next/router';
 // -- Templates
 import BaseLayout from 'templates/BaseLayout';
 // --Styles
@@ -16,7 +17,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 // -- Custom components
 import Availability from 'components/Availability';
-import BookRating from 'components/BookRating';
+import BookRatingModal from 'components/BookRatingModal';
 // -- Querys
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
 // -- Custom hooks
@@ -24,17 +25,6 @@ import useIsMobile from 'hooks/use-IsMobile';
 // -- Utils
 import { BookProps } from 'utils/mappers';
 
-// --Types
-export type DialogState = {
-  isResponse: boolean;
-  hasError: boolean;
-  modalText: string;
-};
-export type UserAction = 'create' | 'update' | null;
-export type UserRatings = {
-  previous: number;
-  current: number;
-};
 //
 type Props = {
   book: BookProps;
@@ -42,61 +32,20 @@ type Props = {
 
 const BookPageTemplate = ({ book }: Props) => {
   //
-  const [action, setAction] = useState<UserAction>(null);
-  const [dialogState, setDialogState] = useState<DialogState>({
-    isResponse: false,
-    hasError: false,
-    modalText: ''
-  });
-  const [open, setOpen] = useState(false);
-  const [previousUserRatingId, setPreviousUserRatingId] = useState('');
-  const [rating, setRating] = useState(book.rating || 0);
-  const [totalRatings, setTotalRatings] = useState(book.totalRatings || 0);
-  const [userRating, setUserRating] = useState<UserRatings>({
-    previous: 0,
-    current: 0
-  });
+  const [openModal, setOpenModal] = useState(false);
+  const { data: session } = useSession();
+  const { push } = useRouter();
 
   const isMobile = useIsMobile();
-  const { data: session } = useSession();
-  //
-  const handleRating = (data: any) => {
-    const hasRating = data?.ratings?.data && data.ratings.data.length > 0;
 
-    if (hasRating) {
-      const userCurrentRating: number =
-        data?.ratings?.data[0].attributes?.rating!;
-      const ratingId = data?.ratings?.data[0].id;
-      setPreviousUserRatingId(ratingId);
-      setAction('update');
-      setDialogState((previous) => ({
-        ...previous,
-        modalText: `Please update your current rate of the book ${book.title}`
-      }));
-      setUserRating({
-        current: userCurrentRating, //to show the previous rate on the modal to the user
-        previous: userCurrentRating
-      });
-    } else {
-      setAction('create');
-      setDialogState((previous) => ({
-        ...previous,
-        modalText: `Please rate the book ${book.title}`
-      }));
-      setUserRating({ previous: 0, current: 0 });
-    }
-  };
-
-  const [getRating] = useLazyQuery(RATINGS_QUERY, {
-    onCompleted: (data) => handleRating(data)
-  });
-
+  //todo: check why after user logged in, the page is not redirect back. It's redirecting to the home page
   const handleRatingClick = () => {
-    setOpen(true);
-    getRating({
-      variables: { bookId: book.id, userId: session?.user.id },
-      fetchPolicy: 'cache-and-network'
-    });
+    //only logged in users can rate
+    if (!session?.user.id) {
+      push('/sign-in');
+      return;
+    }
+    setOpenModal(true);
   };
 
   return (
@@ -145,7 +94,7 @@ const BookPageTemplate = ({ book }: Props) => {
           >
             <Rating
               name="current-book-rating"
-              value={rating}
+              value={book.rating}
               precision={0.1}
               readOnly
               sx={{ color: Colors.warning }}
@@ -153,25 +102,15 @@ const BookPageTemplate = ({ book }: Props) => {
 
             <Typography variant="subtitle1" sx={{ marginLeft: 3 }}>
               {' '}
-              {totalRatings === 0
+              {book.totalRatings === 0
                 ? 'Be the first to rate this book'
-                : `Based on ${totalRatings} user ratings`}
+                : `Based on ${book.totalRatings} user ratings`}
             </Typography>
           </Box>
-          <BookRating
-            action={action}
+          <BookRatingModal
             bookId={book.id}
-            bookTitle={book.title}
-            dialogState={dialogState}
-            open={open}
-            previousUserRatingId={previousUserRatingId}
-            setDialogState={setDialogState}
-            setOpen={setOpen}
-            setRating={setRating}
-            setTotalRatings={setTotalRatings}
-            setUserRating={setUserRating}
-            userId="1"
-            userRating={userRating}
+            open={openModal}
+            userId={session?.user.id}
           />
 
           <Typography variant="body1">{book.synopsis}</Typography>

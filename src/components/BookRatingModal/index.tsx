@@ -25,90 +25,92 @@ import { useBookRating } from './hooks/use-book-rating';
 import { Colors } from 'styles/theme/colors';
 // -- Query
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
-import { DialogState, UserAction, UserRatings } from 'templates/BookPage';
+//import { DialogState, UserAction, UserRatings } from 'templates/BookPage';
 
 type Props = {
-  action: UserAction;
+  //action: UserAction;
   bookId: string;
-  bookTitle: string;
-  dialogState: DialogState;
+  // bookTitle: string;
+  // dialogState: DialogState;
   open: boolean;
-  previousUserRatingId: string;
-  setDialogState: Dispatch<SetStateAction<DialogState>>;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  setRating: Dispatch<SetStateAction<number>>;
-  setTotalRatings: Dispatch<SetStateAction<number>>;
-  setUserRating: Dispatch<SetStateAction<UserRatings>>;
-  userId: string;
-  userRating: UserRatings;
+  //: string;
+  //setDialogState: Dispatch<SetStateAction<DialogState>>;
+  //: Dispatch<SetStateAction<boolean>>;
+  //setRating: Dispatch<SetStateAction<number>>;
+  //setTotalRatings: Dispatch<SetStateAction<number>>;
+  //setUserRating: Dispatch<SetStateAction<UserRatings>>;
+  userId: string | undefined;
+  //userRating: UserRatings;
 };
 
-const BookRating = ({
-  action,
+const BookRatingModal = ({
+  // action,
   bookId,
-  dialogState,
+  // dialogState,
   open,
-  previousUserRatingId,
-  setDialogState,
-  setOpen,
-  setRating,
-  setTotalRatings,
-  setUserRating,
-  userId,
-  userRating
-}: Props) => {
-  const handleClose = () => {
-    setOpen(false);
-    setDialogState((previous) => ({
-      ...previous,
-      isResponse: false,
-      hasError: false
-    }));
-  };
+  // previousUserRatingId,
+  // setDialogState,
+  // setOpen,
+  // setRating,
+  // setTotalRatings,
+  // setUserRating,
+  userId
+}: // userRating
+Props) => {
+  console.log('bookId', bookId, open, userId);
+
+  // const handleClose = () => {
+  //   setOpen(false);
+  //   setDialogState((previous) => ({
+  //     ...previous,
+  //     isResponse: false,
+  //     hasError: false
+  //   }));
+  // };
 
   // -- Custom hook
-  const { createRating, isLoading, updateRating } = useBookRating({
-    bookId,
-    setRating,
-    userId,
-    userRating,
-    setTotalRatings,
-    setDialogState
-  });
+  // const { createRating, isLoading, updateRating } = useBookRating({
+  //   bookId,
+  //   setRating,
+  //   userId,
+  //   userRating,
+  //   setTotalRatings,
+  //   setDialogState
+  // });
 
-  const handleRating = () => {
-    if (action === 'create') {
-      createRating({
-        variables: {
-          userId,
-          bookId,
-          rating: userRating.current
-        }
-      });
-    }
+  // const handleRating = () => {
+  //   if (action === 'create') {
+  //     createRating({
+  //       variables: {
+  //         userId,
+  //         bookId,
+  //         rating: userRating.current
+  //       }
+  //     });
+  //   }
 
-    if (action === 'update') {
-      updateRating({
-        variables: {
-          ratingId: previousUserRatingId,
-          rating: userRating.current
-        }
-      });
-    }
-  };
+  //   if (action === 'update') {
+  //     updateRating({
+  //       variables: {
+  //         ratingId: previousUserRatingId,
+  //         rating: userRating.current
+  //       }
+  //     });
+  //   }
+  // };
 
-  if (dialogState?.modalText === '') return null;
+  //if (dialogState?.modalText === '') return null;
 
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      //onClose={handleClose}
       disableEscapeKeyDown={true}
       aria-labelledby="user-interaction"
       aria-label="Dialog for user interacation"
     >
       <DialogTitle>Rating</DialogTitle>
-      {dialogState?.isResponse ? (
+      {/* {dialogState?.isResponse ? (
         <Box id="rating-status-response">
           <DialogContent
             sx={{
@@ -156,9 +158,9 @@ const BookRating = ({
             </LoadingButton>
           </DialogActions>
         </Box>
-      )}
+      )} */}
     </Dialog>
   );
 };
 
-export default BookRating;
+export default BookRatingModal;
