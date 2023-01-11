@@ -94,7 +94,7 @@ const BookPageTemplate = ({ book }: Props) => {
           >
             <Rating
               name="current-book-rating"
-              value={book.rating}
+              value={book.calculatedRating}
               precision={0.1}
               readOnly
               sx={{ color: Colors.warning }}

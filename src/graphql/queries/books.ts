@@ -7,13 +7,13 @@ export const BookFragment = gql`
     coverImageUrl
     isOnSale
     pageCount
-    userRatings
     price
-    rating
     salePrice
     synopsis
     stock
     totalRatings
+    calculatedRating
+    ratings
     authors {
       data {
         attributes {

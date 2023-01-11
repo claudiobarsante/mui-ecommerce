@@ -27,8 +27,14 @@ import { Colors } from 'styles/theme/colors';
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
 //import { DialogState, UserAction, UserRatings } from 'templates/BookPage';
 
+export type UserAction = 'create' | 'update' | null;
+export type UserRating = {
+  id: string | null;
+  previous: number;
+  current: number;
+};
+
 type Props = {
-  //action: UserAction;
   bookId: string;
   // bookTitle: string;
   // dialogState: DialogState;
@@ -44,7 +50,6 @@ type Props = {
 };
 
 const BookRatingModal = ({
-  // action,
   bookId,
   // dialogState,
   open,
@@ -54,11 +59,16 @@ const BookRatingModal = ({
   // setRating,
   // setTotalRatings,
   // setUserRating,
-  userId
+  userId = ''
 }: // userRating
 Props) => {
   console.log('bookId', bookId, open, userId);
-
+  const [action, setAction] = useState<UserAction>(null);
+  const [userRating, setUserRating] = useState<UserRating>({
+    id: null,
+    previous: 0,
+    current: 0
+  });
   // const handleClose = () => {
   //   setOpen(false);
   //   setDialogState((previous) => ({
@@ -69,14 +79,27 @@ Props) => {
   // };
 
   // -- Custom hook
-  // const { createRating, isLoading, updateRating } = useBookRating({
-  //   bookId,
-  //   setRating,
-  //   userId,
-  //   userRating,
-  //   setTotalRatings,
-  //   setDialogState
-  // });
+  const { currentUserRating } = useBookRating({
+    bookId,
+    //  setRating,
+    userId
+    // userRating,
+    // setTotalRatings,
+    // setDialogState
+  });
+
+  // const hasBookUserRating = currentUserRating?.data.length > 0;
+  // if (hasBookUserRating) {
+  //   setAction('update');
+  //   setUserRating((previous) => ({
+  //     ...previous,
+  //     id: currentUserRating.data[0].id,
+  //     previous: currentUserRating.data[0].attributes.rating
+  //   }));
+  // } else {
+  //   setAction('create');
+  // }
+  console.log('current', currentUserRating);
 
   // const handleRating = () => {
   //   if (action === 'create') {

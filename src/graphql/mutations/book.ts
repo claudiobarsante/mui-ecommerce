@@ -7,23 +7,23 @@ import {
 export const UPDATE_BOOK_MUTATION = gql`
   mutation UpdateBook(
     $bookId: ID!
-    $userRatings: JSON!
-    $rating: Float!
+    $ratings: JSON!
+    $calculatedRating: Float!
     $totalRatings: Int!
   ) {
     updateBook(
       id: $bookId
       data: {
-        userRatings: $userRatings
-        rating: $rating
+        ratings: $ratings
+        calculatedRating: $calculatedRating
         totalRatings: $totalRatings
       }
     ) {
       data {
         id
         attributes {
-          userRatings
-          rating
+          ratings
+          calculatedRating
           totalRatings
         }
       }

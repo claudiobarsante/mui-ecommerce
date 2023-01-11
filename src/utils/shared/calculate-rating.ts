@@ -1,5 +1,5 @@
-export type BookUserRatings = {
-  userRatings: string; //it's a JSON  received
+export type BookUsersRatings = {
+  ratings: string; //it's a JSON  received
   currentUserRating: number;
   action: 'create' | 'update';
   previousUserRating?: number;
@@ -7,26 +7,26 @@ export type BookUserRatings = {
 
 export type CalculatedRating = {
   calculatedRating: number;
-  updatedUserRatings: string; //it's a JSON  returned
+  updatedUsersRatings: string; //it's a JSON  returned
   totalBookRatings: number;
 };
 
-type updatedUserRatings = { [key: number]: number };
+type UpdatedUsersRatings = { [key: number]: number };
 
-function computeUserRatings({
-  userRatings,
+function computeUsersRatings({
+  ratings,
   currentUserRating,
   action,
   previousUserRating
-}: BookUserRatings) {
+}: BookUsersRatings) {
   // -- The rating is from 1 -> 5 stars
   // -- userRating object {1: x, 2: x, 3: x, 4: x, 5: x}
-  const parsedObject = JSON.parse(userRatings);
+  const parsedObject = JSON.parse(ratings);
 
-  let updatedUserRatings: updatedUserRatings = {};
+  let updatedUsersRatings: UpdatedUsersRatings = {};
 
   if (action === 'create') {
-    updatedUserRatings = {
+    updatedUsersRatings = {
       ...parsedObject,
       [currentUserRating]: parsedObject[currentUserRating] + 1
     };
@@ -35,28 +35,28 @@ function computeUserRatings({
   //to avoid computing 2 times the rate of the user - If it's an update first substract -1 of the previous rate then add the updated user rate
   if (action === 'update') {
     //remove previous rating
-    updatedUserRatings = {
+    updatedUsersRatings = {
       ...parsedObject,
       [previousUserRating!]: parsedObject[previousUserRating!] - 1
     };
     //update with the current rating
-    updatedUserRatings = {
-      ...updatedUserRatings,
-      [currentUserRating]: updatedUserRatings[currentUserRating] + 1
+    updatedUsersRatings = {
+      ...updatedUsersRatings,
+      [currentUserRating]: updatedUsersRatings[currentUserRating] + 1
     };
   }
 
-  return updatedUserRatings;
+  return updatedUsersRatings;
 }
 
 export function calculateRating({
-  userRatings,
+  ratings,
   currentUserRating,
   action,
   previousUserRating = 0
-}: BookUserRatings): CalculatedRating {
-  let updatedUserRatings = computeUserRatings({
-    userRatings,
+}: BookUsersRatings): CalculatedRating {
+  let updatedUsersRatings = computeUsersRatings({
+    ratings,
     currentUserRating,
     action,
     previousUserRating
@@ -64,25 +64,25 @@ export function calculateRating({
 
   //?Using a weighted average, where you weigh each rating with the number of votes it got
   const calculatedRating =
-    (1 * updatedUserRatings[1] +
-      2 * updatedUserRatings[2] +
-      3 * updatedUserRatings[3] +
-      4 * updatedUserRatings[4] +
-      5 * updatedUserRatings[5]) /
-    (updatedUserRatings[1] +
-      updatedUserRatings[2] +
-      updatedUserRatings[3] +
-      updatedUserRatings[4] +
-      updatedUserRatings[5]);
+    (1 * updatedUsersRatings[1] +
+      2 * updatedUsersRatings[2] +
+      3 * updatedUsersRatings[3] +
+      4 * updatedUsersRatings[4] +
+      5 * updatedUsersRatings[5]) /
+    (updatedUsersRatings[1] +
+      updatedUsersRatings[2] +
+      updatedUsersRatings[3] +
+      updatedUsersRatings[4] +
+      updatedUsersRatings[5]);
 
   let totalBookRatings = 0;
-  for (let rating in updatedUserRatings) {
-    totalBookRatings += updatedUserRatings[rating];
+  for (let rating in updatedUsersRatings) {
+    totalBookRatings += updatedUsersRatings[rating];
   }
 
   return {
     calculatedRating,
-    updatedUserRatings: JSON.stringify(updatedUserRatings),
+    updatedUsersRatings: JSON.stringify(updatedUsersRatings),
     totalBookRatings
   };
 }
