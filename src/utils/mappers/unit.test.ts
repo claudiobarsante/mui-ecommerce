@@ -3,11 +3,13 @@ import { bookMapper } from '.';
 
 const mapped = {
   id: '7',
+  sku: '123',
   bookId: '62312189',
   title: 'A Bear Called Paddington',
   coverImageUrl:
     'https://images-na.ssl-images-amazon.com/images/I/51clgmTURAL._SX321_BO1,204,203,200_.jpg',
   isOnSale: false,
+
   pageCount: 176,
   price: 45.89,
   rating: 1,
@@ -30,6 +32,7 @@ const data = {
         __typename: 'Book',
         title: 'A Bear Called Paddington',
         bookId: '62312189',
+        sku: '123',
         coverImageUrl:
           'https://images-na.ssl-images-amazon.com/images/I/51clgmTURAL._SX321_BO1,204,203,200_.jpg',
         isOnSale: false,

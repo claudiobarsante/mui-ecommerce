@@ -1416,7 +1416,7 @@ export type UpdateBookMutationVariables = Exact<{
 
 export type UpdateBookMutation = { __typename?: 'Mutation', updateBook?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null, totalRatings?: number | null } | null } | null } | null };
 
-export type RatingFragmentFragment = { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null };
+export type RatingFragmentFragment = { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', sku: string, userRatings?: any | null, rating?: number | null } | null } | null } | null };
 
 export type CreateRatingMutationVariables = Exact<{
   userId?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>;
@@ -1425,7 +1425,7 @@ export type CreateRatingMutationVariables = Exact<{
 }>;
 
 
-export type CreateRatingMutation = { __typename?: 'Mutation', createRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null } | null } | null } | null };
+export type CreateRatingMutation = { __typename?: 'Mutation', createRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', sku: string, userRatings?: any | null, rating?: number | null } | null } | null } | null } | null } | null } | null };
 
 export type UpdateRatingMutationVariables = Exact<{
   ratingId: Scalars['ID'];
@@ -1433,7 +1433,7 @@ export type UpdateRatingMutationVariables = Exact<{
 }>;
 
 
-export type UpdateRatingMutation = { __typename?: 'Mutation', updateRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null } | null } | null } | null };
+export type UpdateRatingMutation = { __typename?: 'Mutation', updateRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', sku: string, userRatings?: any | null, rating?: number | null } | null } | null } | null } | null } | null } | null };
 
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
@@ -1503,7 +1503,7 @@ export type RatingsQueryVariables = Exact<{
 }>;
 
 
-export type RatingsQuery = { __typename?: 'Query', ratings?: { __typename?: 'RatingEntityResponseCollection', data: Array<{ __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, user_ids?: { __typename?: 'UsersPermissionsUserRelationResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', id?: string | null }> } | null, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null } | null } | null } | null } | null }> } | null };
+export type RatingsQuery = { __typename?: 'Query', ratings?: { __typename?: 'RatingEntityResponseCollection', data: Array<{ __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, user_ids?: { __typename?: 'UsersPermissionsUserRelationResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', id?: string | null }> } | null, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', sku: string, userRatings?: any | null, rating?: number | null } | null } | null } | null } | null }> } | null };
 
 export type WishlistQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1525,6 +1525,7 @@ export const RatingFragmentFragmentDoc = gql`
   book {
     data {
       attributes {
+        sku
         userRatings
         rating
       }
@@ -2090,6 +2091,7 @@ export const RatingsDocument = gql`
           data {
             id
             attributes {
+              sku
               userRatings
               rating
             }

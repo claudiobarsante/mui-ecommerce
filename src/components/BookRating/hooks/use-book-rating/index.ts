@@ -37,7 +37,7 @@ export const useBookRating = ({
   // -- Mutations
   //? Mutation to update the book rating on Book
   const [updateBookRating] = useMutationBook({
-    onError: () => errorSetting(),
+    onError: (error) => console.log('error', error), // errorSetting(),
     onCompleted: () => {
       setDialogState({
         isResponse: true,
@@ -51,7 +51,7 @@ export const useBookRating = ({
   const [createRating, { loading: isLoadingAddRating }] = useMutation(
     CREATE_RATING_MUTATION,
     {
-      onError: () => errorSetting(),
+      onError: (error) => console.log('error', error),
       update: (cache, data) => {
         //? updating the cache after creating a new rating will force to re-run the query getRating, so the user will have the updated ratings on the screen
         const readedCache: any = cache.readQuery({
@@ -65,7 +65,8 @@ export const useBookRating = ({
             .userRatings;
         const updatedRating =
           data.data.createRating.data.attributes.book.data.attributes.rating;
-
+        const sku =
+          data.data.createRating.data.attributes.book.data.attributes.sku;
         cache.writeQuery({
           query: RATINGS_QUERY,
           variables: { bookId, userId },
@@ -82,6 +83,7 @@ export const useBookRating = ({
                       data: {
                         id: bookId,
                         attributes: {
+                          sku,
                           userRatings: updatedUserRatings,
                           rating: updatedRating
                         }
@@ -141,7 +143,8 @@ export const useBookRating = ({
             .userRatings;
         const updatedRating =
           data.data.updateRating.data.attributes.book.data.attributes.rating;
-
+        const sku =
+          data.data.updateRating.data.attributes.book.data.attributes.sku;
         cache.writeQuery({
           query: RATINGS_QUERY,
           variables: { bookId, userId },
@@ -158,6 +161,7 @@ export const useBookRating = ({
                       data: {
                         id: bookId,
                         attributes: {
+                          sku,
                           userRatings: updatedUserRatings,
                           rating: updatedRating
                         }
