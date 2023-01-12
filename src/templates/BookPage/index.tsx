@@ -1,6 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useSession } from 'next-auth/react';
-import { useLazyQuery } from '@apollo/client';
 import { Box, Button, Rating, Typography } from '@mui/material';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
@@ -18,24 +17,19 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 // -- Custom components
 import Availability from 'components/Availability';
 import BookRatingModal, { ModalHandle } from 'components/BookRatingModal';
-// -- Querys
-import { RATINGS_QUERY } from 'graphql/queries/ratings';
 // -- Custom hooks
 import useIsMobile from 'hooks/use-IsMobile';
 // -- Utils
 import { BookProps } from 'utils/mappers';
 
 //
-type Props = {
+type BookPageTemplateProps = {
   book: BookProps;
 };
-//type ModalHandle = React.ElementRef<typeof BookRatingModal>;
-// export type ModalHandle = {
-//   openModal: () => void;
-// };
-const BookPageTemplate = ({ book }: Props) => {
+
+const BookPageTemplate = ({ book }: BookPageTemplateProps) => {
   //
-  const modalRef = useRef<ModalHandle>(null);
+  const modalRef = useRef<ModalHandle>(null); // ref for <BookRatingModal/>
   const { data: session } = useSession();
   const { push } = useRouter();
 
@@ -48,7 +42,7 @@ const BookPageTemplate = ({ book }: Props) => {
       push('/sign-in');
       return;
     }
-
+    // -- look at implementation in BookRatingModal - useImperativeHandle hook
     if (modalRef.current) modalRef.current.openModal();
   };
 
@@ -113,7 +107,6 @@ const BookPageTemplate = ({ book }: Props) => {
           </Box>
           <BookRatingModal
             book={book}
-            // open={openModal}
             userId={session?.user.id}
             ref={modalRef}
           />

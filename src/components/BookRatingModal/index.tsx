@@ -41,15 +41,7 @@ export type UserRating = {
 
 type BookRatingModalProps = {
   book: BookProps;
-  //open: boolean;
-  //: string;
-  //setDialogState: Dispatch<SetStateAction<DialogState>>;
-  //: Dispatch<SetStateAction<boolean>>;
-  //setRating: Dispatch<SetStateAction<number>>;
-  //setTotalRatings: Dispatch<SetStateAction<number>>;
-  //setUserRating: Dispatch<SetStateAction<UserRatings>>;
   userId: string | undefined;
-  //userRating: UserRatings;
 };
 
 export type ModalHandle = {
@@ -58,9 +50,8 @@ export type ModalHandle = {
 // eslint-disable-next-line react/display-name
 const BookRatingModal = forwardRef(
   (props: BookRatingModalProps, ref: Ref<ModalHandle>) => {
-    //console.log('bookId', book, open);
+    const { book, userId } = props;
     const [open, setOpen] = useState(false);
-
     const [action, setAction] = useState<UserAction>(null);
     const [userRating, setUserRating] = useState<UserRating>({
       id: null,
@@ -68,6 +59,9 @@ const BookRatingModal = forwardRef(
       current: 0
     });
 
+    /* to open the modal on the BookPageTemplate, pass the setter function call
+    on the "openModal" prop
+    */
     useImperativeHandle(
       ref,
       () => {
@@ -86,9 +80,9 @@ const BookRatingModal = forwardRef(
 
     // -- Custom hook
     const { getCurrentUserRating } = useBookRating({
-      bookId: props.book.id,
+      bookId: book.id,
       //  setRating,
-      userId: props.userId!
+      userId: userId!
 
       // userRating,
       // setTotalRatings,
@@ -98,8 +92,8 @@ const BookRatingModal = forwardRef(
     useEffect(() => {
       getCurrentUserRating({
         variables: {
-          bookId: props.book.id,
-          userId: props.userId!
+          bookId: book.id,
+          userId: userId!
         },
         onCompleted: (data) => {
           console.log('data', data);
@@ -116,7 +110,7 @@ const BookRatingModal = forwardRef(
           }
         }
       });
-    }, [getCurrentUserRating, props.book.id, props.userId]);
+    }, [book.id, getCurrentUserRating, props.book.id, props.userId, userId]);
 
     // const handleRating = () => {
     //   if (action === 'create') {
