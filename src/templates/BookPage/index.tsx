@@ -17,7 +17,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 // -- Custom components
 import Availability from 'components/Availability';
-import BookRatingModal from 'components/BookRatingModal';
+import BookRatingModal, { ModalHandle } from 'components/BookRatingModal';
 // -- Querys
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
 // -- Custom hooks
@@ -29,10 +29,13 @@ import { BookProps } from 'utils/mappers';
 type Props = {
   book: BookProps;
 };
-
+//type ModalHandle = React.ElementRef<typeof BookRatingModal>;
+// export type ModalHandle = {
+//   openModal: () => void;
+// };
 const BookPageTemplate = ({ book }: Props) => {
   //
-  const [openModal, setOpenModal] = useState(false);
+  const modalRef = useRef<ModalHandle>(null);
   const { data: session } = useSession();
   const { push } = useRouter();
 
@@ -45,7 +48,8 @@ const BookPageTemplate = ({ book }: Props) => {
       push('/sign-in');
       return;
     }
-    setOpenModal(true);
+
+    if (modalRef.current) modalRef.current.openModal();
   };
 
   return (
@@ -108,9 +112,10 @@ const BookPageTemplate = ({ book }: Props) => {
             </Typography>
           </Box>
           <BookRatingModal
-            bookId={book.id}
-            open={openModal}
+            book={book}
+            // open={openModal}
             userId={session?.user.id}
+            ref={modalRef}
           />
 
           <Typography variant="body1">{book.synopsis}</Typography>

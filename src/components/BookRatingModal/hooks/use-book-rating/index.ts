@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 
 // -- Mutations
 import {
@@ -200,18 +200,14 @@ Props) => {
 
   // *- Queries -*
   // -- Query to get current user rating for the current book
-  const { data: currentUserRating } = useQuery(RATINGS_QUERY, {
-    variables: {
-      bookId,
-      userId
-    }
-  });
+  const [getCurrentUserRating] = useLazyQuery(RATINGS_QUERY);
+
   //const isLoading = isLoadingUpdateRating || isLoadingAddRating;
 
   return {
     //  createRating,
     //  isLoading,
     // updateRating,
-    currentUserRating
+    getCurrentUserRating
   };
 };

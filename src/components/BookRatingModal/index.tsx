@@ -3,7 +3,10 @@ import React, {
   SetStateAction,
   useCallback,
   useEffect,
-  useState
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  Ref
 } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import {
@@ -26,6 +29,8 @@ import { Colors } from 'styles/theme/colors';
 // -- Query
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
 //import { DialogState, UserAction, UserRatings } from 'templates/BookPage';
+// -- Utils
+import { BookProps } from 'utils/mappers';
 
 export type UserAction = 'create' | 'update' | null;
 export type UserRating = {
@@ -34,11 +39,9 @@ export type UserRating = {
   current: number;
 };
 
-type Props = {
-  bookId: string;
-  // bookTitle: string;
-  // dialogState: DialogState;
-  open: boolean;
+type BookRatingModalProps = {
+  book: BookProps;
+  //open: boolean;
   //: string;
   //setDialogState: Dispatch<SetStateAction<DialogState>>;
   //: Dispatch<SetStateAction<boolean>>;
@@ -49,91 +52,105 @@ type Props = {
   //userRating: UserRatings;
 };
 
-const BookRatingModal = ({
-  bookId,
-  // dialogState,
-  open,
-  // previousUserRatingId,
-  // setDialogState,
-  // setOpen,
-  // setRating,
-  // setTotalRatings,
-  // setUserRating,
-  userId = ''
-}: // userRating
-Props) => {
-  console.log('bookId', bookId, open, userId);
-  const [action, setAction] = useState<UserAction>(null);
-  const [userRating, setUserRating] = useState<UserRating>({
-    id: null,
-    previous: 0,
-    current: 0
-  });
-  // const handleClose = () => {
-  //   setOpen(false);
-  //   setDialogState((previous) => ({
-  //     ...previous,
-  //     isResponse: false,
-  //     hasError: false
-  //   }));
-  // };
+export type ModalHandle = {
+  openModal: () => void;
+};
+// eslint-disable-next-line react/display-name
+const BookRatingModal = forwardRef(
+  (props: BookRatingModalProps, ref: Ref<ModalHandle>) => {
+    //console.log('bookId', book, open);
+    const [open, setOpen] = useState(false);
 
-  // -- Custom hook
-  const { currentUserRating } = useBookRating({
-    bookId,
-    //  setRating,
-    userId
-    // userRating,
-    // setTotalRatings,
-    // setDialogState
-  });
+    const [action, setAction] = useState<UserAction>(null);
+    const [userRating, setUserRating] = useState<UserRating>({
+      id: null,
+      previous: 0,
+      current: 0
+    });
 
-  // const hasBookUserRating = currentUserRating?.data.length > 0;
-  // if (hasBookUserRating) {
-  //   setAction('update');
-  //   setUserRating((previous) => ({
-  //     ...previous,
-  //     id: currentUserRating.data[0].id,
-  //     previous: currentUserRating.data[0].attributes.rating
-  //   }));
-  // } else {
-  //   setAction('create');
-  // }
-  console.log('current', currentUserRating);
+    useImperativeHandle(
+      ref,
+      () => {
+        return { openModal: () => setOpen(true) };
+      },
+      []
+    );
+    // const handleClose = () => {
+    //   setOpen(false);
+    //   setDialogState((previous) => ({
+    //     ...previous,
+    //     isResponse: false,
+    //     hasError: false
+    //   }));
+    // };
 
-  // const handleRating = () => {
-  //   if (action === 'create') {
-  //     createRating({
-  //       variables: {
-  //         userId,
-  //         bookId,
-  //         rating: userRating.current
-  //       }
-  //     });
-  //   }
+    // -- Custom hook
+    const { getCurrentUserRating } = useBookRating({
+      bookId: props.book.id,
+      //  setRating,
+      userId: props.userId!
 
-  //   if (action === 'update') {
-  //     updateRating({
-  //       variables: {
-  //         ratingId: previousUserRatingId,
-  //         rating: userRating.current
-  //       }
-  //     });
-  //   }
-  // };
+      // userRating,
+      // setTotalRatings,
+      // setDialogState
+    });
 
-  //if (dialogState?.modalText === '') return null;
+    useEffect(() => {
+      getCurrentUserRating({
+        variables: {
+          bookId: props.book.id,
+          userId: props.userId!
+        },
+        onCompleted: (data) => {
+          console.log('data', data);
+          const hasBookUserRating = data?.ratings?.data.length > 0;
+          if (hasBookUserRating) {
+            setAction('update');
+            setUserRating((previous) => ({
+              ...previous,
+              id: data?.ratings?.data[0].id,
+              previous: data?.ratings?.data[0].attributes.rating
+            }));
+          } else {
+            setAction('create');
+          }
+        }
+      });
+    }, [getCurrentUserRating, props.book.id, props.userId]);
 
-  return (
-    <Dialog
-      open={open}
-      //onClose={handleClose}
-      disableEscapeKeyDown={true}
-      aria-labelledby="user-interaction"
-      aria-label="Dialog for user interacation"
-    >
-      <DialogTitle>Rating</DialogTitle>
-      {/* {dialogState?.isResponse ? (
+    // const handleRating = () => {
+    //   if (action === 'create') {
+    //     createRating({
+    //       variables: {
+    //         userId,
+    //         bookId,
+    //         rating: userRating.current
+    //       }
+    //     });
+    //   }
+
+    //   if (action === 'update') {
+    //     updateRating({
+    //       variables: {
+    //         ratingId: previousUserRatingId,
+    //         rating: userRating.current
+    //       }
+    //     });
+    //   }
+    // };
+
+    //if (dialogState?.modalText === '') return null;
+
+    return (
+      <Dialog
+        open={open}
+        //onClose={handleClose}
+        disableEscapeKeyDown={true}
+        aria-labelledby="user-interaction"
+        aria-label="Dialog for user interacation"
+      >
+        <DialogTitle>Rating</DialogTitle>
+        {/* {dialogState?.isResponse ? (
         <Box id="rating-status-response">
           <DialogContent
             sx={{
@@ -182,8 +199,9 @@ Props) => {
           </DialogActions>
         </Box>
       )} */}
-    </Dialog>
-  );
-};
+      </Dialog>
+    );
+  }
+);
 
 export default BookRatingModal;
