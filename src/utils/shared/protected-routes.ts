@@ -1,13 +1,10 @@
 import { GetServerSidePropsContext } from 'next';
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from 'pages/api/auth/[...nextauth]';
 
 async function protectedRoutes(context: GetServerSidePropsContext) {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  getServerSession;
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session) {
     context.res.setHeader(

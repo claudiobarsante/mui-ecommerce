@@ -10,13 +10,15 @@ import { useMutationBook } from 'graphql/mutations/book';
 // -- Utils
 import { calculateRating } from 'utils/shared/calculate-rating';
 import { RATINGS_QUERY } from 'graphql/queries/ratings';
+// -- Types
+import { UserRating } from 'components/BookRatingModal';
 //import { DialogState, UserRatings } from 'templates/BookPage';
 
 type Props = {
   bookId: string;
   // setRating: Dispatch<SetStateAction<number>>;
   userId: string;
-  // userRating: UserRatings;
+  userRating: UserRating;
   // setTotalRatings: Dispatch<SetStateAction<number>>;
   // setDialogState: Dispatch<SetStateAction<DialogState>>;
 };
@@ -24,16 +26,17 @@ type Props = {
 export const useBookRating = ({
   bookId,
   //  setRating,
-  userId
+  userId,
+  userRating
 }: // userRating,
 // setTotalRatings,
 // setDialogState
 Props) => {
-  // function errorSetting() {
-  //   const MESSAGE =
-  //     "Your rating wasn't saved due to a techinical issue on your end.Please try connecting again. If the issue keeps happening, contact Customer Care.";
-  //   setDialogState({ isResponse: true, hasError: true, modalText: MESSAGE });
-  // }
+  function errorSetting() {
+    const MESSAGE =
+      "Your rating wasn't saved due to a techinical issue on your end.Please try connecting again. If the issue keeps happening, contact Customer Care.";
+    //setDialogState({ isResponse: true, hasError: true, modalText: MESSAGE });
+  }
   // *- Mutations -*
   // -- Mutation to update the book rating on Book
   // const [updateBookRating] = useMutationBook({
@@ -124,79 +127,79 @@ Props) => {
   //   }
   // );
   // // -- Mutation to update a previous rating for the current user and book on Rating
-  // const [updateRating, { loading: isLoadingUpdateRating }] = useMutation(
-  //   UPDATE_RATING_MUTATION,
-  //   {
-  //     onError: () => errorSetting(),
-  //     update: (cache, data) => {
-  //       //? updating the cache after updating
-  //       const readedCache: any = cache.readQuery({
-  //         query: RATINGS_QUERY,
-  //         variables: { bookId, userId }
-  //       });
+  const [updateRating, { loading: isLoadingUpdateRating }] = useMutation(
+    UPDATE_RATING_MUTATION,
+    {
+      onError: () => errorSetting(),
+      update: (cache, data) => {
+        //? updating the cache after updating
+        const readedCache: any = cache.readQuery({
+          query: RATINGS_QUERY,
+          variables: { bookId, userId }
+        });
 
-  //       const ratingId = data.data.updateRating.data.id;
-  //       const updatedUserRatings =
-  //         data.data.updateRating.data.attributes.book.data.attributes
-  //           .userRatings;
-  //       const updatedRating =
-  //         data.data.updateRating.data.attributes.book.data.attributes.rating;
-  //       const sku =
-  //         data.data.updateRating.data.attributes.book.data.attributes.sku;
-  //       cache.writeQuery({
-  //         query: RATINGS_QUERY,
-  //         variables: { bookId, userId },
-  //         data: {
-  //           ratings: {
-  //             ...readedCache?.ratings,
-  //             data: [
-  //               {
-  //                 id: ratingId,
-  //                 attributes: {
-  //                   user_ids: { data: [{ id: userId }] },
-  //                   rating: userRating.current,
-  //                   book: {
-  //                     data: {
-  //                       id: bookId,
-  //                       attributes: {
-  //                         sku,
-  //                         userRatings: updatedUserRatings,
-  //                         rating: updatedRating
-  //                       }
-  //                     }
-  //                   }
-  //                 }
-  //               }
-  //             ]
-  //           }
-  //         }
-  //       });
-  //     },
-  //     onCompleted: (data) => {
-  //       const userRatings =
-  //         data.updateRating.data.attributes.book.data.attributes.userRatings;
+        const ratingId = data.data.updateRating.data.id;
+        const updatedUserRatings =
+          data.data.updateRating.data.attributes.book.data.attributes
+            .userRatings;
+        const updatedRating =
+          data.data.updateRating.data.attributes.book.data.attributes.rating;
+        const sku =
+          data.data.updateRating.data.attributes.book.data.attributes.sku;
+        cache.writeQuery({
+          query: RATINGS_QUERY,
+          variables: { bookId, userId },
+          data: {
+            ratings: {
+              ...readedCache?.ratings,
+              data: [
+                {
+                  id: ratingId,
+                  attributes: {
+                    user_ids: { data: [{ id: userId }] },
+                    rating: userRating.current,
+                    book: {
+                      data: {
+                        id: bookId,
+                        attributes: {
+                          sku,
+                          userRatings: updatedUserRatings,
+                          rating: updatedRating
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        });
+      },
+      onCompleted: (data) => {
+        const userRatings =
+          data.updateRating.data.attributes.book.data.attributes.userRatings;
 
-  //       const { calculatedRating, updatedUserRatings, totalBookRatings } =
-  //         calculateRating({
-  //           userRatings,
-  //           currentUserRating: userRating.current,
-  //           action: 'update',
-  //           previousUserRating: userRating.previous
-  //         });
-  //       //*using setRating to update de state of the current rating to the calculated one and re-render de page with the updated rating
-  //       setRating(calculatedRating);
-  //       setTotalRatings(totalBookRatings);
-  //       updateBookRating({
-  //         variables: {
-  //           bookId,
-  //           userRatings: updatedUserRatings,
-  //           rating: calculatedRating,
-  //           totalRatings: totalBookRatings
-  //         }
-  //       });
-  //     }
-  //   }
-  // );
+        const { calculatedRating, updatedUserRatings, totalBookRatings } =
+          calculateRating({
+            userRatings,
+            currentUserRating: userRating.current,
+            action: 'update',
+            previousUserRating: userRating.previous
+          });
+        //*using setRating to update de state of the current rating to the calculated one and re-render de page with the updated rating
+        setRating(calculatedRating);
+        setTotalRatings(totalBookRatings);
+        updateBookRating({
+          variables: {
+            bookId,
+            userRatings: updatedUserRatings,
+            rating: calculatedRating,
+            totalRatings: totalBookRatings
+          }
+        });
+      }
+    }
+  );
 
   // *- Queries -*
   // -- Query to get current user rating for the current book

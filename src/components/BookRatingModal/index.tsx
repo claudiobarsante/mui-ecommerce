@@ -69,14 +69,8 @@ const BookRatingModal = forwardRef(
       },
       []
     );
-    // const handleClose = () => {
-    //   setOpen(false);
-    //   setDialogState((previous) => ({
-    //     ...previous,
-    //     isResponse: false,
-    //     hasError: false
-    //   }));
-    // };
+
+    const handleClose = () => setOpen(false);
 
     // -- Custom hook
     const { getCurrentUserRating } = useBookRating({
@@ -100,11 +94,11 @@ const BookRatingModal = forwardRef(
           const hasBookUserRating = data?.ratings?.data.length > 0;
           if (hasBookUserRating) {
             setAction('update');
-            setUserRating((previous) => ({
-              ...previous,
+            setUserRating({
               id: data?.ratings?.data[0].id,
-              previous: data?.ratings?.data[0].attributes.rating
-            }));
+              previous: data?.ratings?.data[0].attributes.rating,
+              current: data?.ratings?.data[0].attributes.rating
+            });
           } else {
             setAction('create');
           }
@@ -112,26 +106,26 @@ const BookRatingModal = forwardRef(
       });
     }, [book.id, getCurrentUserRating, props.book.id, props.userId, userId]);
 
-    // const handleRating = () => {
-    //   if (action === 'create') {
-    //     createRating({
-    //       variables: {
-    //         userId,
-    //         bookId,
-    //         rating: userRating.current
-    //       }
-    //     });
-    //   }
+    const handleRating = () => {
+      // if (action === 'create') {
+      //   createRating({
+      //     variables: {
+      //       userId,
+      //       bookId,
+      //       rating: userRating.current
+      //     }
+      //   });
+      // }
 
-    //   if (action === 'update') {
-    //     updateRating({
-    //       variables: {
-    //         ratingId: previousUserRatingId,
-    //         rating: userRating.current
-    //       }
-    //     });
-    //   }
-    // };
+      if (action === 'update') {
+        updateRating({
+          variables: {
+            ratingId: previousUserRatingId,
+            rating: userRating.current
+          }
+        });
+      }
+    };
 
     //if (dialogState?.modalText === '') return null;
 
@@ -144,6 +138,37 @@ const BookRatingModal = forwardRef(
         aria-label="Dialog for user interacation"
       >
         <DialogTitle>Rating</DialogTitle>
+        <Box>
+          <DialogContent
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <DialogContentText>
+              {action === 'create' ? 'Please create' : 'Please update'}
+            </DialogContentText>
+            <Rating
+              name="book-rating"
+              value={userRating?.current}
+              sx={{ color: Colors.warning }}
+              onChange={(event, newValue) => {
+                setUserRating((rating) => ({
+                  ...rating,
+                  current: newValue ?? 0
+                }));
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <LoadingButton loading={isLoading} onClick={handleRating}>
+              {action === 'create' ? 'Save' : 'Update'}
+            </LoadingButton>
+          </DialogActions>
+        </Box>
         {/* {dialogState?.isResponse ? (
         <Box id="rating-status-response">
           <DialogContent
