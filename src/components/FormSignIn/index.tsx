@@ -116,8 +116,9 @@ const FormSignIn = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            width: '25rem',
-            position: 'relative'
+            //width: '25rem',
+            //position: 'relative',
+            border: '1px solid yellow'
           }}
         >
           <CustomTitle
@@ -132,10 +133,7 @@ const FormSignIn = () => {
             text="Sign In"
             color="lightBlue"
             sx={{
-              paddingLeft: '0.5rem',
-              position: 'absolute',
-              top: '8.5rem',
-              left: 0
+              paddingLeft: '0.5rem'
             }}
           />
 
