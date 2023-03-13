@@ -1,27 +1,25 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useMutation } from '@apollo/client';
-// Material ui
-import Box from '@mui/material/Box';
-
-import { Typography } from '@mui/material';
-
-import LoadingButton from '@mui/lab/LoadingButton';
-import { REGISTER_MUTATION } from 'graphql/mutations/user';
-import { signIn } from 'next-auth/react';
-
-import { AppbarHeader } from 'components/Appbar/styles';
 import Link from 'next/link';
+// -- Authentication
+import { signIn } from 'next-auth/react';
+// -- Material ui
+import { Box, Typography } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+// -- Graphql
+import { REGISTER_MUTATION } from 'graphql/mutations/user';
+// -- Custom components
+import CustomTitle from 'components/Title';
+import FormHeader from 'components/FormHeader';
+import PasswordInput from 'components/Inputs/Password';
+import StandardInput from 'components/Inputs/Standard';
+// -- Custom validations
 import {
   FieldErrors,
   FormFields,
   signUpValidate,
   validateField
 } from 'utils/validations';
-
-import StandardInput from 'components/Inputs/Standard';
-import FormHeader from 'components/FormHeader';
-import PasswordInput from 'components/Inputs/Password';
-import CustomTitle from 'components/Title';
 
 export type FormValues = {
   email: string;

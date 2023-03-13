@@ -1,6 +1,5 @@
 import { Typography } from '@mui/material';
-import '@fontsource/montez';
-
+import '@fontsource/lora';
 import { styled } from '@mui/material/styles';
 
 type Props = {
@@ -14,7 +13,7 @@ export const Title = styled(Typography)(({ fontSize, color }: Props) => ({
   color: color,
   textAlign: 'center',
 
-  fontFamily: '"Montez", "cursive"',
+  fontFamily: 'Lora',
   '&:hover': {
     cursor: 'pointer'
   }

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { SxProps, Theme } from '@mui/material/styles';
 // -- Styles
-import '@fontsource/montez';
 import { Colors } from 'styles/theme/colors';
 import * as S from './styles';
 

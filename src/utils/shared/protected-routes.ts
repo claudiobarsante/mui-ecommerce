@@ -3,7 +3,6 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from 'pages/api/auth/[...nextauth]';
 
 async function protectedRoutes(context: GetServerSidePropsContext) {
-  getServerSession;
   const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session) {
