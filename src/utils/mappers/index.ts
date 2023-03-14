@@ -15,13 +15,14 @@ export type BookProps = {
   isOnSale: boolean;
   pageCount: number;
   price: number;
-  rating: number | undefined | null;
   salePrice: number;
   synopsis: string;
   stock: number;
   authors: (string | null | undefined)[] | undefined;
   publisher: string | undefined | null;
   totalRatings: number | null | undefined;
+  calculatedRating: number | null | undefined;
+  ratings: string | undefined | null;
 };
 
 export const bookMapper = (bookData: BookQuery) => {
@@ -33,11 +34,12 @@ export const bookMapper = (bookData: BookQuery) => {
     isOnSale,
     pageCount,
     price,
-    rating,
     salePrice,
     synopsis,
     stock,
-    totalRatings
+    totalRatings,
+    calculatedRating,
+    ratings
   } = bookData.book?.data?.attributes!;
 
   if (bookData.book?.data) {
@@ -53,11 +55,12 @@ export const bookMapper = (bookData: BookQuery) => {
       isOnSale,
       pageCount,
       price,
-      rating,
       salePrice,
       synopsis,
       stock,
       totalRatings,
+      calculatedRating,
+      ratings,
       authors: extractedAuthors,
       publisher:
         bookData.book?.data?.attributes?.publisher?.data?.attributes?.name
@@ -78,11 +81,12 @@ export const bookToWishlistMapper = (bookData: BookEntity) => {
     isOnSale,
     pageCount,
     price,
-    rating,
     salePrice,
     synopsis,
     stock,
-    totalRatings
+    totalRatings,
+    calculatedRating,
+    ratings
   } = bookData.attributes!;
 
   if (bookData?.attributes) {
@@ -98,11 +102,12 @@ export const bookToWishlistMapper = (bookData: BookEntity) => {
       isOnSale,
       pageCount,
       price,
-      rating,
       salePrice,
       synopsis,
       stock,
       totalRatings,
+      calculatedRating,
+      ratings,
       authors: extractedAuthors,
       publisher: bookData.attributes.publisher?.data?.attributes?.name
     };

@@ -10,7 +10,7 @@ export default function ProductInfo({ book, isMobile }: any) {
       </Typography> */}
       <Rating
         name="read-only"
-        value={book.attributes.rating}
+        value={book.attributes.calculatedRating}
         readOnly
         sx={{ color: Colors.warning }}
       />

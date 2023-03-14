@@ -7,8 +7,8 @@ export const RatingFragment = gql`
       data {
         attributes {
           sku
-          userRatings
-          rating
+          ratings
+          calculatedRating
         }
       }
     }

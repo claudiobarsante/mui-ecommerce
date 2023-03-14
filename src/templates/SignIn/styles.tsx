@@ -3,39 +3,24 @@ import { Box, Typography } from '@mui/material';
 import { Colors } from 'styles/theme/colors';
 
 export const PictureHeader = styled(Typography)(({ theme }) => ({
-  padding: '0.4rem',
-  flexGrow: 1,
-  fontSize: '5rem',
-  fontFamily: '"Montez", "cursive"',
   color: Colors.white,
+  fontFamily: 'Lora',
+  left: '50%',
+  overflow: 'hidden',
   position: 'absolute',
-  top: '10%',
+  top: '5%',
+  transform: 'translateX(-50%)',
+  whiteSpace: 'nowrap',
   zIndex: 10,
+
   [theme.breakpoints.up('md')]: {
-    fontSize: '4.5rem',
-    top: '2%'
+    fontSize: '3.0rem'
   },
 
   [theme.breakpoints.down('md')]: {
-    fontSize: '3rem',
-    top: '3%'
+    fontSize: '2rem'
   },
   [theme.breakpoints.down('sm')]: {
-    fontSize: '1.8rem',
-    top: '5%'
-  }
-}));
-
-// had to use negative margin on the right, because mui5 layout on small devices
-// add a margin on the right 🤔
-export const ImageContainer = styled(Box)(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    marginRight: '-2.7rem'
-  }
-}));
-
-export const FormContainer = styled(Box)(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    marginRight: '-2.6rem'
+    fontSize: '1.4rem'
   }
 }));

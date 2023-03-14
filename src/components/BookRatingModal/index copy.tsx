@@ -43,7 +43,7 @@ type Props = {
   userRating: UserRatings;
 };
 
-const BookRating = ({
+const BookRatingModal = ({
   action,
   bookId,
   dialogState,
@@ -161,4 +161,4 @@ const BookRating = ({
   );
 };
 
-export default BookRating;
+export default BookRatingModal;

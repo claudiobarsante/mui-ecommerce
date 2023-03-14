@@ -22,8 +22,8 @@ export const RATINGS_QUERY = gql`
               id
               attributes {
                 sku
-                userRatings
-                rating
+                ratings
+                calculatedRating
               }
             }
           }

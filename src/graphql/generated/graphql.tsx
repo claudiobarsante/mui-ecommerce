@@ -78,6 +78,7 @@ export type AuthorRelationResponseCollection = {
 export type Book = {
   __typename?: 'Book';
   authors?: Maybe<AuthorRelationResponseCollection>;
+  calculatedRating?: Maybe<Scalars['Float']>;
   category?: Maybe<CategoryEntityResponse>;
   coverImageUrl: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -87,7 +88,7 @@ export type Book = {
   price: Scalars['Float'];
   publishedAt?: Maybe<Scalars['DateTime']>;
   publisher?: Maybe<PublisherEntityResponse>;
-  rating?: Maybe<Scalars['Float']>;
+  ratings?: Maybe<Scalars['JSON']>;
   salePrice: Scalars['Float'];
   sku: Scalars['String'];
   stock: Scalars['Int'];
@@ -95,7 +96,6 @@ export type Book = {
   title: Scalars['String'];
   totalRatings?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-  userRatings?: Maybe<Scalars['JSON']>;
 };
 
 
@@ -126,6 +126,7 @@ export type BookEntityResponseCollection = {
 export type BookFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<BookFiltersInput>>>;
   authors?: InputMaybe<AuthorFiltersInput>;
+  calculatedRating?: InputMaybe<FloatFilterInput>;
   category?: InputMaybe<CategoryFiltersInput>;
   coverImageUrl?: InputMaybe<StringFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
@@ -138,7 +139,7 @@ export type BookFiltersInput = {
   price?: InputMaybe<FloatFilterInput>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
   publisher?: InputMaybe<PublisherFiltersInput>;
-  rating?: InputMaybe<FloatFilterInput>;
+  ratings?: InputMaybe<JsonFilterInput>;
   salePrice?: InputMaybe<FloatFilterInput>;
   sku?: InputMaybe<StringFilterInput>;
   stock?: InputMaybe<IntFilterInput>;
@@ -146,11 +147,11 @@ export type BookFiltersInput = {
   title?: InputMaybe<StringFilterInput>;
   totalRatings?: InputMaybe<IntFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
-  userRatings?: InputMaybe<JsonFilterInput>;
 };
 
 export type BookInput = {
   authors?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  calculatedRating?: InputMaybe<Scalars['Float']>;
   category?: InputMaybe<Scalars['ID']>;
   coverImageUrl?: InputMaybe<Scalars['String']>;
   isFeatured?: InputMaybe<Scalars['Boolean']>;
@@ -159,14 +160,13 @@ export type BookInput = {
   price?: InputMaybe<Scalars['Float']>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   publisher?: InputMaybe<Scalars['ID']>;
-  rating?: InputMaybe<Scalars['Float']>;
+  ratings?: InputMaybe<Scalars['JSON']>;
   salePrice?: InputMaybe<Scalars['Float']>;
   sku?: InputMaybe<Scalars['String']>;
   stock?: InputMaybe<Scalars['Int']>;
   synopsis?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   totalRatings?: InputMaybe<Scalars['Int']>;
-  userRatings?: InputMaybe<Scalars['JSON']>;
 };
 
 export type BookRelationResponseCollection = {
@@ -1408,15 +1408,15 @@ export type WishlistInput = {
 
 export type UpdateBookMutationVariables = Exact<{
   bookId: Scalars['ID'];
-  userRatings: Scalars['JSON'];
-  rating: Scalars['Float'];
+  ratings: Scalars['JSON'];
+  calculatedRating: Scalars['Float'];
   totalRatings: Scalars['Int'];
 }>;
 
 
-export type UpdateBookMutation = { __typename?: 'Mutation', updateBook?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', userRatings?: any | null, rating?: number | null, totalRatings?: number | null } | null } | null } | null };
+export type UpdateBookMutation = { __typename?: 'Mutation', updateBook?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', ratings?: any | null, calculatedRating?: number | null, totalRatings?: number | null } | null } | null } | null };
 
-export type RatingFragmentFragment = { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', sku: string, userRatings?: any | null, rating?: number | null } | null } | null } | null };
+export type RatingFragmentFragment = { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', sku: string, ratings?: any | null, calculatedRating?: number | null } | null } | null } | null };
 
 export type CreateRatingMutationVariables = Exact<{
   userId?: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>;
@@ -1425,7 +1425,7 @@ export type CreateRatingMutationVariables = Exact<{
 }>;
 
 
-export type CreateRatingMutation = { __typename?: 'Mutation', createRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', sku: string, userRatings?: any | null, rating?: number | null } | null } | null } | null } | null } | null } | null };
+export type CreateRatingMutation = { __typename?: 'Mutation', createRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', sku: string, ratings?: any | null, calculatedRating?: number | null } | null } | null } | null } | null } | null } | null };
 
 export type UpdateRatingMutationVariables = Exact<{
   ratingId: Scalars['ID'];
@@ -1433,7 +1433,7 @@ export type UpdateRatingMutationVariables = Exact<{
 }>;
 
 
-export type UpdateRatingMutation = { __typename?: 'Mutation', updateRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', sku: string, userRatings?: any | null, rating?: number | null } | null } | null } | null } | null } | null } | null };
+export type UpdateRatingMutation = { __typename?: 'Mutation', updateRating?: { __typename?: 'RatingEntityResponse', data?: { __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', attributes?: { __typename?: 'Book', sku: string, ratings?: any | null, calculatedRating?: number | null } | null } | null } | null } | null } | null } | null };
 
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
@@ -1444,14 +1444,14 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', id: string, username: string, email?: string | null } } };
 
-export type WishlistFragmentFragment = { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null };
+export type WishlistFragmentFragment = { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, ratings?: any | null, price: number, calculatedRating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null };
 
 export type CreateWishlistMutationVariables = Exact<{
   data: WishlistInput;
 }>;
 
 
-export type CreateWishlistMutation = { __typename?: 'Mutation', createWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
+export type CreateWishlistMutation = { __typename?: 'Mutation', createWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, ratings?: any | null, price: number, calculatedRating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
 
 export type UpdateWishlistMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1459,28 +1459,28 @@ export type UpdateWishlistMutationVariables = Exact<{
 }>;
 
 
-export type UpdateWishlistMutation = { __typename?: 'Mutation', updateWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
+export type UpdateWishlistMutation = { __typename?: 'Mutation', updateWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, ratings?: any | null, price: number, calculatedRating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
 
 export type DeleteWishlistMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type DeleteWishlistMutation = { __typename?: 'Mutation', deleteWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
+export type DeleteWishlistMutation = { __typename?: 'Mutation', deleteWishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, ratings?: any | null, price: number, calculatedRating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
 
-export type BookFragmentFragment = { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null };
+export type BookFragmentFragment = { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, price: number, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, calculatedRating?: number | null, ratings?: any | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null };
 
 export type FeaturedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FeaturedQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null };
+export type FeaturedQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, price: number, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, calculatedRating?: number | null, ratings?: any | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null };
 
 export type BookQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
+export type BookQuery = { __typename?: 'Query', book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, price: number, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, calculatedRating?: number | null, ratings?: any | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null } | null } | null };
 
 export type BooksFiltersQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']>;
@@ -1490,7 +1490,7 @@ export type BooksFiltersQueryVariables = Exact<{
 }>;
 
 
-export type BooksFiltersQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
+export type BooksFiltersQuery = { __typename?: 'Query', books?: { __typename?: 'BookEntityResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, price: number, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, calculatedRating?: number | null, ratings?: any | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', page: number, pageSize: number, pageCount: number, total: number } } } | null };
 
 export type FiltersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1503,21 +1503,21 @@ export type RatingsQueryVariables = Exact<{
 }>;
 
 
-export type RatingsQuery = { __typename?: 'Query', ratings?: { __typename?: 'RatingEntityResponseCollection', data: Array<{ __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, user_ids?: { __typename?: 'UsersPermissionsUserRelationResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', id?: string | null }> } | null, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', sku: string, userRatings?: any | null, rating?: number | null } | null } | null } | null } | null }> } | null };
+export type RatingsQuery = { __typename?: 'Query', ratings?: { __typename?: 'RatingEntityResponseCollection', data: Array<{ __typename?: 'RatingEntity', id?: string | null, attributes?: { __typename?: 'Rating', rating: number, user_ids?: { __typename?: 'UsersPermissionsUserRelationResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', id?: string | null }> } | null, book?: { __typename?: 'BookEntityResponse', data?: { __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', sku: string, ratings?: any | null, calculatedRating?: number | null } | null } | null } | null } | null }> } | null };
 
 export type WishlistQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type WishlistQuery = { __typename?: 'Query', wishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
+export type WishlistQuery = { __typename?: 'Query', wishlist?: { __typename?: 'WishlistEntityResponse', data?: { __typename?: 'WishlistEntity', attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, ratings?: any | null, price: number, calculatedRating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null } | null } | null };
 
 export type WishlistsQueryVariables = Exact<{
   userId: Scalars['ID'];
 }>;
 
 
-export type WishlistsQuery = { __typename?: 'Query', wishlists?: { __typename?: 'WishlistEntityResponseCollection', data: Array<{ __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, userRatings?: any | null, price: number, rating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null }> } | null };
+export type WishlistsQuery = { __typename?: 'Query', wishlists?: { __typename?: 'WishlistEntityResponseCollection', data: Array<{ __typename?: 'WishlistEntity', id?: string | null, attributes?: { __typename?: 'Wishlist', user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, books?: { __typename?: 'BookRelationResponseCollection', data: Array<{ __typename?: 'BookEntity', id?: string | null, attributes?: { __typename?: 'Book', title: string, sku: string, coverImageUrl: string, isOnSale: boolean, pageCount: number, ratings?: any | null, price: number, calculatedRating?: number | null, salePrice: number, synopsis: string, stock: number, totalRatings?: number | null, authors?: { __typename?: 'AuthorRelationResponseCollection', data: Array<{ __typename?: 'AuthorEntity', attributes?: { __typename?: 'Author', name?: string | null } | null }> } | null, publisher?: { __typename?: 'PublisherEntityResponse', data?: { __typename?: 'PublisherEntity', attributes?: { __typename?: 'Publisher', name?: string | null } | null } | null } | null } | null }> } | null } | null }> } | null };
 
 export const RatingFragmentFragmentDoc = gql`
     fragment RatingFragment on Rating {
@@ -1526,8 +1526,8 @@ export const RatingFragmentFragmentDoc = gql`
     data {
       attributes {
         sku
-        userRatings
-        rating
+        ratings
+        calculatedRating
       }
     }
   }
@@ -1549,9 +1549,9 @@ export const WishlistFragmentFragmentDoc = gql`
         coverImageUrl
         isOnSale
         pageCount
-        userRatings
+        ratings
         price
-        rating
+        calculatedRating
         salePrice
         synopsis
         stock
@@ -1582,13 +1582,13 @@ export const BookFragmentFragmentDoc = gql`
   coverImageUrl
   isOnSale
   pageCount
-  userRatings
   price
-  rating
   salePrice
   synopsis
   stock
   totalRatings
+  calculatedRating
+  ratings
   authors {
     data {
       attributes {
@@ -1606,16 +1606,16 @@ export const BookFragmentFragmentDoc = gql`
 }
     `;
 export const UpdateBookDocument = gql`
-    mutation UpdateBook($bookId: ID!, $userRatings: JSON!, $rating: Float!, $totalRatings: Int!) {
+    mutation UpdateBook($bookId: ID!, $ratings: JSON!, $calculatedRating: Float!, $totalRatings: Int!) {
   updateBook(
     id: $bookId
-    data: {userRatings: $userRatings, rating: $rating, totalRatings: $totalRatings}
+    data: {ratings: $ratings, calculatedRating: $calculatedRating, totalRatings: $totalRatings}
   ) {
     data {
       id
       attributes {
-        userRatings
-        rating
+        ratings
+        calculatedRating
         totalRatings
       }
     }
@@ -1638,8 +1638,8 @@ export type UpdateBookMutationFn = Apollo.MutationFunction<UpdateBookMutation, U
  * const [updateBookMutation, { data, loading, error }] = useUpdateBookMutation({
  *   variables: {
  *      bookId: // value for 'bookId'
- *      userRatings: // value for 'userRatings'
- *      rating: // value for 'rating'
+ *      ratings: // value for 'ratings'
+ *      calculatedRating: // value for 'calculatedRating'
  *      totalRatings: // value for 'totalRatings'
  *   },
  * });
@@ -2092,8 +2092,8 @@ export const RatingsDocument = gql`
             id
             attributes {
               sku
-              userRatings
-              rating
+              ratings
+              calculatedRating
             }
           }
         }

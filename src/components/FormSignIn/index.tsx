@@ -3,9 +3,8 @@ import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { darken } from 'polished';
-// Material ui
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
+// -- Material ui
+import { Alert, Box, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 // -- Validations  and types
 import {
@@ -24,15 +23,17 @@ import StandardInput from 'components/Inputs/Standard';
 import { Colors } from 'styles/theme/colors';
 
 const FormSignIn = () => {
-  const [values, setValues] = useState<FormValues>({
+  const initialFormValues = {
     email: '',
     password: '',
     confirmPassword: '',
     username: ''
-  });
-  const [formError, setFormError] = useState('');
+  };
+
   const [fieldError, setFieldError] = useState<FieldErrors>({} as FieldErrors);
+  const [formError, setFormError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [values, setValues] = useState<FormValues>(initialFormValues);
 
   const router = useRouter();
   const { push, query } = router;
@@ -108,16 +109,13 @@ const FormSignIn = () => {
 
   return (
     <>
-      {!!formError && <p>{formError}</p>}
       <form onSubmit={handleOnSubmit}>
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center',
-            width: '25rem',
-            position: 'relative'
+            alignItems: 'center'
           }}
         >
           <CustomTitle
@@ -132,12 +130,19 @@ const FormSignIn = () => {
             text="Sign In"
             color="lightBlue"
             sx={{
-              paddingLeft: '0.5rem',
-              position: 'absolute',
-              top: '8.5rem',
-              left: 0
+              paddingLeft: '0.5rem'
             }}
           />
+
+          <Box
+            sx={{
+              marginTop: '2rem',
+              marginBottom: '-3rem',
+              visibility: !!formError ? 'visible' : 'hidden'
+            }}
+          >
+            <Alert severity="error">{formError}</Alert>
+          </Box>
 
           <StandardInput
             color="lightBlue"
@@ -164,6 +169,7 @@ const FormSignIn = () => {
           />
 
           <LoadingButton
+            data-testid="submit-button"
             loading={loading}
             aria-label="sign in"
             type="submit"

@@ -6,7 +6,7 @@ export const PictureHeader = styled(Typography)(({ theme }) => ({
   padding: '0.4rem',
   flexGrow: 1,
   fontSize: '5rem',
-  fontFamily: '"Montez", "cursive"',
+  fontFamily: '"Lora"',
   color: Colors.white,
   position: 'absolute',
   top: '10%',

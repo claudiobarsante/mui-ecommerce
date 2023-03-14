@@ -16,9 +16,9 @@ export const WishlistFragment = gql`
           coverImageUrl
           isOnSale
           pageCount
-          userRatings
+          ratings
           price
-          rating
+          calculatedRating
           salePrice
           synopsis
           stock
