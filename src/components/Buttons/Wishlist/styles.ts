@@ -4,8 +4,9 @@ import { IconButton } from '@mui/material';
 import { Colors } from 'styles/theme/colors';
 
 export const ActionButton = styled(IconButton)(() => ({
-  background: Colors.white,
-  margin: 4
+  // background: Colors.white,
+  // opacity: 0.8,
+  // margin: 4
 }));
 
 export type BookFavButtonProps = {
@@ -13,13 +14,14 @@ export type BookFavButtonProps = {
   theme?: Theme;
 };
 
-export const FavButton = styled(ActionButton)(
+export const FavButton = styled(IconButton)(
   ({ isfav, theme }: BookFavButtonProps) => ({
-    color: isfav === 'true' ? Colors.primary : Colors.light,
-    [theme!.breakpoints?.up('md')]: {
-      position: 'absolute',
-      right: 0,
-      top: 0
-    }
+    color: isfav === 'true' ? Colors.primary : Colors.light
+    // border: '1px solid green',
+    // // [theme!.breakpoints?.up('md')]: {
+    // position: 'absolute',
+    // right: 0,
+    // top: -8
+    // }
   })
 );

@@ -1,67 +1,156 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import * as S from '../styles';
 
-import { Stack, Tooltip, Typography } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import FitScreenIcon from '@mui/icons-material/FitScreen';
-//import useDialogModal from '../../hooks/useDialogModal';
-//import ProductDetail from '../productdetail';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import ProductInfo from '../Info';
+// -- Card
+import Card from '@mui/material/Card';
+
+import CardMedia from '@mui/material/CardMedia';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import { Box, Button, CardActionArea, Rating, Grid } from '@mui/material';
 
 import { BookSummary } from 'components/Books';
 import WishlistButton from 'components/Buttons/Wishlist';
-import Card from '@mui/material/Card';
-import Paper from '@mui/material/Paper';
-// -- Utils
-import { shimmer, toBase64 } from './../../../utils/shared/shimmer';
+
+import formatPrice from 'utils/shared/format-price';
+import { Colors } from 'styles/theme/colors';
 
 type Props = {
   book: BookSummary;
   isMobile: boolean;
 };
-export default function SingleBookDesktop({ book, isMobile }: Props) {
-  //   const [ProductDetailDialog, showProductDetailDialog, closeProductDialog] =
-  //     useDialogModal(ProductDetail);
+export default function SingleBookDesktop({ book }: Props) {
+  const [hasMounted, setHasMounted] = useState(false);
   const router = useRouter();
 
-  const [showOptions, setShowOptions] = useState(false);
-
-  const handleMouseEnter = useCallback(() => {
-    setShowOptions(true);
-  }, []);
-  const handleMouseLeave = useCallback(() => {
-    setShowOptions(false);
+  //?-- to avoid hydration error with <WishlistButton />
+  useEffect(() => {
+    setHasMounted(true);
   }, []);
 
+  if (!hasMounted) {
+    return null;
+  }
+  //?--
   return (
     <>
-      {/* <Paper elevation={3} sx={{ overflow: 'hidden' }}> */}
-      <S.Book onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <Card sx={{ width: '14rem' }}>
+        <CardActionArea>
+          <CardMedia
+            sx={{ height: '15rem', position: 'relative' }}
+            onClick={() => router.push(`/book/${book.id}`)}
+          >
+            <Image
+              src={book.attributes.coverImageUrl}
+              alt={book.attributes.title}
+              layout="fill"
+              quality={100}
+              priority
+              aria-label={book.attributes.title}
+            />
+          </CardMedia>
+        </CardActionArea>
+        <Box sx={{ flexGrow: 1, marginTop: '1rem' }}>
+          <Grid container rowSpacing={1}>
+            <Grid
+              aria-label={`book name: ${book.attributes.title}`}
+              item
+              md={8}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: '2', //--max 2 lines
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+
+                  fontWeight: 600,
+                  height: '3.2rem',
+                  paddingLeft: '0.5rem'
+                }}
+              >
+                {book.attributes.title}
+              </Typography>
+            </Grid>
+            <Grid item md={4}>
+              <Box sx={{ position: 'relative' }}>
+                <WishlistButton
+                  bookId={book.id}
+                  aria-label="add to favorites"
+                  sx={{
+                    position: 'absolute',
+                    top: -8,
+                    right: 0
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid
+              aria-label={`book price: ${formatPrice(book.attributes.price)}`}
+              item
+              md={8}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <Typography variant="subtitle1" sx={{ paddingLeft: '0.5rem' }}>
+                {formatPrice(book.attributes.price)}
+              </Typography>
+            </Grid>
+            <Grid item md={4}>
+              <Box sx={{ position: 'relative' }}>
+                <Rating
+                  size="small"
+                  name="read-only"
+                  value={4}
+                  readOnly
+                  sx={{ color: Colors.warning, right: '1.3rem' }}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+
+        <CardActions>
+          <Button
+            variant="contained"
+            sx={{
+              width: '100%',
+              color: 'whitesmoke',
+              borderRadius: 0,
+              background: Colors.primary
+            }}
+          >
+            Add To Cart
+          </Button>
+          {/* <Button>
+            <CartPlus />
+            Add to Card
+          </Button>
+          <WishlistButton bookId={book.id} aria-label="add to favorites" /> */}
+
+          {/* <IconButton aria-label="share">
+            <ShareIcon />
+          </IconButton> */}
+        </CardActions>
+      </Card>
+
+      {/* <S.BookImage>
+          
+        </S.BookImage>
         <S.TitleContainer>
           <Typography variant="subtitle1" noWrap sx={{ fontWeight: 500 }}>
             {book.attributes.title}
           </Typography>
-        </S.TitleContainer>
-        <S.BookImage>
-          <Image
-            src={book.attributes.coverImageUrl}
-            // blurDataURL={`data:image/svg+xml;base64,${toBase64(
-            //   shimmer(700, 475)
-            // )}`}
-            // placeholder="blur"
-            alt={book.attributes.title}
-            layout="fill"
-            quality={100}
-            priority
-            aria-label={book.attributes.title}
-          />
-        </S.BookImage>
-        <WishlistButton bookId={book.id} />
-        {(showOptions || isMobile) && (
+        </S.TitleContainer> */}
+      {/* <WishlistButton bookId={book.id} /> */}
+      {/* {(showOptions || isMobile) && (
           <S.AddToCartButton istoshow={`${showOptions}`} variant="contained">
             Add to cart
           </S.AddToCartButton>
@@ -80,8 +169,8 @@ export default function SingleBookDesktop({ book, isMobile }: Props) {
             </S.ActionButton>
           </Stack>
         </S.ActionsButtonsContainer>
-        <ProductInfo book={book} />
-      </S.Book>
+        <ProductInfo book={book} /> */}
+      {/*} </S.Book>*/}
       {/* </Paper> */}
     </>
   );

@@ -5,6 +5,7 @@ import { useWishlist } from 'hooks/use-wishlist';
 // -- Material
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Tooltip } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
 // -- Custom components
 import Spinner from 'components/Spinner';
 // -- Styles
@@ -12,8 +13,9 @@ import * as S from './styles';
 
 type Props = {
   bookId: string;
+  sx?: SxProps<Theme>;
 };
-const WishlistButton = ({ bookId }: Props) => {
+const WishlistButton = ({ bookId, sx: sxAdded }: Props) => {
   const { status } = useSession();
   const [isFavorite, setIsFavorite] = React.useState(false); // To enable us to mock useState, we use React.useState
   const [loading, setLoading] = React.useState(false);
@@ -34,7 +36,11 @@ const WishlistButton = ({ bookId }: Props) => {
   if (status === 'unauthenticated') return null;
 
   return (
-    <S.FavButton isfav={isFavorite.toString()} onClick={handleOnClick}>
+    <S.FavButton
+      sx={sxAdded}
+      isfav={isFavorite.toString()}
+      onClick={handleOnClick}
+    >
       {loading ? (
         <Spinner />
       ) : (

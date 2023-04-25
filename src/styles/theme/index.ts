@@ -14,6 +14,12 @@ const theme = createTheme({
     },
     error: {
       main: Colors.error
+    },
+    background: {
+      default: '#F4F5FA'
+    },
+    text: {
+      primary: '#3a3541'
     }
   },
 

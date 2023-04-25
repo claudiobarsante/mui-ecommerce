@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Grid } from '@mui/material';
+import { Grid, Box, Typography } from '@mui/material';
 // -- Custom components
 import FormSignIn from 'components/FormSignIn';
 // -- Theme
@@ -17,7 +17,8 @@ const SignInTemplate = () => {
         md={6}
         sx={{
           backgroundColor: Colors.lightBlue,
-          position: 'relative'
+          position: 'relative',
+          height: '100vh'
         }}
       >
         <S.PictureHeader>Your companion anywhere</S.PictureHeader>

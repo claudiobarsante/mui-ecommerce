@@ -3,36 +3,41 @@ import { Button, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
 import { slideInBottom, slideInRight } from '../../animation';
 import { Colors } from 'styles/theme/colors';
+import Card from '@mui/material/Card';
 
-export const Book = styled(Box)(({ theme }) => ({
+export const Book = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
   overflow: 'hidden',
 
-  height: '25rem',
-  width: '15rem',
+  height: '15rem',
+  width: '10rem',
   [theme.breakpoints.up('md')]: {
     position: 'relative'
   }
 }));
 
 export const TitleContainer = styled(Box)(({ theme }) => ({
+  //position: 'absolute',
   display: 'flex',
   justifyContent: 'center',
+  alignContent: 'center',
 
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-
-  width: '75%'
+  // overflow: 'hidden',
+  textOverflow: 'ellipsis'
+  // marginBottom: '1rem',
+  // width: '75%',
+  // border: '2px solid green'
 }));
 export const BookImage = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  height: '12rem',
-  width: '8rem',
+  position: 'absolute',
+  top: 0,
+  height: '80%',
+  width: '100%',
 
-  margin: '1rem',
+  // margin: '1rem',
 
   [theme.breakpoints.down('md')]: {
     width: '80%',

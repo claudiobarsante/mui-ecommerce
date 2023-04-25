@@ -8,7 +8,7 @@ export type BaseLayoutProps = {
 };
 const BaseLayout = ({ children }: BaseLayoutProps) => {
   return (
-    <Container maxWidth="xl" sx={{ background: '#fff' }}>
+    <Container maxWidth="xl">
       <Appbar />
       {children}
     </Container>
