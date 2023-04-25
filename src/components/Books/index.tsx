@@ -1,8 +1,5 @@
 import { Container, Grid } from '@mui/material';
-import useIsMobile from 'hooks/use-IsMobile';
-import SingleBookMobile from 'components/Book/Mobile';
-
-import SingleBookDesktop from 'components/Book/Desktop';
+import Book from 'components/Book';
 
 export type BookSummary = {
   __typename: string;
@@ -13,6 +10,7 @@ export type BookSummary = {
     price: number;
     coverImageUrl: string;
     rating: number;
+    calculatedRating: number;
   };
 };
 
@@ -21,7 +19,6 @@ export type BooksProps = {
 };
 
 export default function Books({ books }: BooksProps) {
-  const isMobile = useIsMobile();
   if (!books) return null;
   const renderBooks = books.map((book) => (
     <Grid
@@ -35,11 +32,7 @@ export default function Books({ books }: BooksProps) {
       alignItems="center"
       padding={'10px'}
     >
-      {isMobile ? (
-        <SingleBookMobile book={book} isMobile={isMobile} />
-      ) : (
-        <SingleBookDesktop book={book} isMobile={isMobile} />
-      )}
+      <Book book={book} />
     </Grid>
   ));
   return (

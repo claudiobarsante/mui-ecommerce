@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -18,9 +18,9 @@ import { Colors } from 'styles/theme/colors';
 
 type Props = {
   book: BookSummary;
-  isMobile: boolean;
 };
-export default function SingleBookDesktop({ book }: Props) {
+
+export default function Book({ book }: Props) {
   const [hasMounted, setHasMounted] = useState(false);
   const router = useRouter();
 
@@ -35,7 +35,7 @@ export default function SingleBookDesktop({ book }: Props) {
   //?--
   return (
     <>
-      <Card sx={{ width: '14rem' }}>
+      <Card sx={{ width: '13rem' }}>
         <CardActionArea>
           <CardMedia
             sx={{ height: '15rem', position: 'relative' }}
@@ -56,6 +56,8 @@ export default function SingleBookDesktop({ book }: Props) {
             <Grid
               aria-label={`book name: ${book.attributes.title}`}
               item
+              xs={8}
+              sm={8}
               md={8}
               display="flex"
               justifyContent="flex-start"
@@ -78,7 +80,7 @@ export default function SingleBookDesktop({ book }: Props) {
                 {book.attributes.title}
               </Typography>
             </Grid>
-            <Grid item md={4}>
+            <Grid item xs={4} sm={4} md={4}>
               <Box sx={{ position: 'relative' }}>
                 <WishlistButton
                   bookId={book.id}
@@ -94,6 +96,8 @@ export default function SingleBookDesktop({ book }: Props) {
             <Grid
               aria-label={`book price: ${formatPrice(book.attributes.price)}`}
               item
+              xs={8}
+              sm={8}
               md={8}
               display="flex"
               justifyContent="flex-start"
@@ -103,14 +107,14 @@ export default function SingleBookDesktop({ book }: Props) {
                 {formatPrice(book.attributes.price)}
               </Typography>
             </Grid>
-            <Grid item md={4}>
+            <Grid item xs={4} sm={4} md={4}>
               <Box sx={{ position: 'relative' }}>
                 <Rating
                   size="small"
                   name="read-only"
-                  value={4}
+                  value={book.attributes.calculatedRating}
                   readOnly
-                  sx={{ color: Colors.warning, right: '1.3rem' }}
+                  sx={{ color: Colors.warning, right: '1.7rem' }}
                 />
               </Box>
             </Grid>
@@ -129,49 +133,8 @@ export default function SingleBookDesktop({ book }: Props) {
           >
             Add To Cart
           </Button>
-          {/* <Button>
-            <CartPlus />
-            Add to Card
-          </Button>
-          <WishlistButton bookId={book.id} aria-label="add to favorites" /> */}
-
-          {/* <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton> */}
         </CardActions>
       </Card>
-
-      {/* <S.BookImage>
-          
-        </S.BookImage>
-        <S.TitleContainer>
-          <Typography variant="subtitle1" noWrap sx={{ fontWeight: 500 }}>
-            {book.attributes.title}
-          </Typography>
-        </S.TitleContainer> */}
-      {/* <WishlistButton bookId={book.id} /> */}
-      {/* {(showOptions || isMobile) && (
-          <S.AddToCartButton istoshow={`${showOptions}`} variant="contained">
-            Add to cart
-          </S.AddToCartButton>
-        )}
-        <S.ActionsButtonsContainer istoshow={showOptions.toString()}>
-          <Stack direction={isMobile ? 'row' : 'column'}>
-            <S.ActionButton>
-              <Tooltip placement="left" title="share this product">
-                <ShareIcon color="primary" />
-              </Tooltip>
-            </S.ActionButton>
-            <S.ActionButton onClick={() => router.push(`/book/${book.id}`)}>
-              <Tooltip placement="left" title="see details">
-                <VisibilityIcon color="primary" />
-              </Tooltip>
-            </S.ActionButton>
-          </Stack>
-        </S.ActionsButtonsContainer>
-        <ProductInfo book={book} /> */}
-      {/*} </S.Book>*/}
-      {/* </Paper> */}
     </>
   );
 }
